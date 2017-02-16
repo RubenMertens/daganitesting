@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {Platform, Nav} from 'ionic-angular';
+import {Platform, Nav, NavController} from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 
 import { HomePage } from '../pages/home/home';
@@ -35,14 +35,15 @@ export class MyApp {
   }
 
   onServerListClicked(){
-    this.nav.push(this.pages[1].component);
-    this.nav.setRoot(this.pages[1].component);
+    console.log("serverlistclicked");
+    this.openPage(this.pages[1]);
     this.rootPage.title = "Server List";
   }
 
   openPage(page) {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
+    console.log(this.nav);
     this.nav.setRoot(page.component);
   }
 
