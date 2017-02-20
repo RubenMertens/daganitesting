@@ -38,7 +38,7 @@ export class MapPage {
       }
 
       this.map.moveCamera(position);
-    })
+    });
 
     let location = new GoogleMapsLatLng(-34.9290, 138.6010);
 
