@@ -22,6 +22,10 @@ export class ConnectionService {
     let url : string = this.backEndAdress + "games"
   }
 
+  sendLocationData(coords){
+    this.ws.send(coords);
+  }
+
   setupTCPSocket(){
 
     this.ws = new WebSocket("ws://echo.websocket.org");
@@ -31,6 +35,7 @@ export class ConnectionService {
       this.send(json);*/
 
     };
+
     this.ws.onmessage = function (event) {
       console.log("received : " + event.data)
     }

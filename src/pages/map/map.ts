@@ -3,6 +3,7 @@ import {NavController, NavParams, Platform} from 'ionic-angular';
 import {
   GoogleMap, GoogleMapsLatLng, GoogleMapsEvent, Geolocation, CameraPosition, GoogleMapsPolygon, GoogleMapsLatLngBounds
 } from "ionic-native";
+import {ConnectionService} from "../../providers/connection-service";
 
 /*
  Generated class for the Map page.
@@ -14,7 +15,8 @@ import {
 
 @Component({
   selector: 'page-map',
-  templateUrl: 'map.html'
+  templateUrl: 'map.html',
+  providers:[ConnectionService]
 })
 export class MapPage {
 
@@ -24,10 +26,12 @@ export class MapPage {
   private teamColor: string[] = ["#d3d3d3","#4CAF50","#FFC107", "#E91E63"];
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public platform: Platform) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public platform: Platform,public  connectionService:ConnectionService) {
     platform.ready().then(() => {
       this.loadMap();
+
     });
+    this.connectionService.setupTCPSocket();
   }
 
 
@@ -48,7 +52,7 @@ export class MapPage {
 /*
       console.log(isInGroteMarkt);
 */
-
+      this.connectionService.sendLocationData(data.coords.latitude + "," + data.coords.longitude);
 
     });
 
