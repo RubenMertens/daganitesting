@@ -12,7 +12,7 @@ import {MapPage} from "../pages/map/map";
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
-  rootPage:any = MapPage;
+  rootPage:any = HomePage;
 
   pages: Array<{title: string, component: any}>;
 

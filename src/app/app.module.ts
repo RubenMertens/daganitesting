@@ -4,7 +4,6 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import {ServerListPage} from "../pages/server-list/server-list";
 import {MapPage} from "../pages/map/map";
-import  {LocationTracker} from "../providers/location-tracker"
 
 @NgModule({
   declarations: [
@@ -23,6 +22,6 @@ import  {LocationTracker} from "../providers/location-tracker"
     ServerListPage,
     MapPage
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, LocationTracker]
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
 })
 export class AppModule {}
