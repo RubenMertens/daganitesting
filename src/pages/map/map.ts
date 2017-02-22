@@ -49,6 +49,7 @@ export class MapPage {
       console.log(isInGroteMarkt);
 */
 
+
     });
 
     this.map = new GoogleMap('map', {
