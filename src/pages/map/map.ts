@@ -52,7 +52,7 @@ export class MapPage {
 /*
       console.log(isInGroteMarkt);
 */
-      this.connectionService.sendLocationData(data.coords.latitude + "," + data.coords.longitude);
+      this.connectionService.sendLocationData(data.coords.latitude, data.coords.longitude);
 
     });
 
