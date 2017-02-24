@@ -9,6 +9,7 @@ export class ConnectionService {
   ws :any;
 
   private backEndAdress :string = "https://stniklaas-stadsspel.herokuapp.com/api/";
+  //private backEndAdress:string ="https://localhost:8090/api/";
 
   constructor(public http: Http) {
 

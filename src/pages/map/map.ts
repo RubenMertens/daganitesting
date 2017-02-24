@@ -30,11 +30,17 @@ export class MapPage {
     platform.ready().then(() => {
       this.loadMap();
     });
+    let bullShit:string = "58b04c6a75467e000470946d";
     this.connectionService.getStagedGames().subscribe((data)=> {
-      console.log(data);
+      for (let obj of data) {
+        console.log(obj);
+        if(obj.name == "firstGame"){
+          bullShit = obj.id;
+        }
+      }
     });
 
-    this.connectionService.registerToGame("58b0342eebbf131754f1a228").subscribe((data) => {
+    this.connectionService.registerToGame(bullShit).subscribe((data) => {
 
 
       this.connectionService.setupTCPSocket(data); //todo fix the right data extraction
