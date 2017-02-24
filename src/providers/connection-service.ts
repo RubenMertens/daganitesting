@@ -1,6 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Http, Response} from "@angular/http";
 import {Observable} from "rxjs";
+import 'rxjs/Rx';
 import {LocationMessage} from "../domain/LocationMessage";
 @Injectable()
 export class ConnectionService {
@@ -19,6 +20,16 @@ export class ConnectionService {
 
   }
 
+  registerToGame(gameId: string) : Observable<any> {
+    let url : string = this.backEndAdress+"games/" + gameId + "/register";
+    return this.http.post(url,{clientID:1,name: "boooooooooooooobs",password:""});
+  }
+/*
+  Request body
+  private String clientID;
+  private String name;
+  private String password;*/
+
   findSocketGate() {
     let url : string = this.backEndAdress + "games"
   }
@@ -29,9 +40,14 @@ export class ConnectionService {
     this.ws.send(test);
   }
 
-  setupTCPSocket(){
+  getStagedGames(){
+    let url :string = this.backEndAdress+"games/staged";
+    return this.http.get(url).map(this.extractData);
+  }
 
-    this.ws = new WebSocket("ws://echo.websocket.org");
+  setupTCPSocket(url:string){
+
+    this.ws = new WebSocket(url);
     this.ws.onopen = function () {
       console.log("connection made");
      /* let json : string = JSON.stringify({message : "kakaka"});
@@ -44,10 +60,11 @@ export class ConnectionService {
     }
   }
 
-
-
   private extractData(res : Response){
     let body = res.json();
+    console.log(res.status);
+    console.log("body : ");
+    console.log(body);
     return body;
   }
 

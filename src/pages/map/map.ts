@@ -29,10 +29,36 @@ export class MapPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public platform: Platform,public  connectionService:ConnectionService) {
     platform.ready().then(() => {
       this.loadMap();
-
     });
-    this.connectionService.setupTCPSocket();
+    this.connectionService.getStagedGames().subscribe((data)=> {
+      console.log(data);
+    });
+
+    this.connectionService.registerToGame("58b0342eebbf131754f1a228").subscribe((data) => {
+
+
+      this.connectionService.setupTCPSocket(data); //todo fix the right data extraction
+
+    })
   }
+
+/*  ConnectionResource {
+  private ConnectionDetails details;
+  private String clientToken;
+
+  public ConnectionResource(ConnectionDetails details, String clientToken) {
+  this.details = details;
+  this.clientToken = clientToken;
+}
+
+public ConnectionDetails getDetails() {
+  return details;
+}
+
+public String getClientToken() {
+  return clientToken;
+}
+}*/
 
 
 
