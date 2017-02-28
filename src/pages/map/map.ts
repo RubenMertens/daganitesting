@@ -30,22 +30,28 @@ export class MapPage {
     platform.ready().then(() => {
       this.loadMap();
     });
-    let bullShit:string = "58b04c6a75467e000470946d";
+    let bullShit:string = "58b546e6beed612590f049da";
     this.connectionService.getStagedGames().subscribe((data)=> {
       for (let obj of data) {
-        console.log(obj);
-        if(obj.name == "firstGame"){
+
+        if(obj.name === "firstGame"){
           bullShit = obj.id;
         }
       }
+
+      console.log("registering to " + bullShit);
+      this.connectionService.registerToGame(bullShit).subscribe((data) => {
+
+        //let websocketurl:string = "ws://" + data.details.address + ":"+ data.details.port;
+
+        let websocketurl:string = "ws://" + "192.168.0.247" + ":"+ data.details.port;
+        console.log("connecting to this websocket");
+        console.log(websocketurl);
+        this.connectionService.setupTCPSocket(websocketurl); //todo fix the right data extraction*/
+
+      })
     });
 
-    this.connectionService.registerToGame(bullShit).subscribe((data) => {
-
-
-      this.connectionService.setupTCPSocket(data); //todo fix the right data extraction
-
-    })
   }
 
 /*  ConnectionResource {

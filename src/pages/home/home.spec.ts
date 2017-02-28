@@ -8,7 +8,6 @@ let home = null;
 
 describe('Home componenet',() => {
   beforeEach(() => {
-    home = new HomePage(new NavController() , new NavParams());
   });
 
 });

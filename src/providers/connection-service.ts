@@ -8,8 +8,10 @@ export class ConnectionService {
 
   ws :any;
 
-  private backEndAdress :string = "https://stniklaas-stadsspel.herokuapp.com/api/";
-  //private backEndAdress:string ="https://localhost:8090/api/";
+  //private backEndAdress :string = "https://stniklaas-stadsspel.herokuapp.com/api/";
+
+  private backEndAdress:string ="http://192.168.0.247:8090/api/";
+  //private backEndAdress:string= "http://localhost:8090/api/";
 
   constructor(public http: Http) {
 
@@ -23,7 +25,7 @@ export class ConnectionService {
 
   registerToGame(gameId: string) : Observable<any> {
     let url : string = this.backEndAdress+"games/" + gameId + "/register";
-    return this.http.post(url,{clientID:1,name: "boooooooooooooobs",password:""});
+    return this.http.post(url,{clientID:1,name: "boooooooooooooobs",password:""}).map(this.extractData);
   }
 /*
   Request body
@@ -43,7 +45,8 @@ export class ConnectionService {
 
   getStagedGames(){
     let url :string = this.backEndAdress+"games/staged";
-    return this.http.get(url).map(this.extractData);
+    console.log("url for staged games : " + url);
+    return this.http.get(url).map(this.extractData).catch(this.handleError);
   }
 
   setupTCPSocket(url:string){
@@ -67,6 +70,19 @@ export class ConnectionService {
     console.log("body : ");
     console.log(body);
     return body;
+  }
+
+  private handleError (error: Response | any) {
+    // In a real world app, we might use a remote logging infrastructure
+    let errMsg: string;
+    if (error instanceof Response) {
+      const body = error.text() || '';
+      errMsg = `${error.status} - ${error.statusText || ''} ${body}`;
+    } else {
+      errMsg = error.message ? error.message : error.toString();
+    }
+    console.error(errMsg);
+    return Observable.throw(errMsg);
   }
 
 

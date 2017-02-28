@@ -1,3 +1,4 @@
+/*
 import { MagicBall } from './magic-ball';
 
 let magicBall = null;
@@ -33,3 +34,4 @@ it('should have both yes and no available in result set', () => {
 )
 
 });
+*/
