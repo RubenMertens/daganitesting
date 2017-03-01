@@ -31,7 +31,7 @@ export class MapPage {
       this.loadMap();
     });
     let bullShit:string = "58b546e6beed612590f049da";
-    this.connectionService.getStagedGames().subscribe((data)=> {
+   /* this.connectionService.getStagedGames().subscribe((data)=> {
       for (let obj of data) {
 
         if(obj.name === "firstGame"){
@@ -47,10 +47,14 @@ export class MapPage {
         let websocketurl:string = "ws://" + "192.168.0.247" + ":"+ data.details.port;
         console.log("connecting to this websocket");
         console.log(websocketurl);
-        this.connectionService.setupTCPSocket(websocketurl); //todo fix the right data extraction*/
+        this.connectionService.setupTCPSocket(websocketurl); //todo fix the right data extraction*!/
 
       })
-    });
+    });*/
+
+    //this.connectionService.setupTCPSocket("ws://192.168.0.247:8090/location");
+
+
 
   }
 
@@ -87,9 +91,6 @@ public String getClientToken() {
       //this.map.moveCamera(position);
 
       let isInGroteMarkt =  groteMarktBounds.contains(new GoogleMapsLatLng(data.coords.latitude,data.coords.longitude));
-/*
-      console.log(isInGroteMarkt);
-*/
       this.connectionService.sendLocationData(data.coords.latitude, data.coords.longitude);
 
     });

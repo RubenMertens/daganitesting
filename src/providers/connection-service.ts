@@ -3,6 +3,8 @@ import {Http, Response} from "@angular/http";
 import {Observable} from "rxjs";
 import 'rxjs/Rx';
 import {LocationMessage} from "../domain/LocationMessage";
+import {MessageWrapper} from "../domain/MessageWrapper";
+
 @Injectable()
 export class ConnectionService {
 
@@ -38,9 +40,21 @@ export class ConnectionService {
   }
 
   sendLocationData(lat:number, lon:number){
-    let message:LocationMessage = new LocationMessage("1","1",lat,lon);
-    let test = JSON.stringify(message);
-    this.ws.send(test);
+    if(this.ws != null && this.ws.readyState === this.ws.OPEN ){
+
+      let message: LocationMessage = new LocationMessage("1", "1", lat, lon);
+      let messageString = JSON.stringify(message);
+
+      let messageWrapper: MessageWrapper = new MessageWrapper("LOCATION", messageString);
+      let messageWrapperString = JSON.stringify(messageWrapper);
+
+      this.ws.send(messageWrapperString);
+      console.log("message send : ");
+      console.log(messageWrapperString);
+
+    }else{
+      console.log("tried to send location : connection is not open")
+    }
   }
 
   getStagedGames(){
@@ -50,7 +64,7 @@ export class ConnectionService {
   }
 
   setupTCPSocket(url:string){
-
+    console.log("trying to connect to websocket url " + url);
     this.ws = new WebSocket(url);
     this.ws.onopen = function () {
       console.log("connection made");
