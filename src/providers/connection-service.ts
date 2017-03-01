@@ -4,11 +4,13 @@ import {Observable} from "rxjs";
 import 'rxjs/Rx';
 import {LocationMessage} from "../domain/LocationMessage";
 import {MessageWrapper} from "../domain/MessageWrapper";
+import {assetUrl} from "@angular/compiler/src/identifiers";
 
 @Injectable()
 export class ConnectionService {
 
   ws :any;
+  socket;
 
   //private backEndAdress :string = "https://stniklaas-stadsspel.herokuapp.com/api/";
 
@@ -78,6 +80,10 @@ export class ConnectionService {
     }
   }
 
+  socketSetup(url:string){
+  this.socket = io(url)
+}
+
   private extractData(res : Response){
     let body = res.json();
     console.log(res.status);
@@ -98,6 +104,8 @@ export class ConnectionService {
     console.error(errMsg);
     return Observable.throw(errMsg);
   }
+
+
 
 
 }

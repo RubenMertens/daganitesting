@@ -31,7 +31,7 @@ export class MapPage {
       this.loadMap();
     });
     let bullShit:string = "58b546e6beed612590f049da";
-   /* this.connectionService.getStagedGames().subscribe((data)=> {
+    this.connectionService.getStagedGames().subscribe((data)=> {
       for (let obj of data) {
 
         if(obj.name === "firstGame"){
@@ -50,7 +50,7 @@ export class MapPage {
         this.connectionService.setupTCPSocket(websocketurl); //todo fix the right data extraction*!/
 
       })
-    });*/
+    });
 
     //this.connectionService.setupTCPSocket("ws://192.168.0.247:8090/location");
 
