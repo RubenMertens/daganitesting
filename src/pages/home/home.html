@@ -6,6 +6,13 @@
 
 
 <ion-content padding>
+
+  <ion-item>
+    <ion-label color="primary">Your username</ion-label>
+    <ion-input placeholder="Type your name here" [(ngModel)]="playerName" name="playerName"></ion-input>
+
+  </ion-item>
+
 <button ion-button full (click)=goToServerList()>
   goto other page
 </button>

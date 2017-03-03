@@ -11,15 +11,20 @@ import {ConnectionService} from "../../providers/connection-service";
 })
 export class HomePage {
 
+  playerName:string;
+
+
 
   constructor(public navCtrl: NavController, public navParams: NavParams , public platform : Platform , public connectionService : ConnectionService) {
   //connectionService.setupTCPSocket();
-
+    this.connectionService.getAreaLocations().subscribe(data => {
+      console.log(data);
+    })
   }
 
 
   goToServerList(){
-    this.navCtrl.push(ServerListPage);
+    this.navCtrl.push(ServerListPage,{"playerName":this.playerName});
   }
 
   goToMap(){

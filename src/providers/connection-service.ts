@@ -10,11 +10,9 @@ import {assetUrl} from "@angular/compiler/src/identifiers";
 export class ConnectionService {
 
   ws :any;
-  socket;
 
   //private backEndAdress :string = "https://stniklaas-stadsspel.herokuapp.com/api/";
-
-  private backEndAdress:string ="http://192.168.0.247:8090/api/";
+  private baseAdress:string = "http://192.168.0.247:8090/api/";
   //private backEndAdress:string= "http://localhost:8090/api/";
 
   constructor(public http: Http) {
@@ -22,15 +20,18 @@ export class ConnectionService {
   }
 
   connectToGame(gameId : string) : Observable<any> {
-    let url : string = this.backEndAdress + "games/" + gameId;
+    let url : string = this.baseAdress + "games/" + gameId;
     return this.http.get(url).map(this.extractData);
 
   }
 
-  registerToGame(gameId: string) : Observable<any> {
-    let url : string = this.backEndAdress+"games/" + gameId + "/register";
-    return this.http.post(url,{clientID:1,name: "boooooooooooooobs",password:""}).map(this.extractData);
+  registerToGame(gameId: string, playerName:string, password:string) : Observable<any> {
+    let url : string = this.baseAdress+"games/" + gameId + "/register";
+    //return this.http.post(url,{clientID:1,name: "boooooooooooooobs",password:""}).map(this.extractData);
+    return this.http.post(url,{clientID:1,name: playerName,password:password}).map(this.extractData);
   }
+
+
 /*
   Request body
   private String clientID;
@@ -38,7 +39,7 @@ export class ConnectionService {
   private String password;*/
 
   findSocketGate() {
-    let url : string = this.backEndAdress + "games"
+    let url : string = this.baseAdress + "games"
   }
 
   sendLocationData(lat:number, lon:number){
@@ -60,7 +61,7 @@ export class ConnectionService {
   }
 
   getStagedGames(){
-    let url :string = this.backEndAdress+"games/staged";
+    let url :string = this.baseAdress+"games/staged";
     console.log("url for staged games : " + url);
     return this.http.get(url).map(this.extractData).catch(this.handleError);
   }
@@ -80,9 +81,12 @@ export class ConnectionService {
     }
   }
 
-  socketSetup(url:string){
-  this.socket = io(url)
-}
+  getAreaLocations() : Observable<any>{
+    let url:string = this.baseAdress + "locations/arealocations";
+    return this.http.get(url).map(this.extractData);
+  }
+
+
 
   private extractData(res : Response){
     let body = res.json();
