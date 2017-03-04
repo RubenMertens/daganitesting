@@ -4,6 +4,7 @@ import {
   GoogleMap, GoogleMapsLatLng, GoogleMapsEvent, Geolocation, CameraPosition, GoogleMapsPolygon, GoogleMapsLatLngBounds
 } from "ionic-native";
 import {ConnectionService} from "../../providers/connection-service";
+import {InventoryPage} from "../inventory/inventory";
 
 /*
  Generated class for the Map page.
@@ -65,23 +66,10 @@ export class MapPage {
 
   }
 
-/*  ConnectionResource {
-  private ConnectionDetails details;
-  private String clientToken;
+  gotoInventory(){
+    this.navCtrl.push(InventoryPage);
+  }
 
-  public ConnectionResource(ConnectionDetails details, String clientToken) {
-  this.details = details;
-  this.clientToken = clientToken;
-}
-
-public ConnectionDetails getDetails() {
-  return details;
-}
-
-public String getClientToken() {
-  return clientToken;
-}
-}*/
 
 
 
@@ -168,6 +156,9 @@ public String getClientToken() {
   });
 
 }
+
+
+
 }
 
 /*  this.map.addPolygon({

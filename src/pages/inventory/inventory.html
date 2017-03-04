@@ -1,0 +1,61 @@
+<!--
+  Generated template for the Inventory page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>inventory</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <p text-right>
+          Team totaal:  <ion-icon name="logo-usd"></ion-icon> {{totalMoney}}
+        </p>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <h1 text-center>
+          <ion-icon name="logo-usd"></ion-icon> {{carriedMoney}}
+        </h1>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-list>
+          <ion-list-header>
+            Legal
+          </ion-list-header>
+            <ion-item *ngFor="let item of legalItems" item-left>
+              <h2 item-left>{{item.name}}</h2>
+              <h2 item-right>{{item.amount}}</h2>
+            </ion-item>
+        </ion-list>
+      </ion-col>
+      <ion-col>
+        <ion-list>
+          <ion-list-header>
+            Illegal
+          </ion-list-header>
+          <ion-item *ngFor="let item of illegalitems">
+            <h2 item-left>{{item.name}}</h2>
+            <h2 item-right>{{item.amount}}</h2>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+
+
+</ion-content>
