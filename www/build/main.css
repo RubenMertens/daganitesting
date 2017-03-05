@@ -21277,6 +21277,11 @@ sub {
   }
 }
 
+page-confirmsale .error {
+  color: red;
+  font-size: large;
+}
+
 page-home .scroll-content {
   background-color: #ffffff;
 }

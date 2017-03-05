@@ -17,9 +17,6 @@ export class HomePage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams , public platform : Platform , public connectionService : ConnectionService) {
   //connectionService.setupTCPSocket();
-    this.connectionService.getAreaLocations().subscribe(data => {
-      console.log(data);
-    })
   }
 
 

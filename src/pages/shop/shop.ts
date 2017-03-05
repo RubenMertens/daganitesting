@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import {NavController, NavParams, AlertController} from 'ionic-angular';
-import {BuytabPage} from "../buytab/buytab";
-import {SelltabPage} from "../selltab/selltab";
 import {ListItem} from "../../domain/ListItem";
+import {Player} from "../../providers/Player";
+import {ConfirmsalePage} from "../confirmsale/confirmsale";
 
 /*
   Generated class for the Shop page.
@@ -12,62 +12,39 @@ import {ListItem} from "../../domain/ListItem";
 */
 @Component({
   selector: 'page-shop',
-  templateUrl: 'shop.html'
+  templateUrl: 'shop.html',
 })
 export class ShopPage {
 
-  private options = ["Sell","Buy"];
+  private options:string;
 
-  private sellTab:any;
-  private buyTab:any  ;
-
-  private inventory:ListItem[];
-
-  private carriedMoney:number;
+  private shopInventory:ListItem[];
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-              public alertCtrl: AlertController) {
-    this.sellTab = SelltabPage;
-    this.buyTab = BuytabPage;
+              public alertCtrl: AlertController,
+              public player:Player) {
+      this.options = "Sell"
     this.loadDummyData();
   }
 
-
   loadDummyData(){
-    this.carriedMoney = 1500000;
-    this.inventory = [
-      new ListItem("pizza",60,10),
-      new ListItem("laptop",80,1500),
-      new ListItem("aandeel",1300,5),
-      new ListItem("ijs",150,30)
-    ];
+    this.shopInventory = [
+      new ListItem("pizza",1000,10),
+      new ListItem("laptop",1000,1500),
+      new ListItem("aandeel",1000,5),
+      new ListItem("ij",1000,30),
+    ]
   }
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad ShopPage');
   }
 
-  handleSell(clickedItem: ListItem){
+  handleSell(clickedItem: ListItem) {
 
-    let alert = this.alertCtrl.create();
-    alert.setTitle("Sell");
-    alert.setMessage("How much " + clickedItem.name + " would you like to sell");
-    alert.addInput({
-      type: 'number',
-      label: 'Amount',
-      value: clickedItem.amount+"",
-    });
-    alert.addButton("cancel");
-    alert.addButton({
-      text:"Sell",
-      handler : data => {
-        console.log("Ok clicked");
-        console.log(data)
-      }
-    });
-
-    alert.present();
+    this.navCtrl.push(ConfirmsalePage, clickedItem);
   }
 
-
+  //todo remove item when amount < 0
 
 }

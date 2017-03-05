@@ -4,13 +4,12 @@ import { StatusBar, Splashscreen } from 'ionic-native';
 
 import { HomePage } from '../pages/home/home';
 import {ServerListPage} from "../pages/server-list/server-list";
-import {MapPage} from "../pages/map/map";
-import {InventoryPage} from "../pages/inventory/inventory";
 import {ShopPage} from "../pages/shop/shop";
+import {Player} from "../providers/Player";
 
 
 @Component({
-  templateUrl: 'app.html'
+  templateUrl: 'app.html',
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;

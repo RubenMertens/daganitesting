@@ -1,7 +1,8 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {NavController, NavParams, Platform} from 'ionic-angular';
 import {
-  GoogleMap, GoogleMapsLatLng, GoogleMapsEvent, Geolocation, CameraPosition, GoogleMapsPolygon, GoogleMapsLatLngBounds
+  GoogleMap, GoogleMapsLatLng, GoogleMapsEvent, Geolocation, CameraPosition, GoogleMapsPolygon, GoogleMapsLatLngBounds,
+  GoogleMapsGroundOverlay
 } from "ionic-native";
 import {ConnectionService} from "../../providers/connection-service";
 import {InventoryPage} from "../inventory/inventory";
@@ -38,7 +39,7 @@ export class MapPage {
       this.loadMap();
     });
 
-    /*let bullShit:string = "58b546e6beed612590f049da";
+/*    let bullShit:string = "58b546e6beed612590f049da";
     this.connectionService.getStagedGames().subscribe((data)=> {
       for (let obj of data) {
 
@@ -48,29 +49,28 @@ export class MapPage {
       }
 
       console.log("registering to " + bullShit);
-      this.connectionService.registerToGame(bullShit).subscribe((data) => {
+      this.connectionService.registerToGame(bullShit,"BOOOOOOOOOOBS","").subscribe((data) => {
 
         //let websocketurl:string = "ws://" + data.details.address + ":"+ data.details.port;
 
-        let websocketurl:string = "ws://" + "192.168.0.247" + ":"+ data.details.port;
+        let websocketurl:string = "ws://" + "192.168.0.248" + ":"+ data.details.port;
         console.log("connecting to this websocket");
         console.log(websocketurl);
         this.connectionService.setupTCPSocket(websocketurl); //todo fix the right data extraction*!/
 
       })
     });*/
+    /*this.connectionService.registerToGame("name","thing","").subscribe(data => {
+      console.log(data);
+    });*/
 
-    //this.connectionService.setupTCPSocket("ws://192.168.0.247:8090/location");
-
-
-
+    this.connectionService.setupTCPSocket("ws://192.168.0.250:8090/user");
+    //this.connectionService.setupTCPSocket("ws://stniklaas-stadsspel.herokuapp.com/user");
   }
 
   gotoInventory(){
     this.navCtrl.push(InventoryPage);
   }
-
-
 
 
   loadMap() {
@@ -91,7 +91,7 @@ export class MapPage {
     });
 
     this.map = new GoogleMap('map', {
-      'backgroundColor': 'white',
+      'backgroundColor': 'dark',
       'controls': {
         'compass': true,
         'myLocationButton': true,
@@ -105,7 +105,6 @@ export class MapPage {
         'zoom': true
       }
     });
-
 
 
     this.map.on(GoogleMapsEvent.MAP_READY).subscribe(() => {

@@ -6,8 +6,8 @@ import {ServerListPage} from "../pages/server-list/server-list";
 import {MapPage} from "../pages/map/map";
 import {InventoryPage} from "../pages/inventory/inventory";
 import {ShopPage} from "../pages/shop/shop";
-import {SelltabPage} from "../pages/selltab/selltab";
-import {BuytabPage} from "../pages/buytab/buytab";
+import {ConfirmsalePage} from "../pages/confirmsale/confirmsale";
+import {Player} from "../providers/Player";
 
 @NgModule({
   declarations: [
@@ -17,6 +17,7 @@ import {BuytabPage} from "../pages/buytab/buytab";
     MapPage,
     InventoryPage,
     ShopPage,
+    ConfirmsalePage
 
   ],
   imports: [
@@ -30,7 +31,8 @@ import {BuytabPage} from "../pages/buytab/buytab";
     MapPage,
     InventoryPage,
     ShopPage,
+    ConfirmsalePage
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},Player]
 })
 export class AppModule {}

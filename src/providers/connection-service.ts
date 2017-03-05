@@ -11,8 +11,8 @@ export class ConnectionService {
 
   ws :any;
 
-  //private backEndAdress :string = "https://stniklaas-stadsspel.herokuapp.com/api/";
-  private baseAdress:string = "http://192.168.0.247:8090/api/";
+  //private baseAdress :string = "https://stniklaas-stadsspel.herokuapp.com/api/";
+  private baseAdress:string = "http://192.168.0.250:8090/api/";
   //private backEndAdress:string= "http://localhost:8090/api/";
 
   constructor(public http: Http) {
@@ -45,10 +45,10 @@ export class ConnectionService {
   sendLocationData(lat:number, lon:number){
     if(this.ws != null && this.ws.readyState === this.ws.OPEN ){
 
-      let message: LocationMessage = new LocationMessage("1", "1", lat, lon);
+      let message: LocationMessage = new LocationMessage(lat, lon);
       let messageString = JSON.stringify(message);
 
-      let messageWrapper: MessageWrapper = new MessageWrapper("LOCATION", messageString);
+      let messageWrapper: MessageWrapper = new MessageWrapper("LOCATION", messageString , "1","1");
       let messageWrapperString = JSON.stringify(messageWrapper);
 
       this.ws.send(messageWrapperString);

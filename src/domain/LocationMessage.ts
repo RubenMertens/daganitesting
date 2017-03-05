@@ -5,7 +5,7 @@
 
 export class LocationMessage{
 
-  constructor(public gameID: string, public clientID: string, public latitude:number, public longitude:number){
+  constructor(public latitude:number, public longitude:number){
 
   }
 }

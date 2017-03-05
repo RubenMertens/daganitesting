@@ -4,5 +4,5 @@
 
 export class MessageWrapper {
 
-  constructor(public messageType:string,public messageString:string){}
+  constructor(public messageType:string,public messageString:string ,public gameID: string, public clientID: string,){}
 }

@@ -18,7 +18,7 @@
     <ion-row>
       <ion-col>
         <h1 text-center>
-          <ion-icon name="logo-usd"></ion-icon> {{carriedMoney}}
+          <ion-icon name="logo-usd"></ion-icon> {{player.carriedMoney}}
         </h1>
       </ion-col>
     </ion-row>
@@ -61,7 +61,7 @@
               </ion-row>
             </ion-grid>
 
-            <button ion-item *ngFor="let item of inventory" (click)="handleSell(item)">
+            <button ion-item *ngFor="let item of player.inventory" (click)="handleSell(item)">
               <ion-grid>
                 <ion-row>
                   <ion-col>
