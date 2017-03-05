@@ -1,0 +1,40 @@
+<!--
+  Generated template for the Confirmsale page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+   <ion-title>Confirm Sale</ion-title>
+
+</ion-header>
+
+
+<ion-content padding>
+  <p text-center>Select the amount of {{clickedItem.name}} you want to sell!</p>
+
+
+  <ion-item>
+    <ion-input type="number" [(ngModel)]="value" name="value" min=0 max={{clickedItem.amount}}></ion-input> <!--todo fix min max attribute? -->
+  </ion-item>
+
+  <p class="error" text-center>{{errorMessage}}</p>
+
+  <ion-footer>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <button ion-button (click)="handleCancel()" full>Cancel</button>
+
+        </ion-col>
+        <ion-col>
+          <button ion-button (click)="handleSell()" full>Sell</button>
+
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+  </ion-footer>
+
+
+</ion-content>
