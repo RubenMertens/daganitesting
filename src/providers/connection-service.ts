@@ -10,13 +10,16 @@ import {assetUrl} from "@angular/compiler/src/identifiers";
 export class ConnectionService {
 
   ws :any;
+  token:string; //todo clean this up
+  private clientID:number;
+  private gameId:string;
 
-  //private baseAdress :string = "https://stniklaas-stadsspel.herokuapp.com/api/";
-  private baseAdress:string = "http://192.168.0.250:8090/api/";
+  private baseAdress :string = "https://stniklaas-stadsspel.herokuapp.com/api/";
+  //private baseAdress:string = "http://192.168.0.250:8090/api/";
   //private backEndAdress:string= "http://localhost:8090/api/";
 
   constructor(public http: Http) {
-
+    this.clientID = Math.floor(Math.random() * 1000000) + 1;
   }
 
   connectToGame(gameId : string) : Observable<any> {
@@ -28,7 +31,7 @@ export class ConnectionService {
   registerToGame(gameId: string, playerName:string, password:string) : Observable<any> {
     let url : string = this.baseAdress+"games/" + gameId + "/register";
     //return this.http.post(url,{clientID:1,name: "boooooooooooooobs",password:""}).map(this.extractData);
-    return this.http.post(url,{clientID:1,name: playerName,password:password}).map(this.extractData);
+    return this.http.post(url,{clientID:this.clientID,name: playerName,password:password}).map(this.extractData);
   }
 
 
@@ -48,7 +51,7 @@ export class ConnectionService {
       let message: LocationMessage = new LocationMessage(lat, lon);
       let messageString = JSON.stringify(message);
 
-      let messageWrapper: MessageWrapper = new MessageWrapper("LOCATION", messageString , "1","1");
+      let messageWrapper: MessageWrapper = new MessageWrapper("LOCATION",this.token, messageString , this.gameId,this.clientID +"");
       let messageWrapperString = JSON.stringify(messageWrapper);
 
       this.ws.send(messageWrapperString);
@@ -66,7 +69,9 @@ export class ConnectionService {
     return this.http.get(url).map(this.extractData).catch(this.handleError);
   }
 
-  setupTCPSocket(url:string){
+  setupTCPSocket(url:string, token:string, gameId:string){
+    this.token =token;
+    this.gameId = gameId;
     console.log("trying to connect to websocket url " + url);
     this.ws = new WebSocket(url);
     this.ws.onopen = function () {
@@ -107,6 +112,10 @@ export class ConnectionService {
     }
     console.error(errMsg);
     return Observable.throw(errMsg);
+  }
+
+  stopConnection(){
+    this.ws.close();
   }
 
 

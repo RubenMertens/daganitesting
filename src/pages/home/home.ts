@@ -3,6 +3,7 @@ import {NavController, NavParams, Platform} from "ionic-angular";
 import {ServerListPage} from "../server-list/server-list";
 import {MapPage} from "../map/map";
 import {ConnectionService} from "../../providers/connection-service";
+import {ShopPage} from "../shop/shop";
 
 @Component({
   selector: 'page-home',
@@ -28,6 +29,10 @@ export class HomePage {
     this.navCtrl.push(MapPage);
 
 
+  }
+
+  goToShop(){
+    this.navCtrl.push(ShopPage);
   }
 
 

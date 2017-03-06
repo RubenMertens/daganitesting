@@ -13,7 +13,7 @@ import {Player} from "../providers/Player";
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
-  rootPage:any = ShopPage;
+  rootPage:any = HomePage;
 
   pages: Array<{title: string, component: any}>;
 

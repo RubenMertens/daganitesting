@@ -22,6 +22,275 @@ import {InventoryPage} from "../inventory/inventory";
 })
 export class MapPage {
 
+  private MapStyles = [
+    {
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#1d2c4d"
+        }
+      ]
+    },
+    {
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#8ec3b9"
+        }
+      ]
+    },
+    {
+      "elementType": "labels.text.stroke",
+      "stylers": [
+        {
+          "color": "#1a3646"
+        }
+      ]
+    },
+    {
+      "featureType": "administrative",
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "visibility": "off"
+        }
+      ]
+    },
+    {
+      "featureType": "administrative.country",
+      "elementType": "geometry.stroke",
+      "stylers": [
+        {
+          "color": "#4b6878"
+        }
+      ]
+    },
+    {
+      "featureType": "administrative.land_parcel",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#64779e"
+        }
+      ]
+    },
+    {
+      "featureType": "administrative.province",
+      "elementType": "geometry.stroke",
+      "stylers": [
+        {
+          "color": "#4b6878"
+        }
+      ]
+    },
+    {
+      "featureType": "landscape.man_made",
+      "elementType": "geometry.stroke",
+      "stylers": [
+        {
+          "color": "#334e87"
+        }
+      ]
+    },
+    {
+      "featureType": "landscape.natural",
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#023e58"
+        }
+      ]
+    },
+    {
+      "featureType": "poi",
+      "stylers": [
+        {
+          "visibility": "off"
+        }
+      ]
+    },
+    {
+      "featureType": "poi",
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#283d6a"
+        }
+      ]
+    },
+    {
+      "featureType": "poi",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#6f9ba5"
+        }
+      ]
+    },
+    {
+      "featureType": "poi",
+      "elementType": "labels.text.stroke",
+      "stylers": [
+        {
+          "color": "#1d2c4d"
+        }
+      ]
+    },
+    {
+      "featureType": "poi.park",
+      "elementType": "geometry.fill",
+      "stylers": [
+        {
+          "color": "#023e58"
+        }
+      ]
+    },
+    {
+      "featureType": "poi.park",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#3C7680"
+        }
+      ]
+    },
+    {
+      "featureType": "road",
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#304a7d"
+        }
+      ]
+    },
+    {
+      "featureType": "road",
+      "elementType": "labels.icon",
+      "stylers": [
+        {
+          "visibility": "off"
+        }
+      ]
+    },
+    {
+      "featureType": "road",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#98a5be"
+        }
+      ]
+    },
+    {
+      "featureType": "road",
+      "elementType": "labels.text.stroke",
+      "stylers": [
+        {
+          "color": "#1d2c4d"
+        }
+      ]
+    },
+    {
+      "featureType": "road.highway",
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#2c6675"
+        }
+      ]
+    },
+    {
+      "featureType": "road.highway",
+      "elementType": "geometry.stroke",
+      "stylers": [
+        {
+          "color": "#255763"
+        }
+      ]
+    },
+    {
+      "featureType": "road.highway",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#b0d5ce"
+        }
+      ]
+    },
+    {
+      "featureType": "road.highway",
+      "elementType": "labels.text.stroke",
+      "stylers": [
+        {
+          "color": "#023e58"
+        }
+      ]
+    },
+    {
+      "featureType": "transit",
+      "stylers": [
+        {
+          "visibility": "off"
+        }
+      ]
+    },
+    {
+      "featureType": "transit",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#98a5be"
+        }
+      ]
+    },
+    {
+      "featureType": "transit",
+      "elementType": "labels.text.stroke",
+      "stylers": [
+        {
+          "color": "#1d2c4d"
+        }
+      ]
+    },
+    {
+      "featureType": "transit.line",
+      "elementType": "geometry.fill",
+      "stylers": [
+        {
+          "color": "#283d6a"
+        }
+      ]
+    },
+    {
+      "featureType": "transit.station",
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#3a4762"
+        }
+      ]
+    },
+    {
+      "featureType": "water",
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#0e1626"
+        }
+      ]
+    },
+    {
+      "featureType": "water",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#4e6d70"
+        }
+      ]
+    }
+  ];
+
+
   map: GoogleMap;
 
   private safeZoneColor: string = "#0000FF";
@@ -33,13 +302,21 @@ export class MapPage {
   private circleRadius:number= 10;
   private cirlceStrokeWidth:number=1;
 
+  private clientID:number;
+
+  private token:string;
+  private gameId:string; //todo MA echt refactor dit
+
+
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public platform: Platform,public  connectionService:ConnectionService) {
     platform.ready().then(() => {
       this.loadMap();
     });
 
-/*    let bullShit:string = "58b546e6beed612590f049da";
+    this.clientID = Math.floor(Math.random() * 1000000) + 1;
+
+    let bullShit:string = "58b546e6beed612590f049da";
     this.connectionService.getStagedGames().subscribe((data)=> {
       for (let obj of data) {
 
@@ -49,22 +326,23 @@ export class MapPage {
       }
 
       console.log("registering to " + bullShit);
-      this.connectionService.registerToGame(bullShit,"BOOOOOOOOOOBS","").subscribe((data) => {
-
-        //let websocketurl:string = "ws://" + data.details.address + ":"+ data.details.port;
-
-        let websocketurl:string = "ws://" + "192.168.0.248" + ":"+ data.details.port;
+      this.gameId=bullShit;
+      this.connectionService.registerToGame(this.gameId,"BOOOOOOOOOOBS","").subscribe((data) => {
+        console.log(data);
+        let websocketurl = "ws://stniklaas-stadsspel.herokuapp.com/user";
+        this.token = data.clientToken;
         console.log("connecting to this websocket");
         console.log(websocketurl);
-        this.connectionService.setupTCPSocket(websocketurl); //todo fix the right data extraction*!/
+        this.connectionService.setupTCPSocket(websocketurl,this.token,this.gameId); //todo fix the right data extraction*!/
 
       })
-    });*/
+    });
+
     /*this.connectionService.registerToGame("name","thing","").subscribe(data => {
       console.log(data);
     });*/
 
-    this.connectionService.setupTCPSocket("ws://192.168.0.250:8090/user");
+    //this.connectionService.setupTCPSocket("ws://192.168.0.250:8090/user");
     //this.connectionService.setupTCPSocket("ws://stniklaas-stadsspel.herokuapp.com/user");
   }
 
@@ -91,7 +369,7 @@ export class MapPage {
     });
 
     this.map = new GoogleMap('map', {
-      'backgroundColor': 'dark',
+      'styles': this.MapStyles,
       'controls': {
         'compass': true,
         'myLocationButton': true,
@@ -154,9 +432,14 @@ export class MapPage {
 
   });
 
+
+
 }
 
-
+  restartConnection(){
+    this.connectionService.stopConnection();
+    this.connectionService.setupTCPSocket("ws://stniklaas-stadsspel.herokuapp.com/user",this.token,this.gameId);
+  }
 
 }
 
