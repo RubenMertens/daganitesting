@@ -18,7 +18,6 @@ import {InventoryPage} from "../inventory/inventory";
 @Component({
   selector: 'page-map',
   templateUrl: 'map.html',
-  providers:[ConnectionService]
 })
 export class MapPage {
 
@@ -294,68 +293,76 @@ export class MapPage {
   map: GoogleMap;
 
   private safeZoneColor: string = "#0000FF";
-  private districtAColor:string = "#FF0000";
-  private districtBColor:string = "#00FF00";
-  private teamColor: string[] = ["#d3d3d3","#4CAF50","#FFC107", "#E91E63"];
-  private circleColor:string = "#000000";
-  private strokeWidth:number= 5;
-  private circleRadius:number= 10;
-  private cirlceStrokeWidth:number=1;
+  private districtAColor: string = "#FF0000";
+  private districtBColor: string = "#00FF00";
+  private teamColor: string[] = ["#d3d3d3", "#4CAF50", "#FFC107", "#E91E63"];
+  private circleColor: string = "#000000";
+  private strokeWidth: number = 5;
+  private circleRadius: number = 10;
+  private cirlceStrokeWidth: number = 1;
+  private geoWatch:any;
 
-  private clientID:number;
-
-  private token:string;
-  private gameId:string; //todo MA echt refactor dit
-
+  private token: string;
+  private gameId: string; //todo MA echt refactor dit
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public platform: Platform,public  connectionService:ConnectionService) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public platform: Platform, public  connectionService: ConnectionService) {
     platform.ready().then(() => {
       this.loadMap();
     });
 
-    this.clientID = Math.floor(Math.random() * 1000000) + 1;
+    if (navParams.data != null) {
+      console.log(navParams);
 
-    let bullShit:string = "58b546e6beed612590f049da";
-    this.connectionService.getStagedGames().subscribe((data)=> {
-      for (let obj of data) {
+      this.gameId = navParams.data[1];
+      this.token = navParams.data[0].clientToken;
 
-        if(obj.name === "firstGame"){
-          bullShit = obj.id;
+      this.connectionService.setupTCPSocket(this.token, this.gameId);
+
+      this.connectionService.addMessageHandler(this.handleSocketMessage);
+
+    } else {
+      let bullShit: string = "58b546e6beed612590f049da";
+      this.connectionService.getStagedGames().subscribe((data) => {
+        for (let obj of data) {
+          if (obj.name === "firstGame") {
+            bullShit = obj.id;
+          }
         }
-      }
 
-      console.log("registering to " + bullShit);
-      this.gameId=bullShit;
-      this.connectionService.registerToGame(this.gameId,"BOOOOOOOOOOBS","").subscribe((data) => {
-        console.log(data);
-        let websocketurl = "ws://stniklaas-stadsspel.herokuapp.com/user";
-        this.token = data.clientToken;
-        console.log("connecting to this websocket");
-        console.log(websocketurl);
-        this.connectionService.setupTCPSocket(websocketurl,this.token,this.gameId); //todo fix the right data extraction*!/
+        console.log("registering to " + bullShit);
+        console.log(navParams);
+        this.gameId = bullShit;
+        this.connectionService.registerToGame(this.gameId, "BOOOOOOOOOOBS", "").subscribe((data) => {
+          console.log(data);
+          console.log("connecting to this websocket");
+          this.connectionService.setupTCPSocket(this.token, this.gameId); //todo fix the right data extraction*!/
 
-      })
-    });
+        })
+      });
+    }
 
-    /*this.connectionService.registerToGame("name","thing","").subscribe(data => {
-      console.log(data);
-    });*/
-
-    //this.connectionService.setupTCPSocket("ws://192.168.0.250:8090/user");
-    //this.connectionService.setupTCPSocket("ws://stniklaas-stadsspel.herokuapp.com/user");
   }
 
-  gotoInventory(){
+  handleSocketMessage(message) {
+    console.log("handling message");
+    console.log(message);
+  }
+
+  gotoInventory() {
     this.navCtrl.push(InventoryPage);
+  }
+
+  ionViewWillLeave(){
+    console.log("will leave map.");
+    this.connectionService.stopConnection();
+    this.geoWatch.unsubscribe();
   }
 
 
   loadMap() {
 
-    let watch = Geolocation.watchPosition();
-
-    watch.subscribe((data) => {
+    this.geoWatch= Geolocation.watchPosition().subscribe((data) => {
       let position: CameraPosition = {
         target: new GoogleMapsLatLng(data.coords.latitude, data.coords.longitude),
         zoom: 18,
@@ -394,20 +401,23 @@ export class MapPage {
           let poly = [];
           let treasureLoc: GoogleMapsLatLng;
           for (let point of obj.points) {
-            if(point.type ==="COORDINATE") {
+            if (point.type === "COORDINATE") {
               poly.push(new GoogleMapsLatLng(point.latitude, point.longitude));
-            }else if(point.type === "TREASURE"){
-              treasureLoc = new GoogleMapsLatLng(point.latitude,point.longitude);
+            } else if (point.type === "TREASURE") {
+              treasureLoc = new GoogleMapsLatLng(point.latitude, point.longitude);
             }
           }
-          let color:string = "";
-          switch (obj.type){
-            case "MARKET": color = this.safeZoneColor;
-            break;
-            case "DISTRICT_A": color= this.districtAColor;
-            break;
-            case "DISTRICT_B":color = this.districtBColor;
-            break;
+          let color: string = "";
+          switch (obj.type) {
+            case "MARKET":
+              color = this.safeZoneColor;
+              break;
+            case "DISTRICT_A":
+              color = this.districtAColor;
+              break;
+            case "DISTRICT_B":
+              color = this.districtBColor;
+              break;
           }
 
           this.map.addPolygon({
@@ -415,7 +425,7 @@ export class MapPage {
             'strokeColor': color,
             'strokeWidth': this.strokeWidth,
             'fillColor': color,
-            'visible':true
+            'visible': true
           }).catch((error) => {
             console.log(error);
           });
@@ -423,22 +433,19 @@ export class MapPage {
           this.map.addCircle({
             center: treasureLoc,
             radius: this.circleRadius,
-            strokeColor : this.circleColor,
-            strokeWidth : this.cirlceStrokeWidth,
-            fillColor : this.circleColor
+            strokeColor: this.circleColor,
+            strokeWidth: this.cirlceStrokeWidth,
+            fillColor: this.circleColor
           });
         }
       });
 
-  });
+    });
+  }
 
-
-
-}
-
-  restartConnection(){
+  restartConnection() {
     this.connectionService.stopConnection();
-    this.connectionService.setupTCPSocket("ws://stniklaas-stadsspel.herokuapp.com/user",this.token,this.gameId);
+    this.connectionService.setupTCPSocket(this.token, this.gameId);
   }
 
 }

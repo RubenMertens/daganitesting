@@ -5,44 +5,32 @@ import 'rxjs/Rx';
 import {LocationMessage} from "../domain/LocationMessage";
 import {MessageWrapper} from "../domain/MessageWrapper";
 import {assetUrl} from "@angular/compiler/src/identifiers";
+import {Device} from "ionic-native";
 
 @Injectable()
 export class ConnectionService {
 
   ws :any;
   token:string; //todo clean this up
-  private clientID:number;
+  private clientID:string;
   private gameId:string;
 
   private baseAdress :string = "https://stniklaas-stadsspel.herokuapp.com/api/";
+  private webSocketUrl:string = "ws://stniklaas-stadsspel.herokuapp.com//user";
   //private baseAdress:string = "http://192.168.0.250:8090/api/";
   //private backEndAdress:string= "http://localhost:8090/api/";
 
   constructor(public http: Http) {
-    this.clientID = Math.floor(Math.random() * 1000000) + 1;
+    //this.clientID = Device.uuid; //todo: not fake this
+    this.clientID = Math.floor(Math.random()*1000000) +1 +"";
   }
 
-  connectToGame(gameId : string) : Observable<any> {
-    let url : string = this.baseAdress + "games/" + gameId;
-    return this.http.get(url).map(this.extractData);
-
-  }
 
   registerToGame(gameId: string, playerName:string, password:string) : Observable<any> {
     let url : string = this.baseAdress+"games/" + gameId + "/register";
-    //return this.http.post(url,{clientID:1,name: "boooooooooooooobs",password:""}).map(this.extractData);
+    this.gameId = gameId;
+    console.log("registering cliend id : " + this.clientID + "to " + gameId);
     return this.http.post(url,{clientID:this.clientID,name: playerName,password:password}).map(this.extractData);
-  }
-
-
-/*
-  Request body
-  private String clientID;
-  private String name;
-  private String password;*/
-
-  findSocketGate() {
-    let url : string = this.baseAdress + "games"
   }
 
   sendLocationData(lat:number, lon:number){
@@ -50,7 +38,6 @@ export class ConnectionService {
 
       let message: LocationMessage = new LocationMessage(lat, lon);
       let messageString = JSON.stringify(message);
-
       let messageWrapper: MessageWrapper = new MessageWrapper("LOCATION",this.token, messageString , this.gameId,this.clientID +"");
       let messageWrapperString = JSON.stringify(messageWrapper);
 
@@ -69,11 +56,10 @@ export class ConnectionService {
     return this.http.get(url).map(this.extractData).catch(this.handleError);
   }
 
-  setupTCPSocket(url:string, token:string, gameId:string){
+  setupTCPSocket(token:string, gameId:string){
     this.token =token;
-    this.gameId = gameId;
-    console.log("trying to connect to websocket url " + url);
-    this.ws = new WebSocket(url);
+    console.log("trying to connect to websocket url " + this.webSocketUrl);
+    this.ws = new WebSocket(this.webSocketUrl);
     this.ws.onopen = function () {
       console.log("connection made");
      /* let json : string = JSON.stringify({message : "kakaka"});
@@ -83,8 +69,23 @@ export class ConnectionService {
 
     this.ws.onmessage = function (event) {
       console.log("received : " + event.data)
+
+         }
+
+    this.ws.onclose = function(event){
+      console.log("websocket closed");
+      console.error(event);
+    }
+
+    this.ws.onerror = function(error){
+      console.error(error);
     }
   }
+
+  addMessageHandler(handler:any){
+    console.log("Handler changed");
+    this.ws.onmessage = handler;
+}
 
   getAreaLocations() : Observable<any>{
     let url:string = this.baseAdress + "locations/arealocations";

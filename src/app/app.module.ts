@@ -8,6 +8,7 @@ import {InventoryPage} from "../pages/inventory/inventory";
 import {ShopPage} from "../pages/shop/shop";
 import {ConfirmsalePage} from "../pages/confirmsale/confirmsale";
 import {Player} from "../providers/Player";
+import {ConnectionService} from "../providers/connection-service";
 
 @NgModule({
   declarations: [
@@ -33,6 +34,6 @@ import {Player} from "../providers/Player";
     ShopPage,
     ConfirmsalePage
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},Player]
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},Player,ConnectionService]
 })
 export class AppModule {}

@@ -12,10 +12,10 @@ import {MapPage} from "../map/map";
 @Component({
   selector: 'page-server-list',
   templateUrl: 'server-list.html',
-  providers:[ConnectionService]
 })
 export class ServerListPage {
 
+  //todo refeshknop!
   private listedGames:any = [];
 
   constructor(public navCtrl: NavController, public navParams: NavParams ,
@@ -33,6 +33,21 @@ export class ServerListPage {
     console.log('ionViewDidLoad ServerListPage');
     console.log(this.navParams);
   }
+
+  ionViewWillLeave(){
+    console.log("about to leave the server list page");
+
+  }
+
+  refreshList(){
+
+    this.connectionService.getStagedGames().subscribe(data => {
+      console.log("page refreshed");
+      this.listedGames = data;
+    })
+  }
+
+
 
   entergame(id:string){
     console.log("tried to enter game: " + id);
@@ -57,7 +72,13 @@ export class ServerListPage {
             console.log("Ok clicked");
             console.log(data);
             this.connectionService.registerToGame(id, this.navParams.data.playerName, data.Password).subscribe(data => {
-                this.navCtrl.push(MapPage,data); //todo lobby page
+                this.navCtrl.push(MapPage,[data,id]); //todo lobby page
+            }, error => {
+              let errorprompt = this.alertCtrl.create();
+              errorprompt.setTitle("Something went wrong!");
+              errorprompt.setMessage(error);
+
+              errorprompt.present();
             });
           }
         }
