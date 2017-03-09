@@ -6,6 +6,8 @@ import {
 } from "ionic-native";
 import {ConnectionService} from "../../providers/connection-service";
 import {InventoryPage} from "../inventory/inventory";
+import {MessageWrapper} from "../../domain/MessageWrapper";
+import {BulkLocation} from "../../domain/BulkLocation";
 
 /*
  Generated class for the Map page.
@@ -293,8 +295,8 @@ export class MapPage {
   map: GoogleMap;
 
   private safeZoneColor: string = "#0000FF";
-  private districtAColor: string = "#FF0000";
-  private districtBColor: string = "#00FF00";
+  private districtAColor: string = "#FFFFFF88";
+  private districtBColor: string = "#FFF";
   private teamColor: string[] = ["#d3d3d3", "#4CAF50", "#FFC107", "#E91E63"];
   private circleColor: string = "#000000";
   private strokeWidth: number = 5;
@@ -345,8 +347,24 @@ export class MapPage {
   }
 
   handleSocketMessage(message) {
-    console.log("handling message");
-    console.log(message);
+    console.log("handling message in handler, yeah. mother fucker");
+    console.log(message.data);
+    let messageWrapper:MessageWrapper = JSON.parse(message.data);
+    console.log(messageWrapper);
+    if(messageWrapper.messageType == "BULK_LOCATION"){
+      let bulklocations:BulkLocation = JSON.parse(messageWrapper.message);
+      for (let obj of bulklocations.locations) {
+        console.log(obj);
+
+        /*this.map.addMarker({
+
+          position: new GoogleMapsLatLng(ob),
+          map: this.map,
+          title: "test"
+        });*/
+      }
+    }
+
   }
 
   gotoInventory() {

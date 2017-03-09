@@ -9,6 +9,7 @@ import {ShopPage} from "../pages/shop/shop";
 import {ConfirmsalePage} from "../pages/confirmsale/confirmsale";
 import {Player} from "../providers/Player";
 import {ConnectionService} from "../providers/connection-service";
+import {LobbyPage} from "../pages/lobby/lobby";
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import {ConnectionService} from "../providers/connection-service";
     MapPage,
     InventoryPage,
     ShopPage,
-    ConfirmsalePage
+    ConfirmsalePage,
+    LobbyPage,
 
   ],
   imports: [
@@ -32,7 +34,8 @@ import {ConnectionService} from "../providers/connection-service";
     MapPage,
     InventoryPage,
     ShopPage,
-    ConfirmsalePage
+    ConfirmsalePage,
+    LobbyPage,
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},Player,ConnectionService]
 })

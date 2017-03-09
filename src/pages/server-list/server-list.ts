@@ -2,6 +2,7 @@ import {Component, Input} from '@angular/core';
 import {NavController, NavParams, AlertController} from 'ionic-angular';
 import {ConnectionService} from "../../providers/connection-service";
 import {MapPage} from "../map/map";
+import {LobbyPage} from "../lobby/lobby";
 
 /*
   Generated class for the ServerList page.
@@ -72,7 +73,7 @@ export class ServerListPage {
             console.log("Ok clicked");
             console.log(data);
             this.connectionService.registerToGame(id, this.navParams.data.playerName, data.Password).subscribe(data => {
-                this.navCtrl.push(MapPage,[data,id]); //todo lobby page
+                this.navCtrl.push(LobbyPage,[data,id]); //todo lobby page
             }, error => {
               let errorprompt = this.alertCtrl.create();
               errorprompt.setTitle("Something went wrong!");

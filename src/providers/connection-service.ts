@@ -33,6 +33,12 @@ export class ConnectionService {
     return this.http.post(url,{clientID:this.clientID,name: playerName,password:password}).map(this.extractData);
   }
 
+  unregisterFromGame(){
+    let url:string = this.baseAdress+"games/" + this.gameId + "/unregister/" + this.clientID;
+    console.log("unregistering "  + this.clientID+ " from game " + this.gameId);
+    return this.http.post(url,{}).map(this.extractData);
+  }
+
   sendLocationData(lat:number, lon:number){
     if(this.ws != null && this.ws.readyState === this.ws.OPEN ){
 
