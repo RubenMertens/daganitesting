@@ -15,10 +15,10 @@ export class ConnectionService {
   private clientID:string;
   private gameId:string;
 
-  private baseAdress :string = "https://stniklaas-stadsspel.herokuapp.com/api/";
-  private webSocketUrl:string = "ws://stniklaas-stadsspel.herokuapp.com//user";
-  //private baseAdress:string = "http://192.168.0.250:8090/api/";
-  //private backEndAdress:string= "http://localhost:8090/api/";
+  //private baseAdress :string = "https://stniklaas-stadsspel.herokuapp.com/api/";
+  //private webSocketUrl:string = "ws://stniklaas-stadsspel.herokuapp.com/user";
+  private webSocketUrl:string = "ws://10.134.229.38:8090/user";
+  private baseAdress:string = "http://10.134.229.38:8090/api/";
 
   constructor(public http: Http) {
     //this.clientID = Device.uuid; //todo: not fake this
@@ -53,6 +53,17 @@ export class ConnectionService {
 
     }else{
       console.log("tried to send location : connection is not open")
+    }
+  }
+
+  sendHeartBeat(){
+    if(this.ws != null && this.ws.readyState === this.ws.OPEN){
+      let message : MessageWrapper = new MessageWrapper("HEARTBEAT",this.token,"",this.gameId,this.clientID);
+      console.log("heartbeat message");
+      console.log(message);
+      this.ws.send(JSON.stringify(message));
+    }else{
+      console.error("Tried to send location but connection didn't exist or was not open!")
     }
   }
 

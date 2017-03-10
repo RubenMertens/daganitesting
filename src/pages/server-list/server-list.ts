@@ -73,6 +73,9 @@ export class ServerListPage {
             console.log("Ok clicked");
             console.log(data);
             this.connectionService.registerToGame(id, this.navParams.data.playerName, data.Password).subscribe(data => {
+              console.log(data);
+              console.log(id);
+              console.log("kak eten is fijn");
                 this.navCtrl.push(LobbyPage,[data,id]); //todo lobby page
             }, error => {
               let errorprompt = this.alertCtrl.create();

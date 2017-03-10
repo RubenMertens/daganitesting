@@ -17,6 +17,7 @@ import {ConfirmsalePage} from "../confirmsale/confirmsale";
 export class ShopPage {
 
   private options:string;
+  private shopType:string;
 
   private shopInventory:ListItem[];
 

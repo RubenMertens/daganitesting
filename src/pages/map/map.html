@@ -15,7 +15,7 @@
 
 <ion-content>
   <div #map id="map">
-    <button ion-button icon-only large (click)="gotoInventory()">
+    <button *ngIf="inShop || inMarket" ion-button icon-only large (click)="gotoInventory()">
       <ion-icon name="ios-basket" ></ion-icon>
     </button>
 

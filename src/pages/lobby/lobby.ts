@@ -17,25 +17,32 @@ import {MapPage} from "../map/map";
 })
 export class LobbyPage {
 
-
+  private heartBeatTimer:any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, player:Player, public connectionService:ConnectionService) {
     let gameId = navParams.data[1];
     let token = navParams.data[0].clientToken;
 
     this.connectionService.setupTCPSocket(token, gameId);
-
-    this.connectionService.addMessageHandler(this.handleSocketMessage);
+    this.heartBeatTimer = setInterval(() => this.connectionService.sendHeartBeat(),1000);
+    let self = this;
+    this.connectionService.addMessageHandler(function (message) {
+        self.handleSocketMessage(message,self) //todo refactor
+    })
 
   }
 
-  handleSocketMessage(message){
+
+
+  handleSocketMessage(message,self){
     console.log("handling message in handler, yeah. mother fucker");
     console.log(message.data);
     let messageWrapper:MessageWrapper = JSON.parse(message.data);
     console.log(messageWrapper);
     if(messageWrapper.messageType == "GAME_START"){
-        this.navCtrl.push(MapPage);
+      clearInterval(this.heartBeatTimer);
+      self.navCtrl.push(MapPage);
+
       }
   }
 
@@ -43,11 +50,18 @@ export class LobbyPage {
     console.log('ionViewDidLoad LobbyPage');
   }
 
-
+  ionViewWillLeave(){
+    console.log("about to leave the server list page");
+    this.connectionService.unregisterFromGame();
+    clearInterval(this.heartBeatTimer);
+  }
 
   leavePage(){
     console.log("player is leaving game");
     this.connectionService.unregisterFromGame();
+    console.log(this.heartBeatTimer);
+    clearInterval(this.heartBeatTimer);
+    this.heartBeatTimer.
     this.navCtrl.pop();
   }
 

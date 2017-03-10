@@ -18,6 +18,10 @@
     <ion-input type="number" [(ngModel)]="value" name="value" min=0 max={{clickedItem.amount}}></ion-input> <!--todo fix min max attribute? -->
   </ion-item>
 
+  <ion-item>
+    <p text-center>You will earn {{value * clickedItem.value}}</p>
+  </ion-item>
+
   <p class="error" text-center>{{errorMessage}}</p>
 
   <ion-footer>

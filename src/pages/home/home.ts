@@ -12,7 +12,8 @@ import {Device} from "ionic-native";
 })
 export class HomePage {
 
-  playerName:string;
+
+  playerName:string ="";
 
 
 

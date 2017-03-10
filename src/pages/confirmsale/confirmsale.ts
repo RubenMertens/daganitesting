@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import {ListItem} from "../../domain/ListItem";
 import {Player} from "../../providers/Player";
+import {ConnectionService} from "../../providers/connection-service";
 
 /*
   Generated class for the Confirmsale page.
@@ -19,7 +20,7 @@ export class ConfirmsalePage {
   private value:number;
   private errorMessage:string;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public player:Player) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public player:Player, public connectionService: ConnectionService) {
     this.clickedItem = navParams.data;
     this.value = this.clickedItem.amount;
   }

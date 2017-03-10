@@ -8,6 +8,7 @@ import {ConnectionService} from "../../providers/connection-service";
 import {InventoryPage} from "../inventory/inventory";
 import {MessageWrapper} from "../../domain/MessageWrapper";
 import {BulkLocation} from "../../domain/BulkLocation";
+import {MapArea} from "../../domain/MapArea";
 
 /*
  Generated class for the Map page.
@@ -297,12 +298,18 @@ export class MapPage {
   private safeZoneColor: string = "#0000FF";
   private districtAColor: string = "#FFFFFF88";
   private districtBColor: string = "#FFF";
-  private teamColor: string[] = ["#d3d3d3", "#4CAF50", "#FFC107", "#E91E63"];
+  private teamColor: Array<string> = ["#d3d3d3", "#4CAF50", "#FFC107", "#E91E63"];
   private circleColor: string = "#000000";
   private strokeWidth: number = 5;
   private circleRadius: number = 10;
   private cirlceStrokeWidth: number = 1;
   private geoWatch:any;
+  private mapAreaArray:Array<MapArea> = [];
+
+  private inMarket:boolean;
+  private inDistrict:boolean;
+  private inShop:boolean;
+  private inBank:boolean;
 
   private token: string;
   private gameId: string; //todo MA echt refactor dit
@@ -313,7 +320,10 @@ export class MapPage {
       this.loadMap();
     });
 
-    if (navParams.data != null) {
+    this.connectionService.addMessageHandler(this.handleSocketMessage);
+
+
+   /* if (navParams.data != null) {
       console.log(navParams);
 
       this.gameId = navParams.data[1];
@@ -342,7 +352,7 @@ export class MapPage {
 
         })
       });
-    }
+    }*/
 
   }
 
@@ -352,17 +362,24 @@ export class MapPage {
     let messageWrapper:MessageWrapper = JSON.parse(message.data);
     console.log(messageWrapper);
     if(messageWrapper.messageType == "BULK_LOCATION"){
-      let bulklocations:BulkLocation = JSON.parse(messageWrapper.message);
-      for (let obj of bulklocations.locations) {
+      let bulklocations:any = JSON.parse(messageWrapper.message);
+      console.log(bulklocations);
+
+      /*for (let obj of bulklocations.locations) {
         console.log(obj);
 
-        /*this.map.addMarker({
 
-          position: new GoogleMapsLatLng(ob),
-          map: this.map,
-          title: "test"
-        });*/
-      }
+
+
+         //todo finish this? needs testing ofc
+        /!*this.map.addCircle({
+          center: obj.value,
+          radius: 2,
+          strokeColor : "#000000",
+          strokeWidth : 1,
+          fillColor : this.teamColor[1]
+        });*!/
+      }*/
     }
 
   }
@@ -380,18 +397,41 @@ export class MapPage {
 
   loadMap() {
 
-    this.geoWatch= Geolocation.watchPosition().subscribe((data) => {
+    this.geoWatch= Geolocation.watchPosition()/*.timeout(5000, console.log("timed out"))*/.subscribe((data) => {
       let position: CameraPosition = {
         target: new GoogleMapsLatLng(data.coords.latitude, data.coords.longitude),
         zoom: 18,
         tilt: 30
       };
-      //this.map.moveCamera(position);
+      //this.map.moveCamera(position); //todo turn this back on for camera locking
 
       //let isInGroteMarkt =  groteMarktBounds.contains(new GoogleMapsLatLng(data.coords.latitude,data.coords.longitude));
       this.connectionService.sendLocationData(data.coords.latitude, data.coords.longitude);
 
+      this.inMarket = false;
+      this.inShop = false;
+      this.inBank = false;
+      this.inDistrict = false;
+
+      for (let area of this.mapAreaArray) {
+        if(area.mapBound.contains(new GoogleMapsLatLng(data.coords.latitude,data.coords.longitude))){
+          console.log("player in area of type " + area.areaType);
+          switch (area.areaType){
+            case "MARKET" : this.inMarket = true;
+            break;
+            case "DISTRICT_A" || "DISTRICT_B" : this.inDistrict = true;
+            break;
+            case "BANK" : this.inBank = true; //todo refactor these to fit the actual message;
+            break;
+            case "SHOP" : this.inShop = true; //todo refactor these to fit the actual message;
+          }
+        }
+      }
+
     });
+
+
+
 
     this.map = new GoogleMap('map', {
       'styles': this.MapStyles,
@@ -447,6 +487,7 @@ export class MapPage {
           }).catch((error) => {
             console.log(error);
           });
+          this.mapAreaArray.push(new MapArea(obj.type,new GoogleMapsLatLngBounds(poly))); //todo test this
 
           this.map.addCircle({
             center: treasureLoc,
