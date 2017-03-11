@@ -1,14 +1,18 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
-import {NavController, NavParams, Platform} from 'ionic-angular';
+import {NavController, NavParams, Platform, AlertController} from 'ionic-angular';
 import {
   GoogleMap, GoogleMapsLatLng, GoogleMapsEvent, Geolocation, CameraPosition, GoogleMapsPolygon, GoogleMapsLatLngBounds,
-  GoogleMapsGroundOverlay
+  GoogleMapsGroundOverlay, GoogleMapsCircle
 } from "ionic-native";
 import {ConnectionService} from "../../providers/connection-service";
 import {InventoryPage} from "../inventory/inventory";
 import {MessageWrapper} from "../../domain/MessageWrapper";
 import {BulkLocation} from "../../domain/BulkLocation";
 import {MapArea} from "../../domain/MapArea";
+import {AreaBounds} from "../../domain/AreaBounds";
+import {TradePost} from "../../domain/TradePost";
+import {BankPage} from "../bank/bank";
+import {Game} from "../../domain/Game";
 
 /*
  Generated class for the Map page.
@@ -295,81 +299,57 @@ export class MapPage {
 
   map: GoogleMap;
 
-  private safeZoneColor: string = "#0000FF";
+  private safeZoneColor: string = "#0000FF88";
   private districtAColor: string = "#FFFFFF88";
   private districtBColor: string = "#FFF";
   private teamColor: Array<string> = ["#d3d3d3", "#4CAF50", "#FFC107", "#E91E63"];
   private circleColor: string = "#000000";
+  private bankColor:string ="#F00";
+  private tradePostColor:string="#00F";
   private strokeWidth: number = 5;
-  private circleRadius: number = 10;
+  private circleRadius: number = 20;
   private cirlceStrokeWidth: number = 1;
   private geoWatch:any;
   private mapAreaArray:Array<MapArea> = [];
+  private boundsArray:Array<AreaBounds> =[];
+
+  private game:Game;
 
   private inMarket:boolean;
   private inDistrict:boolean;
   private inShop:boolean;
   private inBank:boolean;
+  private inTreasury:boolean;
+
+  private currentLocationObject:any;
 
   private token: string;
   private gameId: string; //todo MA echt refactor dit
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public platform: Platform, public  connectionService: ConnectionService) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+              public platform: Platform, public  connectionService: ConnectionService
+              , public alertCtrl:AlertController
+  ) {
     platform.ready().then(() => {
       this.loadMap();
     });
 
     this.connectionService.addMessageHandler(this.handleSocketMessage);
-
-
-   /* if (navParams.data != null) {
-      console.log(navParams);
-
-      this.gameId = navParams.data[1];
-      this.token = navParams.data[0].clientToken;
-
-      this.connectionService.setupTCPSocket(this.token, this.gameId);
-
-      this.connectionService.addMessageHandler(this.handleSocketMessage);
-
-    } else {
-      let bullShit: string = "58b546e6beed612590f049da";
-      this.connectionService.getStagedGames().subscribe((data) => {
-        for (let obj of data) {
-          if (obj.name === "firstGame") {
-            bullShit = obj.id;
-          }
-        }
-
-        console.log("registering to " + bullShit);
-        console.log(navParams);
-        this.gameId = bullShit;
-        this.connectionService.registerToGame(this.gameId, "BOOOOOOOOOOBS", "").subscribe((data) => {
-          console.log(data);
-          console.log("connecting to this websocket");
-          this.connectionService.setupTCPSocket(this.token, this.gameId); //todo fix the right data extraction*!/
-
-        })
-      });
-    }*/
+    console.log(navParams);
+    this.game= navParams.data;
+    console.log(this.game);
 
   }
 
   handleSocketMessage(message) {
-    console.log("handling message in handler, yeah. mother fucker");
-    console.log(message.data);
     let messageWrapper:MessageWrapper = JSON.parse(message.data);
-    console.log(messageWrapper);
     if(messageWrapper.messageType == "BULK_LOCATION"){
       let bulklocations:any = JSON.parse(messageWrapper.message);
       console.log(bulklocations);
 
       /*for (let obj of bulklocations.locations) {
         console.log(obj);
-
-
-
 
          //todo finish this? needs testing ofc
         /!*this.map.addCircle({
@@ -388,7 +368,7 @@ export class MapPage {
     this.navCtrl.push(InventoryPage);
   }
 
-  ionViewWillLeave(){
+  ionViewWillLeave(){ //todo mag niet weg als naar shop of bank ofzo
     console.log("will leave map.");
     this.connectionService.stopConnection();
     this.geoWatch.unsubscribe();
@@ -412,26 +392,30 @@ export class MapPage {
       this.inShop = false;
       this.inBank = false;
       this.inDistrict = false;
+      this.inTreasury = false;
 
-      for (let area of this.mapAreaArray) {
-        if(area.mapBound.contains(new GoogleMapsLatLng(data.coords.latitude,data.coords.longitude))){
-          console.log("player in area of type " + area.areaType);
-          switch (area.areaType){
-            case "MARKET" : this.inMarket = true;
-            break;
-            case "DISTRICT_A" || "DISTRICT_B" : this.inDistrict = true;
-            break;
-            case "BANK" : this.inBank = true; //todo refactor these to fit the actual message;
-            break;
-            case "SHOP" : this.inShop = true; //todo refactor these to fit the actual message;
+      for (let areaBound of this.boundsArray) {
+        if(areaBound.bounds.contains(new GoogleMapsLatLng(data.coords.latitude,data.coords.longitude))){
+          this.currentLocationObject = areaBound.object;
+          switch(areaBound.type){
+            case "BANK":
+              this.inBank = true;
+              break;
+            case "TRADE_POST" :
+              this.inShop = true;
+              break;
+            case "MARKET" :
+              this.inMarket = true;
+              break;
+            case "TREASURY" :
+              console.log("inside a treasury");
+              this.inTreasury = true;
+              break;
           }
         }
+
       }
-
     });
-
-
-
 
     this.map = new GoogleMap('map', {
       'styles': this.MapStyles,
@@ -450,10 +434,68 @@ export class MapPage {
     });
 
 
+
     this.map.on(GoogleMapsEvent.MAP_READY).subscribe(() => {
       console.log('Map is ready!');
 
-      this.connectionService.getAreaLocations().subscribe(data => {
+      for (let district of this.game.districts) {
+        let poly = [];
+        let treasureLoc: GoogleMapsLatLng;
+        for (let point of district.points) {
+          if (point.type === "COORDINATE") {
+            poly.push(new GoogleMapsLatLng(point.latitude, point.longitude));
+          } else if (point.type === "TREASURE") {
+            treasureLoc = new GoogleMapsLatLng(point.latitude, point.longitude);
+          }
+        }
+        this.map.addPolygon({
+          'points': poly,
+          'strokeColor': this.districtAColor,
+          'strokeWidth': this.strokeWidth,
+          'fillColor': this.districtAColor,
+          'visible': true
+        }).catch((error) => {
+          console.log(error);
+        });
+        this.boundsArray.push(new AreaBounds(district,this.circletoBounds(treasureLoc,this.circleRadius),"TREASURY"));
+        this.map.addCircle({
+          center: treasureLoc,
+          radius: this.circleRadius,
+          strokeColor: this.circleColor,
+          strokeWidth: this.cirlceStrokeWidth,
+          fillColor: this.circleColor
+        });
+      }
+
+      for (let market of this.game.markets) {
+        let poly = [];
+        for (let point of market.points) {
+          poly.push(new GoogleMapsLatLng(point.latitude, point.longitude));
+        }
+        this.boundsArray.push(new AreaBounds(market,new GoogleMapsLatLngBounds(poly),"TREASURY"));
+        this.map.addPolygon({
+          'points': poly,
+          'strokeColor': this.safeZoneColor,
+          'strokeWidth': this.strokeWidth,
+          'fillColor': this.safeZoneColor,
+          'visible': true
+        }).catch((error) => {
+          console.log(error);
+        });
+      }
+
+      for (let tradePost of this.game.tradePosts) {
+        this.boundsArray.push(new AreaBounds(tradePost,this.circletoBounds(tradePost.point,this.circleRadius),"TRADE_POST"));
+        this.map.addCircle({
+          center: tradePost.point,
+          radius: this.circleRadius,
+          strokeColor: this.tradePostColor,
+          strokeWidth: this.cirlceStrokeWidth,
+          fillColor: this.tradePostColor
+        });
+      }
+
+   /*   this.connectionService.getAreaLocations().subscribe(data => {
         console.log(data);
         for (let obj of data) {
           let poly = [];
@@ -469,6 +511,7 @@ export class MapPage {
           switch (obj.type) {
             case "MARKET":
               color = this.safeZoneColor;
+              this.boundsArray.push(new AreaBounds({},new GoogleMapsLatLngBounds(poly),"MARKET"));
               break;
             case "DISTRICT_A":
               color = this.districtAColor;
@@ -487,7 +530,8 @@ export class MapPage {
           }).catch((error) => {
             console.log(error);
           });
-          this.mapAreaArray.push(new MapArea(obj.type,new GoogleMapsLatLngBounds(poly))); //todo test this
+
+          this.boundsArray.push(new AreaBounds({},this.circletoBounds(treasureLoc,this.circleRadius),"TREASURY"));
 
           this.map.addCircle({
             center: treasureLoc,
@@ -499,6 +543,50 @@ export class MapPage {
         }
       });
 
+      this.connectionService.getPointLocations().subscribe(data => {
+        console.log("pointlocations");
+        console.log(data);
+        let center: GoogleMapsLatLng;
+        let bounds : GoogleMapsLatLngBounds;
+        for (let pointlocation of data) {
+          switch (pointlocation.type){
+            case "BANK":
+              console.log("drawing bank");
+              center = new GoogleMapsLatLng(pointlocation.point.latitude,pointlocation.point.longitude);
+              bounds = this.circletoBounds(center,20); //todo not hardcode this
+              this.boundsArray.push(new AreaBounds({},bounds,"BANK"));
+
+              this.map.addCircle({
+                center: new GoogleMapsLatLng(pointlocation.point.latitude,pointlocation.point.longitude),
+                radius: 20,
+                strokeColor: "#0000FF",
+                strokeWidth: this.cirlceStrokeWidth,
+                fillColor: "#0000FF"
+              });
+
+              break;
+            case "TRADE_POST":
+              console.log("trade post drawing");
+              let tradepost: TradePost = new TradePost(pointlocation.id,pointlocation.items,pointlocation.name, pointlocation.point);
+              center = new GoogleMapsLatLng(pointlocation.point.latitude,pointlocation.point.longitude);
+              bounds = this.circletoBounds(center,20); //todo not hardcode this
+              this.boundsArray.push(new AreaBounds(tradepost,bounds, "TRADE_POST"));
+              console.log(tradepost);
+              console.log(this.boundsArray);
+
+              this.map.addCircle({
+                center: center,
+                radius: 20,
+                strokeColor: "#FF0000",
+                strokeWidth: this.cirlceStrokeWidth,
+                fillColor: "#FF0000"
+              });
+              break;
+          }
+        }
+        }
+        )*/
+
     });
   }
 
@@ -506,6 +594,47 @@ export class MapPage {
     this.connectionService.stopConnection();
     this.connectionService.setupTCPSocket(this.token, this.gameId);
   }
+
+  public circletoBounds(center:GoogleMapsLatLng, radius:number) { //todo collapse to no variables
+    let radiusEarth = 6378000;
+    let SWlat = center.lat + (-radius / radiusEarth) * (180 / Math.PI);
+    let SWlng = center.lng + (-radius / radiusEarth) * (180 / Math.PI) / Math.cos(center.lat * Math.PI/180);
+    let SWpoint = new GoogleMapsLatLng(SWlat,SWlng);
+    let NElat = center.lat + (radius / radiusEarth) * (180 / Math.PI);
+    let NElng = center.lng + (radius / radiusEarth) * (180 / Math.PI) / Math.cos(center.lat * Math.PI/180);
+    let NEpoint = new GoogleMapsLatLng(NElat,NElng);
+    return new GoogleMapsLatLngBounds( [SWpoint,NEpoint]);
+  }
+
+  public gotoBank(){
+    this.navCtrl.push(BankPage);
+  }
+
+
+  public collectMoney(){ //todo werkt voor gene zak
+    let prompt = this.alertCtrl.create({
+      title: "Collect Money",
+      message:"Collect the " + this.currentLocationObject.money +" in this treasury", //todo this will be undefined :)
+      buttons: [
+        {
+          text: 'cancel',
+          handler: data => {
+            console.log("cancel clicked")
+          }
+        },
+        {
+          text: "Ok",
+          handler: data => {
+            console.log("Ok clicked");
+
+          }
+        }
+      ]
+    });
+    prompt.present();
+  }
+
+
 
 }
 

@@ -19,6 +19,13 @@
       <ion-icon name="ios-basket" ></ion-icon>
     </button>
 
-    <button ion-button large (click)="restartConnection()">RESTART CONN</button>
+    <button ion-button large  icon-only (click)="gotoBank()"> <!--todo add if statement-->
+      <ion-icon name="logo-usd"></ion-icon>
+    </button>
+
+    <ion-fab bottom right>
+      <button ion-fab (click)="collectMoney()"><ion-icon name="ios-cash"></ion-icon></button> <!--todo add if statement-->
+    </ion-fab>
+
   </div>
 </ion-content>

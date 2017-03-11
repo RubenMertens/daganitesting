@@ -17,8 +17,8 @@ export class ConnectionService {
 
   //private baseAdress :string = "https://stniklaas-stadsspel.herokuapp.com/api/";
   //private webSocketUrl:string = "ws://stniklaas-stadsspel.herokuapp.com/user";
-  private webSocketUrl:string = "ws://10.134.229.38:8090/user";
-  private baseAdress:string = "http://10.134.229.38:8090/api/";
+  private webSocketUrl:string = "ws://192.168.0.248:8090/user";
+  private baseAdress:string = "http://192.168.0.248:8090/api/";
 
   constructor(public http: Http) {
     //this.clientID = Device.uuid; //todo: not fake this
@@ -46,10 +46,7 @@ export class ConnectionService {
       let messageString = JSON.stringify(message);
       let messageWrapper: MessageWrapper = new MessageWrapper("LOCATION",this.token, messageString , this.gameId,this.clientID +"");
       let messageWrapperString = JSON.stringify(messageWrapper);
-
       this.ws.send(messageWrapperString);
-      console.log("message send : ");
-      console.log(messageWrapperString);
 
     }else{
       console.log("tried to send location : connection is not open")
@@ -106,6 +103,16 @@ export class ConnectionService {
 
   getAreaLocations() : Observable<any>{
     let url:string = this.baseAdress + "locations/arealocations";
+    return this.http.get(url).map(this.extractData);
+  }
+
+  getPointLocations() : Observable<any>{
+    let url: string = this.baseAdress + "locations/pointlocations";
+    return this.http.get(url).map(this.extractData)
+  }
+
+  getGame() : Observable<any>{
+    let url:string = this.baseAdress + "games/" + this.gameId;
     return this.http.get(url).map(this.extractData);
   }
 

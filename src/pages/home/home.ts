@@ -5,6 +5,7 @@ import {MapPage} from "../map/map";
 import {ConnectionService} from "../../providers/connection-service";
 import {ShopPage} from "../shop/shop";
 import {Device} from "ionic-native";
+import {BankPage} from "../bank/bank";
 
 @Component({
   selector: 'page-home',
@@ -35,6 +36,10 @@ export class HomePage {
 
   goToShop(){
     this.navCtrl.push(ShopPage);
+  }
+
+  gotoBank(){
+    this.navCtrl.push(BankPage);
   }
 
 

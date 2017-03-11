@@ -4,6 +4,7 @@ import {Player} from "../../providers/Player";
 import {ConnectionService} from "../../providers/connection-service";
 import {MessageWrapper} from "../../domain/MessageWrapper";
 import {MapPage} from "../map/map";
+import {Game} from "../../domain/Game";
 
 /*
   Generated class for the Lobby page.
@@ -18,6 +19,7 @@ import {MapPage} from "../map/map";
 export class LobbyPage {
 
   private heartBeatTimer:any;
+  private game:Game;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, player:Player, public connectionService:ConnectionService) {
     let gameId = navParams.data[1];
@@ -35,19 +37,24 @@ export class LobbyPage {
 
 
   handleSocketMessage(message,self){
-    console.log("handling message in handler, yeah. mother fucker");
     console.log(message.data);
     let messageWrapper:MessageWrapper = JSON.parse(message.data);
     console.log(messageWrapper);
     if(messageWrapper.messageType == "GAME_START"){
       clearInterval(this.heartBeatTimer);
-      self.navCtrl.push(MapPage);
+      self.navCtrl.push(MapPage,this.game);
 
       }
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad LobbyPage');
+
+    this.connectionService.getGame().subscribe(data => {
+      console.log(data);
+      this.game = new Game(data.id,data.roomName,data.districts,data.markets,data.tradePosts,data.teams,data.maxPlayersPerTeam,data.maxTeams);
+      console.log(this.game);
+    })
   }
 
   ionViewWillLeave(){

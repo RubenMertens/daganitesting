@@ -26,7 +26,6 @@ export class ServerListPage {
     this.connectionService.getStagedGames().subscribe((data) => {
       console.log(data);
       this.listedGames = data;
-      //this.listedGames = data;
     })
   }
 
@@ -48,8 +47,6 @@ export class ServerListPage {
     })
   }
 
-
-
   entergame(id:string){
     console.log("tried to enter game: " + id);
     let prompt = this.alertCtrl.create({
@@ -70,12 +67,10 @@ export class ServerListPage {
         {
           text: "Ok",
           handler: data => {
+
             console.log("Ok clicked");
-            console.log(data);
             this.connectionService.registerToGame(id, this.navParams.data.playerName, data.Password).subscribe(data => {
               console.log(data);
-              console.log(id);
-              console.log("kak eten is fijn");
                 this.navCtrl.push(LobbyPage,[data,id]); //todo lobby page
             }, error => {
               let errorprompt = this.alertCtrl.create();
@@ -84,6 +79,7 @@ export class ServerListPage {
 
               errorprompt.present();
             });
+
           }
         }
       ]
