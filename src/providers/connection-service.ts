@@ -12,8 +12,8 @@ export class ConnectionService {
 
   ws :any;
   token:string; //todo clean this up
-  private clientID:string;
-  private gameId:string;
+  public clientID:string;
+  public gameId:string;
 
   //private baseAdress :string = "https://stniklaas-stadsspel.herokuapp.com/api/";
   //private webSocketUrl:string = "ws://stniklaas-stadsspel.herokuapp.com/user";

@@ -13,6 +13,7 @@ import {AreaBounds} from "../../domain/AreaBounds";
 import {TradePost} from "../../domain/TradePost";
 import {BankPage} from "../bank/bank";
 import {Game} from "../../domain/Game";
+import {CollectMoneyPage} from "../collect-money/collect-money";
 
 /*
  Generated class for the Map page.
@@ -303,7 +304,7 @@ export class MapPage {
   private districtAColor: string = "#FFFFFF88";
   private districtBColor: string = "#FFF";
   private teamColor: Array<string> = ["#d3d3d3", "#4CAF50", "#FFC107", "#E91E63"];
-  private circleColor: string = "#000000";
+  private circleColor: string = "#0ff";
   private bankColor:string ="#F00";
   private tradePostColor:string="#00F";
   private strokeWidth: number = 5;
@@ -314,6 +315,7 @@ export class MapPage {
   private boundsArray:Array<AreaBounds> =[];
 
   private game:Game;
+  private myTeam:any;
 
   private inMarket:boolean;
   private inDistrict:boolean;
@@ -339,6 +341,7 @@ export class MapPage {
     console.log(navParams);
     this.game= navParams.data;
     console.log(this.game);
+
 
   }
 
@@ -368,10 +371,14 @@ export class MapPage {
     this.navCtrl.push(InventoryPage);
   }
 
-  ionViewWillLeave(){ //todo mag niet weg als naar shop of bank ofzo
+  ionViewWillLeave(){
+  }
+
+  exitMap(){
     console.log("will leave map.");
     this.connectionService.stopConnection();
     this.geoWatch.unsubscribe();
+    this.navCtrl.pop();
   }
 
 
@@ -457,14 +464,14 @@ export class MapPage {
         }).catch((error) => {
           console.log(error);
         });
-        this.boundsArray.push(new AreaBounds(district,this.circletoBounds(treasureLoc,this.circleRadius),"TREASURY"));
-        this.map.addCircle({
-          center: treasureLoc,
-          radius: this.circleRadius,
-          strokeColor: this.circleColor,
-          strokeWidth: this.cirlceStrokeWidth,
-          fillColor: this.circleColor
-        });
+        /*        this.boundsArray.push(new AreaBounds(district,this.circletoBounds(treasureLoc,this.circleRadius),"DISTRICTCAPITAL")); //todo pleinen voor veroveren
+         this.map.addCircle({
+         center: treasureLoc,
+         radius: this.circleRadius,
+         strokeColor: this.circleColor,
+         strokeWidth: this.cirlceStrokeWidth,
+         fillColor: this.circleColor
+         });*/
       }
 
       for (let market of this.game.markets) {
@@ -472,7 +479,7 @@ export class MapPage {
         for (let point of market.points) {
           poly.push(new GoogleMapsLatLng(point.latitude, point.longitude));
         }
-        this.boundsArray.push(new AreaBounds(market,new GoogleMapsLatLngBounds(poly),"TREASURY"));
+        this.boundsArray.push(new AreaBounds(market, new GoogleMapsLatLngBounds(poly), "TREASURY"));
         this.map.addPolygon({
           'points': poly,
           'strokeColor': this.safeZoneColor,
@@ -485,14 +492,42 @@ export class MapPage {
       }
 
       for (let tradePost of this.game.tradePosts) {
-        this.boundsArray.push(new AreaBounds(tradePost,this.circletoBounds(tradePost.point,this.circleRadius),"TRADE_POST"));
+        let point = new GoogleMapsLatLng(tradePost.point.latitude, tradePost.point.longitude);
+        this.boundsArray.push(new AreaBounds(tradePost, this.circletoBounds(point, this.circleRadius), "TRADE_POST"));
         this.map.addCircle({
-          center: tradePost.point,
+          center: point,
           radius: this.circleRadius,
           strokeColor: this.tradePostColor,
-          strokeWidth: this.cirlceStrokeWidth,
+          strokeWidth: 0,
           fillColor: this.tradePostColor
         });
+      }
+
+      for (let team of this.game.teams) {
+        console.log("team")
+        console.log(team);
+        for (let key in team.players) {
+          if (team.players.hasOwnProperty(key)) {
+            console.log("key")
+            console.log(team.players[key]);
+            if(team.players[key].clientID === this.connectionService.clientID){
+            this.myTeam = team;
+            let point = team.districts[0].points[team.districts[0].points.length - 1];
+            let treasureLoc = new GoogleMapsLatLng(point.latitude, point.longitude);
+            this.boundsArray.push(new AreaBounds(team, this.circletoBounds(treasureLoc, this.circleRadius), "TREASURY")); //todo pleinen voor veroveren
+              console.log("added treasury to map");
+              console.log(point);
+              console.log(team.districts[0]);
+            this.map.addCircle({
+              center: treasureLoc,
+              radius: this.circleRadius,
+              strokeColor: this.circleColor,
+              strokeWidth: 0,
+              fillColor: this.circleColor
+            })
+            }
+          }
+        }
       }
 
    /*   this.connectionService.getAreaLocations().subscribe(data => {
@@ -612,26 +647,7 @@ export class MapPage {
 
 
   public collectMoney(){ //todo werkt voor gene zak
-    let prompt = this.alertCtrl.create({
-      title: "Collect Money",
-      message:"Collect the " + this.currentLocationObject.money +" in this treasury", //todo this will be undefined :)
-      buttons: [
-        {
-          text: 'cancel',
-          handler: data => {
-            console.log("cancel clicked")
-          }
-        },
-        {
-          text: "Ok",
-          handler: data => {
-            console.log("Ok clicked");
-
-          }
-        }
-      ]
-    });
-    prompt.present();
+    this.navCtrl.push(CollectMoneyPage,this.currentLocationObject);
   }
 
 

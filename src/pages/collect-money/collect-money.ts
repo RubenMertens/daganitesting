@@ -18,7 +18,14 @@ export class CollectMoneyPage {
   private errorMessage:string;
   private value:number;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public player:Player) {}
+  private team:any;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, public player:Player) {
+    this.team = navParams.data;
+    this.value = this.team.treasury;
+    console.log(this.team);
+
+  }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CollectMoneyPage');
@@ -30,9 +37,10 @@ export class CollectMoneyPage {
 
   handleCollect(){
 
-    if(this.value > 0 && this.moneyInTreasury - this.value > 0){
-      this.player.carriedMoney += this.moneyInTreasury;
-      this.moneyInTreasury -= this.value;
+    if(this.value > 0 && this.team.treasury - this.value > 0){
+      this.player.carriedMoney += this.team.treasury;
+      this.team.treasury -= this.value;
+      //todo send message to backend!
       this.navCtrl.pop();
     }else{
       this.errorMessage = "Can't collect that amount of money!"

@@ -17,9 +17,11 @@
 
   <h1 text-center>Select the amount of money you would like to get from this treasury</h1>
 
+  <h2 text-center>{{team.treasury}}</h2>
+
 
   <ion-item>
-    <ion-input type="number" [(ngModel)]="value" name="value" min=0 max={{moneyInTreasury}}></ion-input> <!--todo fix min max attribute? -->
+    <ion-input type="number" [(ngModel)]="value" name="value" min=0 max={{team.treasury}}></ion-input> <!--todo fix min max attribute? -->
   </ion-item>
 
   <p class="error" text-center>{{errorMessage}}</p>
