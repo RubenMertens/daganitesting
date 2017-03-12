@@ -6,6 +6,7 @@ import {LocationMessage} from "../domain/LocationMessage";
 import {MessageWrapper} from "../domain/MessageWrapper";
 import {assetUrl} from "@angular/compiler/src/identifiers";
 import {Device} from "ionic-native";
+import {GameEventMessage} from "../domain/GameEventMessage";
 
 @Injectable()
 export class ConnectionService {
@@ -23,6 +24,13 @@ export class ConnectionService {
   constructor(public http: Http) {
     //this.clientID = Device.uuid; //todo: not fake this
     this.clientID = Math.floor(Math.random()*1000000) +1 +"";
+  }
+
+  sendTreasuryCollect(moneyTransferred:number, tradePostId:string){
+    let message = new GameEventMessage("TREASURY_WITHDRAWAL",[this.clientID],moneyTransferred,new Map(),tradePostId);
+    console.log(message);
+    let wrapper = new MessageWrapper("EVENT",this.token,JSON.stringify(message),this.gameId,this.clientID);
+    this.ws.send(JSON.stringify(wrapper));
   }
 
 

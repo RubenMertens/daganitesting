@@ -14,6 +14,7 @@ import {TradePost} from "../../domain/TradePost";
 import {BankPage} from "../bank/bank";
 import {Game} from "../../domain/Game";
 import {CollectMoneyPage} from "../collect-money/collect-money";
+import {Player} from "../../providers/Player";
 
 /*
  Generated class for the Map page.
@@ -315,7 +316,6 @@ export class MapPage {
   private boundsArray:Array<AreaBounds> =[];
 
   private game:Game;
-  private myTeam:any;
 
   private inMarket:boolean;
   private inDistrict:boolean;
@@ -331,13 +331,15 @@ export class MapPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               public platform: Platform, public  connectionService: ConnectionService
-              , public alertCtrl:AlertController
+              , public alertCtrl:AlertController, public player:Player,
   ) {
     platform.ready().then(() => {
       this.loadMap();
     });
-
-    this.connectionService.addMessageHandler(this.handleSocketMessage);
+    let self = this;
+    this.connectionService.addMessageHandler(function (message) {
+      self.handleSocketMessage(message,self) //todo refactor
+    });
     console.log(navParams);
     this.game= navParams.data;
     console.log(this.game);
@@ -345,12 +347,13 @@ export class MapPage {
 
   }
 
-  handleSocketMessage(message) {
+  handleSocketMessage(message, self) {
     let messageWrapper:MessageWrapper = JSON.parse(message.data);
+    console.log("message received");
+    console.log(messageWrapper);
     if(messageWrapper.messageType == "BULK_LOCATION"){
       let bulklocations:any = JSON.parse(messageWrapper.message);
       console.log(bulklocations);
-
       /*for (let obj of bulklocations.locations) {
         console.log(obj);
 
@@ -363,6 +366,13 @@ export class MapPage {
           fillColor : this.teamColor[1]
         });*!/
       }*/
+    }else if(messageWrapper.messageType == "NOTIFICATION"){
+      let notification = JSON.parse(messageWrapper.message);
+      console.log(notification);
+      console.log(this.player.team);
+      self.player.team.districts = notification.districts;
+      self.player.team.treasury = notification.treasury;
+      self.player.team.bankAccount = notification.bankAccount;
     }
 
   }
@@ -440,8 +450,6 @@ export class MapPage {
       }
     });
 
-
-
     this.map.on(GoogleMapsEvent.MAP_READY).subscribe(() => {
       console.log('Map is ready!');
 
@@ -464,7 +472,8 @@ export class MapPage {
         }).catch((error) => {
           console.log(error);
         });
-        /*        this.boundsArray.push(new AreaBounds(district,this.circletoBounds(treasureLoc,this.circleRadius),"DISTRICTCAPITAL")); //todo pleinen voor veroveren
+        /*
+        this.boundsArray.push(new AreaBounds(district,this.circletoBounds(treasureLoc,this.circleRadius),"DISTRICTCAPITAL")); //todo pleinen voor veroveren
          this.map.addCircle({
          center: treasureLoc,
          radius: this.circleRadius,
@@ -508,16 +517,13 @@ export class MapPage {
         console.log(team);
         for (let key in team.players) {
           if (team.players.hasOwnProperty(key)) {
-            console.log("key")
-            console.log(team.players[key]);
+
             if(team.players[key].clientID === this.connectionService.clientID){
-            this.myTeam = team;
+            this.player.team = team;
             let point = team.districts[0].points[team.districts[0].points.length - 1];
             let treasureLoc = new GoogleMapsLatLng(point.latitude, point.longitude);
-            this.boundsArray.push(new AreaBounds(team, this.circletoBounds(treasureLoc, this.circleRadius), "TREASURY")); //todo pleinen voor veroveren
-              console.log("added treasury to map");
-              console.log(point);
-              console.log(team.districts[0]);
+            this.currentLocationObject = this.player.team; //todo remove this is for testing
+            this.boundsArray.push(new AreaBounds(this.player.team, this.circletoBounds(treasureLoc, this.circleRadius), "TREASURY")); //todo pleinen voor veroveren
             this.map.addCircle({
               center: treasureLoc,
               radius: this.circleRadius,

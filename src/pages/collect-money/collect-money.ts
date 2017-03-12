@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import {Player} from "../../providers/Player";
+import {ConnectionService} from "../../providers/connection-service";
 
 /*
   Generated class for the CollectMoney page.
@@ -20,7 +21,7 @@ export class CollectMoneyPage {
 
   private team:any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public player:Player) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public player:Player, public connectionService:ConnectionService) {
     this.team = navParams.data;
     this.value = this.team.treasury;
     console.log(this.team);
@@ -37,10 +38,11 @@ export class CollectMoneyPage {
 
   handleCollect(){
 
-    if(this.value > 0 && this.team.treasury - this.value > 0){
+    if(this.team.treasury > 0 && (this.team.treasury - this.value) >= 0){
       this.player.carriedMoney += this.team.treasury;
       this.team.treasury -= this.value;
       //todo send message to backend!
+      this.connectionService.sendTreasuryCollect(this.value,this.team.districts[0].id);
       this.navCtrl.pop();
     }else{
       this.errorMessage = "Can't collect that amount of money!"
