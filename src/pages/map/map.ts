@@ -15,6 +15,7 @@ import {BankPage} from "../bank/bank";
 import {Game} from "../../domain/Game";
 import {CollectMoneyPage} from "../collect-money/collect-money";
 import {Player} from "../../providers/Player";
+import {ShopPage} from "../shop/shop";
 
 /*
  Generated class for the Map page.
@@ -319,6 +320,7 @@ export class MapPage {
   private game:Game;
   private bank:any;
   private team:any;
+  private demoShop:any;
 
   private inMarket:boolean;
   private inDistrict:boolean;
@@ -537,6 +539,7 @@ export class MapPage {
       for (let tradePost of this.game.tradePosts) {
         let point = new GoogleMapsLatLng(tradePost.point.latitude, tradePost.point.longitude);
         this.boundsArray.push(new AreaBounds(tradePost, this.circletoBounds(point, this.circleRadius), "TRADE_POST"));
+        this.demoShop = tradePost;
         this.map.addCircle({
           center: point,
           radius: this.circleRadius,
@@ -596,6 +599,11 @@ export class MapPage {
 
   public collectMoney(){
     this.navCtrl.push(CollectMoneyPage,this.team); //todo verander naar currentlocation
+  }
+
+  public gotoShop(){
+    //this.navCtrl.push(ShopPage,this.currentLocationObject);
+    this.navCtrl.push(ShopPage,this.demoShop);
   }
 
 

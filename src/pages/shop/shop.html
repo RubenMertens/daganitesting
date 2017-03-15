@@ -13,7 +13,7 @@
 </ion-header>
 
 
-<ion-content>
+<ion-content class="card-background">
   <ion-grid>
     <ion-row>
       <ion-col>
@@ -23,55 +23,35 @@
       </ion-col>
     </ion-row>
 
-    <ion-row>
-      <ion-col>
-        <h2>{{shopType}}</h2>
-      </ion-col>
-    </ion-row>
+    <ion-card *ngFor="let item of shop.items">
+      <ion-card-header>
+        {{item.name}}
+      </ion-card-header>
+
+      <ion-card-content>
+        Buy {{item.name}} from {{shop.name}} for {{item.legalPurchase}}$ each?
+      </ion-card-content>
+
+      <ion-item>
+        <ion-label floating>Amount</ion-label>
+        <ion-input type="number" [(ngModel)]="amount" name="amount" min="0"></ion-input>
+      </ion-item>
 
       <ion-row>
         <ion-col>
-          <ion-list>
-
-            <ion-grid>
-              <ion-row>
-                <ion-col>
-                  <ion-list-header>
-                    name
-                  </ion-list-header>
-                </ion-col>
-                <ion-col>
-                  <ion-list-header text-center>
-                    amount
-                  </ion-list-header>
-                </ion-col>
-                <ion-col>
-                  <ion-list-header text-right>
-                    price
-                  </ion-list-header>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-
-            <button ion-item *ngFor="let item of player.inventory" (click)="handleSell(item)">
-              <ion-grid>
-                <ion-row>
-                  <ion-col>
-                    <p>{{item.name}}</p>
-                  </ion-col>
-                  <ion-col>
-                    <p text-center>{{item.amount}}</p>
-                  </ion-col>
-                  <ion-col>
-                    <p text-right>{{item.value}}</p>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
-            </button>
-          </ion-list>
+          <button ion-button full (click)="handleSell(item,true)" >Buy (legal)</button>
+        </ion-col>
+        <ion-col>
+          <button ion-button full (click)="handleSell(item,false)">Buy (illegal)</button>
         </ion-col>
       </ion-row>
 
+    </ion-card>
+
  </ion-grid>
+
+  <ion-footer>
+    <button ion-button full (click)="cancel()">Cancel</button>
+  </ion-footer>
 
 </ion-content>

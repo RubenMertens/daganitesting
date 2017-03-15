@@ -27,9 +27,13 @@
     </ion-segment-button>
   </ion-segment>
 
+  <h2>{{errorMessage}}</h2>
+
   <div [ngSwitch]="options">
     <div *ngSwitchCase="'deposit'">
-      <ion-input type="number" [(ngModel)]="depositValue" name="depositValue" min=0 max={{player.carriedMoney}}></ion-input>
+      <ion-item>
+        <ion-input type="number" [(ngModel)]="depositValue" name="depositValue" min=0 max={{player.carriedMoney}}></ion-input>
+      </ion-item>
 
       <ion-footer>
         <ion-row>
@@ -43,7 +47,9 @@
       </ion-footer>
     </div>
       <div *ngSwitchCase="'withdraw'">
-        <ion-input type="number" [(ngModel)]="withdrawalValue" name="depositValue" min=0 max={{player.team.bankAccount}}></ion-input>
+        <ion-item>
+          <ion-input type="number" [(ngModel)]="withdrawalValue" name="depositValue" min=0 max={{player.team.bankAccount}}></ion-input>
+        </ion-item>
 
         <ion-footer>
           <ion-row>

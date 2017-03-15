@@ -19,14 +19,15 @@ export class BankPage {
   private bank:any;
   private options:string;
   private withdrawalValue:number;
+  private errorMessage:string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams , public alertCtrl:AlertController, public player:Player, public connectionService:ConnectionService) {
     console.log("bank param");
     console.log(this.navParams.data);
     this.bank = this.navParams.data;
 
-    this.depositValue= this.player.carriedMoney;
-    this.withdrawalValue = this.player.team.bankAccount;
+    this.depositValue= +this.player.carriedMoney;
+    this.withdrawalValue = +this.player.team.bankAccount;
     this.options= "deposit";
   }
 
@@ -36,26 +37,30 @@ export class BankPage {
 
   deposit(){
     console.log("depositing to bank");
-    //todo if statement
-    if(this.player.carriedMoney - this.depositValue >=0){
-      this.player.carriedMoney -= this.depositValue;
-      this.player.team.bankAccount += this.depositValue;
-      this.connectionService.sendBankDeposit(this.depositValue,this.bank.id);
-      this.depositValue = this.player.carriedMoney;
+    if(this.player.carriedMoney - +this.depositValue >=0){
+      this.player.carriedMoney -= +this.depositValue;
+      this.player.team.bankAccount += +this.depositValue;
+      this.connectionService.sendBankDeposit(+this.depositValue,this.bank.id);
+
+      this.depositValue = +this.player.carriedMoney;
+      this.withdrawalValue = +this.player.team.bankAccount;
     }else{
       console.error("failed to deposit to bank");
+      this.errorMessage = "You can't deposit that amount of money!";
     }
   }
 
   withdraw(){
-    if(this.player.team.bankAccount - this.withdrawalValue >= 0){
-      this.player.team.bankAccount -=  this.withdrawalValue;
-      this.player.carriedMoney += this.withdrawalValue;
-      this.connectionService.sendBankWithdrawal(this.withdrawalValue,this.bank.id);
-      this.withdrawalValue = this.player.team.bankAccount;
+    if(this.player.team.bankAccount - +this.withdrawalValue >= 0){
+      this.player.team.bankAccount -=  +this.withdrawalValue;
+      this.player.carriedMoney += +this.withdrawalValue;
+      this.connectionService.sendBankWithdrawal(+this.withdrawalValue,this.bank.id);
 
+      this.depositValue = +this.player.carriedMoney;
+      this.withdrawalValue = +this.player.team.bankAccount;
     }else{
       console.error("failed to withdrawal from bank");
+      this.errorMessage = "You can't withdraw that amount of money!";
     }
   }
 

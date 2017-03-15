@@ -1,5 +1,6 @@
 import {Injectable} from "@angular/core";
 import {ListItem} from "../domain/ListItem";
+import {PlayerItem} from "../domain/PlayerItem";
 /**
  * Created by Ravanys on 05/03/2017.
  */
@@ -8,8 +9,10 @@ import {ListItem} from "../domain/ListItem";
 export class Player{
   public carriedMoney:number = 0;
   public team:any;
-  constructor(){
 
+  public items:Map<string,PlayerItem>;
+  constructor(){
+    this.items = new Map<string, PlayerItem>();
   }
 
 }

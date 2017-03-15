@@ -9,8 +9,13 @@
 
   <div #map id="map">
     <button ion-button (click)="exitMap()">EXIT</button>
-    <button *ngIf="inShop || inMarket" ion-button icon-only large (click)="gotoInventory()">
+
+    <button ion-button icon-only large (click)="gotoInventory()">
       <ion-icon name="ios-basket" ></ion-icon>
+    </button>
+
+    <button *ngIf="true" ion-button icon-only large (click)="gotoShop()"> <!--todo if in shop-->
+      <ion-icon name="ios-cart-outline"></ion-icon>
     </button>
 
     <button *ngIf="true" ion-button large  icon-only (click)="gotoBank()"> <!--todo if in bank-->

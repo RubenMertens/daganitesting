@@ -26,24 +26,33 @@ export class ConnectionService {
     this.clientID = Math.floor(Math.random()*1000000) +1 +"";
   }
 
+  sendEventMessage(object:any){
+    console.log(object);
+    let wrapper = new MessageWrapper("EVENT",this.token,JSON.stringify(object),this.gameId,this.clientID);
+    this.ws.send(JSON.stringify(wrapper));
+  }
+
   sendTreasuryCollect(moneyTransferred:number, tradePostId:string){
     let message = new GameEventMessage("TREASURY_WITHDRAWAL",[this.clientID],moneyTransferred,new Map(),tradePostId);
-    console.log(message);
-    let wrapper = new MessageWrapper("EVENT",this.token,JSON.stringify(message),this.gameId,this.clientID);
-    this.ws.send(JSON.stringify(wrapper));
+    this.sendEventMessage(message);
   }
 
   sendBankDeposit(moneyTrasferred:number, tradePostId:string){
     let message= new GameEventMessage("BANK_DEPOSIT",[this.clientID],moneyTrasferred,new Map(),tradePostId);
-    console.log(message);
-    let wrapper = new MessageWrapper("EVENT",this.token,JSON.stringify(message),this.gameId,this.clientID);
-    this.ws.send(JSON.stringify(wrapper));
+    this.sendEventMessage(message);
   }
   sendBankWithdrawal(moneyTransferred:number, tradePostId:string){
     let message = new GameEventMessage("BANK_WITHDRAWAL",[this.clientID],moneyTransferred,new Map(),tradePostId);
-    console.log(message);
-    let wrapper = new MessageWrapper("EVENT",this.token,JSON.stringify(message),this.gameId,this.clientID);
-    this.ws.send(JSON.stringify(wrapper));
+    this.sendEventMessage(message);
+  }
+
+  sendTradePostLegalPurchase(moneyTransferred:number, items:Map<string,number>, tradePostId:string){
+    let message = new GameEventMessage("TRADEPOST_LEGAL_PURCHASE",[this.clientID],moneyTransferred,items,tradePostId);
+    this.sendEventMessage(message);
+  }
+  sendTradePostIllegalPurchase(moneyTransferred:number, items:Map<string,number>,tradePostId:string){
+    let message= new GameEventMessage("TRADEPOST_ILLEGAL_PURCHASE",[this.clientID],moneyTransferred,items,tradePostId);
+    this.sendEventMessage(message);
   }
 
 
