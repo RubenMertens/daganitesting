@@ -33,8 +33,14 @@ export class ConnectionService {
     this.ws.send(JSON.stringify(wrapper));
   }
 
-  sendPutMoneyBank(moneyTrasferred:number,tradePostId:string){
+  sendBankDeposit(moneyTrasferred:number, tradePostId:string){
     let message= new GameEventMessage("BANK_DEPOSIT",[this.clientID],moneyTrasferred,new Map(),tradePostId);
+    console.log(message);
+    let wrapper = new MessageWrapper("EVENT",this.token,JSON.stringify(message),this.gameId,this.clientID);
+    this.ws.send(JSON.stringify(wrapper));
+  }
+  sendBankWithdrawal(moneyTransferred:number, tradePostId:string){
+    let message = new GameEventMessage("BANK_WITHDRAWAL",[this.clientID],moneyTransferred,new Map(),tradePostId);
     console.log(message);
     let wrapper = new MessageWrapper("EVENT",this.token,JSON.stringify(message),this.gameId,this.clientID);
     this.ws.send(JSON.stringify(wrapper));
@@ -56,7 +62,6 @@ export class ConnectionService {
 
   sendLocationData(lat:number, lon:number){
     if(this.ws != null && this.ws.readyState === this.ws.OPEN ){
-
       let message: LocationMessage = new LocationMessage(lat, lon);
       let messageString = JSON.stringify(message);
       let messageWrapper: MessageWrapper = new MessageWrapper("LOCATION",this.token, messageString , this.gameId,this.clientID +"");

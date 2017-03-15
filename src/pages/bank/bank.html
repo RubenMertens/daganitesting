@@ -15,7 +15,7 @@
 
 <ion-content padding>
   <h1 text-center>Money in the Bank</h1>
-  <h2 text-center>{{moneyInBank}}</h2>
+  <h2 text-center>{{player.team.bankAccount}}</h2>
 
 
   <ion-segment [(ngModel)]="options">
@@ -27,12 +27,9 @@
     </ion-segment-button>
   </ion-segment>
 
-  <div ngSwitch="options">
+  <div [ngSwitch]="options">
     <div *ngSwitchCase="'deposit'">
-      <p>test</p>
-      <ion-item>
-        <ion-input type="number" [(ngModel)]="depositValue" name="value" min=0 max={{playerMoney}}></ion-input> <!--todo fix min max attribute? -->
-      </ion-item>
+      <ion-input type="number" [(ngModel)]="depositValue" name="depositValue" min=0 max={{player.carriedMoney}}></ion-input>
 
       <ion-footer>
         <ion-row>
@@ -44,12 +41,26 @@
           </ion-col>
         </ion-row>
       </ion-footer>
-
     </div>
-    <div *ngSwitchCase="'withdraw'">
+      <div *ngSwitchCase="'withdraw'">
+        <ion-input type="number" [(ngModel)]="withdrawalValue" name="depositValue" min=0 max={{player.team.bankAccount}}></ion-input>
 
-    </div>
+        <ion-footer>
+          <ion-row>
+            <ion-col>
+              <button ion-button full (click)="cancel()">Cancel</button>
+            </ion-col>
+            <ion-col>
+              <button ion-button full (click)="withdraw()">Withdraw</button>
+            </ion-col>
+          </ion-row>
+        </ion-footer>
+      </div>
+
   </div>
+
+
+
 
 
 

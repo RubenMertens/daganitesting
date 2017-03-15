@@ -40,7 +40,7 @@ export class ServerListPage {
   }
 
   refreshList(){
-
+    console.log("trying to refresh page!");
     this.connectionService.getStagedGames().subscribe(data => {
       console.log("page refreshed");
       this.listedGames = data;

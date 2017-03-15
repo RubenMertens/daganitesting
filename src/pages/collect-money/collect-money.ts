@@ -39,9 +39,8 @@ export class CollectMoneyPage {
   handleCollect(){
 
     if(this.team.treasury > 0 && (this.team.treasury - this.value) >= 0){
-      this.player.carriedMoney += this.team.treasury;
+      this.player.carriedMoney += this.value;
       this.team.treasury -= this.value;
-      //todo send message to backend!
       this.connectionService.sendTreasuryCollect(this.value,this.team.districts[0].id);
       this.navCtrl.pop();
     }else{

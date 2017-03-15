@@ -317,6 +317,8 @@ export class MapPage {
   private circles:Array<any>=[];
 
   private game:Game;
+  private bank:any;
+  private team:any;
 
   private inMarket:boolean;
   private inDistrict:boolean;
@@ -384,6 +386,9 @@ export class MapPage {
       self.player.team.districts = notification.districts;
       self.player.team.treasury = notification.treasury;
       self.player.team.bankAccount = notification.bankAccount;
+    }else if (messageWrapper.messageType=="ERROR_EXCEPTION"){
+      console.error(messageWrapper.message);
+
     }
 
   }
@@ -504,7 +509,7 @@ export class MapPage {
         for (let point of market.points) {
           poly.push(new GoogleMapsLatLng(point.latitude, point.longitude));
         }
-        this.boundsArray.push(new AreaBounds(market, new GoogleMapsLatLngBounds(poly), "TREASURY"));
+        this.boundsArray.push(new AreaBounds(market, new GoogleMapsLatLngBounds(poly), "MARKET"));
         this.map.addPolygon({
           'points': poly,
           'strokeColor': this.safeZoneColor,
@@ -519,6 +524,7 @@ export class MapPage {
       for (let bank of this.game.banks) {
         let point = new GoogleMapsLatLng(bank.point.latitude,bank.point.longitude);
         this.boundsArray.push(new AreaBounds(bank,this.circletoBounds(point,this.circleRadius),"BANK"));
+        this.bank = bank; //todo remove?
         this.map.addCircle({
           center: point,
           radius: this.circleRadius,
@@ -541,7 +547,7 @@ export class MapPage {
       }
 
       for (let team of this.game.teams) {
-        console.log("team")
+        console.log("team");
         console.log(team);
         for (let key in team.players) {
           if (team.players.hasOwnProperty(key)) {
@@ -551,6 +557,7 @@ export class MapPage {
             let point = team.districts[0].points[team.districts[0].points.length - 1];
             let treasureLoc = new GoogleMapsLatLng(point.latitude, point.longitude);
             this.currentLocationObject = this.player.team; //todo remove this is for testing
+              this.team = this.player.team;
             this.boundsArray.push(new AreaBounds(this.player.team, this.circletoBounds(treasureLoc, this.circleRadius), "TREASURY")); //todo pleinen voor veroveren
             this.map.addCircle({
               center: treasureLoc,
@@ -563,8 +570,6 @@ export class MapPage {
           }
         }
       }
-
-
     });
   }
 
@@ -585,195 +590,15 @@ export class MapPage {
   }
 
   public gotoBank(){
-    this.navCtrl.push(BankPage,this.currentLocationObject);
+    this.navCtrl.push(BankPage,this.bank);
   }
 
 
-  public collectMoney(){ //todo werkt voor gene zak
-    this.navCtrl.push(CollectMoneyPage,this.currentLocationObject);
+  public collectMoney(){
+    this.navCtrl.push(CollectMoneyPage,this.team); //todo verander naar currentlocation
   }
 
 
 
 }
 
-/*  this.map.addPolygon({
- 'points': groteMarktPoly,
- 'strokeColor': this.safeZoneColor,
- 'strokeWidth': 5,
- 'fillColor': this.safeZoneColor,
- 'visible' :true
- }).catch((error) => {
- console.log(error);
- });
-
- this.map.addPolygon({
- 'points': a1Poly,
- 'strokeColor': this.teamColor[0],
- 'strokeWidth': 5,
- 'fillColor': this.teamColor[0],
- 'visible' :true
- }).catch((error) => {
- console.log(error);
- });
-
- this.map.addPolygon({
- 'points': a2Poly,
- 'strokeColor': this.teamColor[0],
- 'strokeWidth': 5,
- 'fillColor': this.teamColor[0],
- 'visible' :true
- }).catch((error) => {
- console.log(error);
- });
-
- this.map.addPolygon({
- 'points': a3Poly,
- 'strokeColor': this.teamColor[0],
- 'strokeWidth': 5,
- 'fillColor': this.teamColor[0],
- 'visible' :true
- }).catch((error) => {
- console.log(error);
- });
-
- this.map.addPolygon({
- 'points': a4Poly,
- 'strokeColor': this.teamColor[0],
- 'strokeWidth': 5,
- 'fillColor': this.teamColor[0],
- 'visible' :true
- }).catch((error) => {
- console.log(error);
- });
-
- this.map.addPolygon({
- 'points': a5Poly,
- 'strokeColor': this.teamColor[0],
- 'strokeWidth': 5,
- 'fillColor': this.teamColor[0],
- 'visible' :true
- }).catch((error) => {
- console.log(error);
- });
-
- this.map.addCircle({
- center: a1Schatkist,
- radius: 10,
- strokeColor : "#000000",
- strokeWidth : 1,
- fillColor : this.teamColor[1]
- });
-
- this.map.addCircle({
- center: a2Schatkist,
- radius: 10,
- strokeColor : "#000000",
- strokeWidth : 1,
- fillColor : this.teamColor[1]
- });
-
- this.map.addCircle({
- center: a3Schatkist,
- radius: 10,
- strokeColor : "#000000",
- strokeWidth : 1,
- fillColor : this.teamColor[1]
- });
-
- this.map.addCircle({
- center: a4Schatkist,
- radius: 10,
- strokeColor : "#000000",
- strokeWidth : 1,
- fillColor : this.teamColor[1]
- });
-
- this.map.addCircle({
- center: a5Schatkist,
- radius: 10,
- strokeColor : "#000000",
- strokeWidth : 1,
- fillColor : this.teamColor[1]
- });
-
- });
-
-
- let groteMarktPoly = [
- new GoogleMapsLatLng(51.164404, 4.138955),
- new GoogleMapsLatLng(51.165199, 4.139859),
- new GoogleMapsLatLng(51.164937, 4.141007),
- new GoogleMapsLatLng(51.163301, 4.141691),
- new GoogleMapsLatLng(51.163087, 4.141356)
- ];
-
-
- let a1Poly = [
- new GoogleMapsLatLng(51.163204, 4.141742),
- new GoogleMapsLatLng(51.164348, 4.145379),
- new GoogleMapsLatLng(51.163655, 4.147578),
- new GoogleMapsLatLng(51.162868, 4.148769),
- new GoogleMapsLatLng(51.161791, 4.148029),
- new GoogleMapsLatLng(51.160486, 4.150218),
- new GoogleMapsLatLng(51.160076, 4.148844),
- new GoogleMapsLatLng(51.161637, 4.145636),
- ];
-
- let a1Schatkist = new GoogleMapsLatLng(51.162747, 4.146580);
-
- let a2Poly = [
- new GoogleMapsLatLng(51.164903, 4.141451),
- new GoogleMapsLatLng(51.168743, 4.142419),
- new GoogleMapsLatLng(51.168470, 4.144602),
- new GoogleMapsLatLng(51.168615, 4.144844),
- new GoogleMapsLatLng(51.168605, 4.145192),
- new GoogleMapsLatLng(51.168447, 4.145450),
- new GoogleMapsLatLng(51.168353, 4.145461),
- new GoogleMapsLatLng(51.167979, 4.148234),
- new GoogleMapsLatLng(51.166062, 4.147134),
- ];
-
- let a2Schatkist = new GoogleMapsLatLng(51.168370, 4.145031);
-
- let a3Poly = [
- new GoogleMapsLatLng(51.163919, 4.139593),
- new GoogleMapsLatLng(51.161489, 4.135498),
- new GoogleMapsLatLng(51.161220, 4.132111),
- new GoogleMapsLatLng(51.162270, 4.131950),
- new GoogleMapsLatLng(51.163985, 4.133817),
- new GoogleMapsLatLng(51.165122, 4.131253),
- new GoogleMapsLatLng(51.166448, 4.133055),
- new GoogleMapsLatLng(51.165257, 4.135415),
- new GoogleMapsLatLng(51.165889, 4.136145),
- ];
-
-
- let a3Schatkist = new GoogleMapsLatLng(51.163743, 4.135104);
-
- let a4Poly = [
- new GoogleMapsLatLng(51.163919, 4.139593),
- new GoogleMapsLatLng(51.163041, 4.141444),
- new GoogleMapsLatLng(51.161477, 4.142002),
- new GoogleMapsLatLng(51.160930, 4.138223),
- new GoogleMapsLatLng(51.161489, 4.135498),
- ];
-
-
- let a4Schatkist = new GoogleMapsLatLng( 51.161966, 4.138899);
-
- let a5Poly = [
- new GoogleMapsLatLng( 51.169287, 4.138398),
- new GoogleMapsLatLng( 51.169065, 4.140297),
- new GoogleMapsLatLng( 51.168587, 4.142089),
- new GoogleMapsLatLng( 51.165089, 4.141123),
- new GoogleMapsLatLng( 51.165506, 4.138312),
- new GoogleMapsLatLng( 51.166017, 4.137486),
- new GoogleMapsLatLng( 51.166044, 4.136885),
- new GoogleMapsLatLng( 51.167315, 4.136993),
- ];
-
- let a5Schatkist = new GoogleMapsLatLng( 51.169068, 4.139418);*/
-
-
-//let groteMarktBounds = new GoogleMapsLatLngBounds(groteMarktPoly);
