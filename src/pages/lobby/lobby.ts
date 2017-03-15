@@ -59,7 +59,7 @@ export class LobbyPage {
 
   ionViewWillLeave(){
     console.log("about to leave the server list page");
-    this.connectionService.unregisterFromGame();
+    //this.connectionService.unregisterFromGame();
     clearInterval(this.heartBeatTimer);
   }
 

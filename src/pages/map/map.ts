@@ -314,6 +314,7 @@ export class MapPage {
   private geoWatch:any;
   private mapAreaArray:Array<MapArea> = [];
   private boundsArray:Array<AreaBounds> =[];
+  private circles:Array<any>=[];
 
   private game:Game;
 
@@ -358,18 +359,24 @@ export class MapPage {
     console.log(messageWrapper);
     if(messageWrapper.messageType == "BULK_LOCATION"){
       let bulklocations:any = JSON.parse(messageWrapper.message);
-      console.log(bulklocations);
-      /*for (let obj of bulklocations.locations) {
+      console.log("circles");
+      console.log(self.circles);
+     for (let obj of self.circles){
+      obj.remove();
+     }
+     self.circles=[];
+      for (let obj of bulklocations.locations) {
         console.log(obj);
-         //todo finish this? needs testing ofc
-        /!*this.map.addCircle({
-          center: obj.value,
+       self.map.addCircle({
+          center: new GoogleMapsLatLng(obj.location.lat,obj.location.lng),
           radius: 2,
           strokeColor : "#000000",
           strokeWidth : 1,
-          fillColor : this.teamColor[1]
-        });*!/
-      }*/
+          fillColor : self.teamColor[1]
+        }).then((data) => {
+         self.circles.push(data);
+       });
+      }
     }else if(messageWrapper.messageType == "TEAM_NOTIFICATION"){
       let notification = JSON.parse(messageWrapper.message);
       console.log(notification);
