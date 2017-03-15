@@ -393,6 +393,7 @@ export class MapPage {
   }
 
   ionViewWillLeave(){
+
   }
 
   exitMap(){
@@ -400,6 +401,9 @@ export class MapPage {
     this.connectionService.stopConnection();
     this.geoWatch.unsubscribe();
     this.navCtrl.pop();
+    for (let obj of this.circles){
+      obj.remove();
+    }
   }
 
 
