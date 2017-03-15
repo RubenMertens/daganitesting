@@ -15,5 +15,6 @@ export class Game{
     public teams:any,
     public maxPlayersPerTeam:number,
     public maxTeams:number,
+    public banks:any,
   ){}
 }

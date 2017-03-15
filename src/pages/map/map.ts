@@ -336,10 +336,15 @@ export class MapPage {
     platform.ready().then(() => {
       this.loadMap();
     });
+/*
     let self = this;
-    this.connectionService.addMessageHandler(function (message) {
+*/
+
+    this.connectionService.addMessageHandler(message => this.handleSocketMessage(message,this));
+
+/*    this.connectionService.addMessageHandler(function (message) {
       self.handleSocketMessage(message,self) //todo refactor
-    });
+    });*/
     console.log(navParams);
     this.game= navParams.data;
     console.log(this.game);
@@ -356,7 +361,6 @@ export class MapPage {
       console.log(bulklocations);
       /*for (let obj of bulklocations.locations) {
         console.log(obj);
-
          //todo finish this? needs testing ofc
         /!*this.map.addCircle({
           center: obj.value,
@@ -366,7 +370,7 @@ export class MapPage {
           fillColor : this.teamColor[1]
         });*!/
       }*/
-    }else if(messageWrapper.messageType == "NOTIFICATION"){
+    }else if(messageWrapper.messageType == "TEAM_NOTIFICATION"){
       let notification = JSON.parse(messageWrapper.message);
       console.log(notification);
       console.log(this.player.team);
@@ -417,6 +421,7 @@ export class MapPage {
           switch(areaBound.type){
             case "BANK":
               this.inBank = true;
+              console.log("is in bank");
               break;
             case "TRADE_POST" :
               this.inShop = true;
@@ -499,6 +504,18 @@ export class MapPage {
           console.log(error);
         });
       }
+      console.log(this.game);
+      for (let bank of this.game.banks) {
+        let point = new GoogleMapsLatLng(bank.point.latitude,bank.point.longitude);
+        this.boundsArray.push(new AreaBounds(bank,this.circletoBounds(point,this.circleRadius),"BANK"));
+        this.map.addCircle({
+          center: point,
+          radius: this.circleRadius,
+          strokeColor: this.tradePostColor,
+          strokeWidth: 5,
+          fillColor: this.tradePostColor
+        });
+      }
 
       for (let tradePost of this.game.tradePosts) {
         let point = new GoogleMapsLatLng(tradePost.point.latitude, tradePost.point.longitude);
@@ -507,7 +524,7 @@ export class MapPage {
           center: point,
           radius: this.circleRadius,
           strokeColor: this.tradePostColor,
-          strokeWidth: 0,
+          strokeWidth: 5,
           fillColor: this.tradePostColor
         });
       }
@@ -536,97 +553,6 @@ export class MapPage {
         }
       }
 
-   /*   this.connectionService.getAreaLocations().subscribe(data => {
-        console.log(data);
-        for (let obj of data) {
-          let poly = [];
-          let treasureLoc: GoogleMapsLatLng;
-          for (let point of obj.points) {
-            if (point.type === "COORDINATE") {
-              poly.push(new GoogleMapsLatLng(point.latitude, point.longitude));
-            } else if (point.type === "TREASURE") {
-              treasureLoc = new GoogleMapsLatLng(point.latitude, point.longitude);
-            }
-          }
-          let color: string = "";
-          switch (obj.type) {
-            case "MARKET":
-              color = this.safeZoneColor;
-              this.boundsArray.push(new AreaBounds({},new GoogleMapsLatLngBounds(poly),"MARKET"));
-              break;
-            case "DISTRICT_A":
-              color = this.districtAColor;
-              break;
-            case "DISTRICT_B":
-              color = this.districtBColor;
-              break;
-          }
-
-          this.map.addPolygon({
-            'points': poly,
-            'strokeColor': color,
-            'strokeWidth': this.strokeWidth,
-            'fillColor': color,
-            'visible': true
-          }).catch((error) => {
-            console.log(error);
-          });
-
-          this.boundsArray.push(new AreaBounds({},this.circletoBounds(treasureLoc,this.circleRadius),"TREASURY"));
-
-          this.map.addCircle({
-            center: treasureLoc,
-            radius: this.circleRadius,
-            strokeColor: this.circleColor,
-            strokeWidth: this.cirlceStrokeWidth,
-            fillColor: this.circleColor
-          });
-        }
-      });
-
-      this.connectionService.getPointLocations().subscribe(data => {
-        console.log("pointlocations");
-        console.log(data);
-        let center: GoogleMapsLatLng;
-        let bounds : GoogleMapsLatLngBounds;
-        for (let pointlocation of data) {
-          switch (pointlocation.type){
-            case "BANK":
-              console.log("drawing bank");
-              center = new GoogleMapsLatLng(pointlocation.point.latitude,pointlocation.point.longitude);
-              bounds = this.circletoBounds(center,20); //todo not hardcode this
-              this.boundsArray.push(new AreaBounds({},bounds,"BANK"));
-
-              this.map.addCircle({
-                center: new GoogleMapsLatLng(pointlocation.point.latitude,pointlocation.point.longitude),
-                radius: 20,
-                strokeColor: "#0000FF",
-                strokeWidth: this.cirlceStrokeWidth,
-                fillColor: "#0000FF"
-              });
-
-              break;
-            case "TRADE_POST":
-              console.log("trade post drawing");
-              let tradepost: TradePost = new TradePost(pointlocation.id,pointlocation.items,pointlocation.name, pointlocation.point);
-              center = new GoogleMapsLatLng(pointlocation.point.latitude,pointlocation.point.longitude);
-              bounds = this.circletoBounds(center,20); //todo not hardcode this
-              this.boundsArray.push(new AreaBounds(tradepost,bounds, "TRADE_POST"));
-              console.log(tradepost);
-              console.log(this.boundsArray);
-
-              this.map.addCircle({
-                center: center,
-                radius: 20,
-                strokeColor: "#FF0000",
-                strokeWidth: this.cirlceStrokeWidth,
-                fillColor: "#FF0000"
-              });
-              break;
-          }
-        }
-        }
-        )*/
 
     });
   }
@@ -648,7 +574,7 @@ export class MapPage {
   }
 
   public gotoBank(){
-    this.navCtrl.push(BankPage);
+    this.navCtrl.push(BankPage,this.currentLocationObject);
   }
 
 

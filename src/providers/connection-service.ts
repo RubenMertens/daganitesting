@@ -18,8 +18,8 @@ export class ConnectionService {
 
   //private baseAdress :string = "https://stniklaas-stadsspel.herokuapp.com/api/";
   //private webSocketUrl:string = "ws://stniklaas-stadsspel.herokuapp.com/user";
-  private webSocketUrl:string = "ws://192.168.0.248:8090/user";
-  private baseAdress:string = "http://192.168.0.248:8090/api/";
+  private webSocketUrl:string = "ws://10.134.229.38:8090/user";
+  private baseAdress:string = "http://10.134.229.38:8090/api/";
 
   constructor(public http: Http) {
     //this.clientID = Device.uuid; //todo: not fake this
@@ -28,6 +28,13 @@ export class ConnectionService {
 
   sendTreasuryCollect(moneyTransferred:number, tradePostId:string){
     let message = new GameEventMessage("TREASURY_WITHDRAWAL",[this.clientID],moneyTransferred,new Map(),tradePostId);
+    console.log(message);
+    let wrapper = new MessageWrapper("EVENT",this.token,JSON.stringify(message),this.gameId,this.clientID);
+    this.ws.send(JSON.stringify(wrapper));
+  }
+
+  sendPutMoneyBank(moneyTrasferred:number,tradePostId:string){
+    let message= new GameEventMessage("BANK_DEPOSIT",[this.clientID],moneyTrasferred,new Map(),tradePostId);
     console.log(message);
     let wrapper = new MessageWrapper("EVENT",this.token,JSON.stringify(message),this.gameId,this.clientID);
     this.ws.send(JSON.stringify(wrapper));

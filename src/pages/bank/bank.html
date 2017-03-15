@@ -17,19 +17,41 @@
   <h1 text-center>Money in the Bank</h1>
   <h2 text-center>{{moneyInBank}}</h2>
 
-  <h1 text-center>Your money</h1>
-  <h2 text-center>{{playerMoney}}</h2>
 
-  <ion-footer>
-    <ion-row>
-      <ion-col>
-        <button ion-button full (click)="withdraw()">Withdraw</button>
-      </ion-col>
-      <ion-col>
-        <button ion-button full (click)="deposit()">Deposit</button>
-      </ion-col>
-    </ion-row>
-  </ion-footer>
+  <ion-segment [(ngModel)]="options">
+    <ion-segment-button value="deposit">
+      Deposit
+    </ion-segment-button>
+    <ion-segment-button  value="withdraw">
+      Withdraw
+    </ion-segment-button>
+  </ion-segment>
+
+  <div ngSwitch="options">
+    <div *ngSwitchCase="'deposit'">
+      <p>test</p>
+      <ion-item>
+        <ion-input type="number" [(ngModel)]="depositValue" name="value" min=0 max={{playerMoney}}></ion-input> <!--todo fix min max attribute? -->
+      </ion-item>
+
+      <ion-footer>
+        <ion-row>
+          <ion-col>
+            <button ion-button full (click)="cancel()">Cancel</button>
+          </ion-col>
+          <ion-col>
+            <button ion-button full (click)="deposit()">Deposit</button>
+          </ion-col>
+        </ion-row>
+      </ion-footer>
+
+    </div>
+    <div *ngSwitchCase="'withdraw'">
+
+    </div>
+  </div>
+
+
 
 
 </ion-content>

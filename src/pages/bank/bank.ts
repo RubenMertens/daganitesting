@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import {NavController, NavParams, AlertController} from 'ionic-angular';
+import {Player} from "../../providers/Player";
+import {ConnectionService} from "../../providers/connection-service";
 
 /*
   Generated class for the Bank page.
@@ -15,96 +17,35 @@ export class BankPage {
 
   private moneyInBank:number;
   private playerMoney:number;
+  private depositValue:number;
+  private bank:any;
+  private option:string;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams , public alertCtrl:AlertController) {
-    this.fillWithDummyData();
+  constructor(public navCtrl: NavController, public navParams: NavParams , public alertCtrl:AlertController, public player:Player, public connectionService:ConnectionService) {
+    console.log("bank param");
+    console.log(this.navParams.data);
+    this.bank = this.navParams.data;
+    this.moneyInBank = this.player.team.bankAccount;
+    this.playerMoney=this.player.carriedMoney;
+    this.depositValue= this.playerMoney;
+    this.option= "deposit";
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad BankPage');
   }
 
-  fillWithDummyData(){
-    this.moneyInBank = 3000000;
-    this.playerMoney = 1000;
-  }
-
   deposit(){
-    let prompt = this.alertCtrl.create({
-      title: "Deposit how much?",
-      inputs : [
-        {
-          name: "amount",
-          placeholder: "amount",
-          type: "number"
-        }
-      ],
-      buttons: [
-        {
-          text: 'cancel',
-          handler: data => {
-            console.log("cancel clicked")
-          }
-        },
-        {
-          text: "Deposit",
-          handler: data => {
-            console.log("Ok clicked");
-            console.log(+data);
-            if(+data.amount > 0 && this.playerMoney - data.amount > 0){
-              this.playerMoney -= +data.amount;
-              this.moneyInBank += +data.amount;
-              //todo send message to backend
-            }else{
-              let errorprompt = this.alertCtrl.create();
-              errorprompt.setTitle("There's not enough money!");
-              errorprompt.present();
-            }
-          }
-          }
-      ]
-    });
-
-    prompt.present();
+    console.log("depositing to bank");
+    this.connectionService.sendPutMoneyBank(this.depositValue,this.bank.id);
   }
 
   withdraw(){
-    let prompt = this.alertCtrl.create({
-      title: "Withdraw how much?",
-      inputs : [
-        {
-          name: "amount",
-          placeholder: "amount",
-          type: "number"
-        }
-      ],
-      buttons: [
-        {
-          text: 'cancel',
-          handler: data => {
-            console.log("cancel clicked")
-          }
-        },
-        {
-          text: "Withdraw",
-          handler: data => {
-            console.log("Ok clicked");
-            console.log(data);
-            if(data.amount > 0 && this.moneyInBank - data.amount > 0){
-              this.playerMoney += +data.amount;
-              this.moneyInBank -= +data.amount;
-              //todo send message to backend
-            }else{
-              let errorprompt = this.alertCtrl.create();
-              errorprompt.setTitle("There's not enough money!");
-              errorprompt.present();
-            }
-          }
-        }
-      ]
-    });
 
-    prompt.present();
+  }
+
+  cancel(){
+    this.navCtrl.pop();
   }
 
 }

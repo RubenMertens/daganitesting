@@ -52,7 +52,7 @@ export class LobbyPage {
 
     this.connectionService.getGame().subscribe(data => {
       console.log(data);
-      this.game = new Game(data.id,data.roomName,data.districts,data.markets,data.tradePosts,data.teams,data.maxPlayersPerTeam,data.maxTeams);
+      this.game = new Game(data.id,data.roomName,data.districts,data.markets,data.tradePosts,data.teams,data.maxPlayersPerTeam,data.maxTeams,data.banks);
       console.log(this.game);
     })
   }
