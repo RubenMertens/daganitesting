@@ -51,7 +51,7 @@ export class ConnectionService {
     map.forEach((value,key) => {
       object[key] = value;
     });
-    
+
     return object;
   }
 
@@ -62,6 +62,11 @@ export class ConnectionService {
 
   sendTradePostIllegalPurchase(moneyTransferred:number, items:Map<string,number>,tradePostId:string){
     let message= new GameEventMessage("TRADEPOST_ILLEGAL_PURCHASE",[this.clientID],moneyTransferred,this.mapToObject(items),tradePostId);
+    this.sendEventMessage(message);
+  }
+
+  sendTradePostAllSale(tradePostId:string){
+    let message = new GameEventMessage("TRADEPOST_ALL_SALE",[this.clientID],0,{},tradePostId);
     this.sendEventMessage(message);
   }
 

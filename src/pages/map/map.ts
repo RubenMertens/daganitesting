@@ -31,239 +31,239 @@ import {ShopPage} from "../shop/shop";
 })
 export class MapPage {
 
-private mapStyles= [
-  {
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#1d2c4d"
-      }
-    ]
-  },
-{
-  "elementType": "labels.text.fill",
-  "stylers": [
+  private mapStyles = [
     {
-      "color": "#8ec3b9"
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#1d2c4d"
+        }
+      ]
+    },
+    {
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#8ec3b9"
+        }
+      ]
+    },
+    {
+      "elementType": "labels.text.stroke",
+      "stylers": [
+        {
+          "color": "#1a3646"
+        }
+      ]
+    },
+    {
+      "featureType": "administrative.country",
+      "elementType": "geometry.stroke",
+      "stylers": [
+        {
+          "color": "#4b6878"
+        }
+      ]
+    },
+    {
+      "featureType": "administrative.land_parcel",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#64779e"
+        }
+      ]
+    },
+    {
+      "featureType": "administrative.province",
+      "elementType": "geometry.stroke",
+      "stylers": [
+        {
+          "color": "#4b6878"
+        }
+      ]
+    },
+    {
+      "featureType": "landscape.man_made",
+      "elementType": "geometry.stroke",
+      "stylers": [
+        {
+          "color": "#334e87"
+        }
+      ]
+    },
+    {
+      "featureType": "landscape.natural",
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#023e58"
+        }
+      ]
+    },
+    {
+      "featureType": "poi",
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#283d6a"
+        }
+      ]
+    },
+    {
+      "featureType": "poi",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#6f9ba5"
+        }
+      ]
+    },
+    {
+      "featureType": "poi",
+      "elementType": "labels.text.stroke",
+      "stylers": [
+        {
+          "color": "#1d2c4d"
+        }
+      ]
+    },
+    {
+      "featureType": "poi.park",
+      "elementType": "geometry.fill",
+      "stylers": [
+        {
+          "color": "#023e58"
+        }
+      ]
+    },
+    {
+      "featureType": "poi.park",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#3C7680"
+        }
+      ]
+    },
+    {
+      "featureType": "road",
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#304a7d"
+        }
+      ]
+    },
+    {
+      "featureType": "road",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#98a5be"
+        }
+      ]
+    },
+    {
+      "featureType": "road",
+      "elementType": "labels.text.stroke",
+      "stylers": [
+        {
+          "color": "#1d2c4d"
+        }
+      ]
+    },
+    {
+      "featureType": "road.highway",
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#2c6675"
+        }
+      ]
+    },
+    {
+      "featureType": "road.highway",
+      "elementType": "geometry.stroke",
+      "stylers": [
+        {
+          "color": "#255763"
+        }
+      ]
+    },
+    {
+      "featureType": "road.highway",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#b0d5ce"
+        }
+      ]
+    },
+    {
+      "featureType": "road.highway",
+      "elementType": "labels.text.stroke",
+      "stylers": [
+        {
+          "color": "#023e58"
+        }
+      ]
+    },
+    {
+      "featureType": "transit",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#98a5be"
+        }
+      ]
+    },
+    {
+      "featureType": "transit",
+      "elementType": "labels.text.stroke",
+      "stylers": [
+        {
+          "color": "#1d2c4d"
+        }
+      ]
+    },
+    {
+      "featureType": "transit.line",
+      "elementType": "geometry.fill",
+      "stylers": [
+        {
+          "color": "#283d6a"
+        }
+      ]
+    },
+    {
+      "featureType": "transit.station",
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#3a4762"
+        }
+      ]
+    },
+    {
+      "featureType": "water",
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#0e1626"
+        }
+      ]
+    },
+    {
+      "featureType": "water",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#4e6d70"
+        }
+      ]
     }
-    ]
-},
-{
-  "elementType": "labels.text.stroke",
-  "stylers": [
-  {
-    "color": "#1a3646"
-  }
-]
-},
-{
-  "featureType": "administrative.country",
-  "elementType": "geometry.stroke",
-  "stylers": [
-  {
-    "color": "#4b6878"
-  }
-]
-},
-{
-  "featureType": "administrative.land_parcel",
-  "elementType": "labels.text.fill",
-  "stylers": [
-  {
-    "color": "#64779e"
-  }
-]
-},
-{
-  "featureType": "administrative.province",
-  "elementType": "geometry.stroke",
-  "stylers": [
-  {
-    "color": "#4b6878"
-  }
-]
-},
-{
-  "featureType": "landscape.man_made",
-  "elementType": "geometry.stroke",
-  "stylers": [
-  {
-    "color": "#334e87"
-  }
-]
-},
-{
-  "featureType": "landscape.natural",
-  "elementType": "geometry",
-  "stylers": [
-  {
-    "color": "#023e58"
-  }
-]
-},
-{
-  "featureType": "poi",
-  "elementType": "geometry",
-  "stylers": [
-  {
-    "color": "#283d6a"
-  }
-]
-},
-{
-  "featureType": "poi",
-  "elementType": "labels.text.fill",
-  "stylers": [
-  {
-    "color": "#6f9ba5"
-  }
-]
-},
-{
-  "featureType": "poi",
-  "elementType": "labels.text.stroke",
-  "stylers": [
-  {
-    "color": "#1d2c4d"
-  }
-]
-},
-{
-  "featureType": "poi.park",
-  "elementType": "geometry.fill",
-  "stylers": [
-  {
-    "color": "#023e58"
-  }
-]
-},
-{
-  "featureType": "poi.park",
-  "elementType": "labels.text.fill",
-  "stylers": [
-  {
-    "color": "#3C7680"
-  }
-]
-},
-{
-  "featureType": "road",
-  "elementType": "geometry",
-  "stylers": [
-  {
-    "color": "#304a7d"
-  }
-]
-},
-{
-  "featureType": "road",
-  "elementType": "labels.text.fill",
-  "stylers": [
-  {
-    "color": "#98a5be"
-  }
-]
-},
-{
-  "featureType": "road",
-  "elementType": "labels.text.stroke",
-  "stylers": [
-  {
-    "color": "#1d2c4d"
-  }
-]
-},
-{
-  "featureType": "road.highway",
-  "elementType": "geometry",
-  "stylers": [
-  {
-    "color": "#2c6675"
-  }
-]
-},
-{
-  "featureType": "road.highway",
-  "elementType": "geometry.stroke",
-  "stylers": [
-  {
-    "color": "#255763"
-  }
-]
-},
-{
-  "featureType": "road.highway",
-  "elementType": "labels.text.fill",
-  "stylers": [
-  {
-    "color": "#b0d5ce"
-  }
-]
-},
-{
-  "featureType": "road.highway",
-  "elementType": "labels.text.stroke",
-  "stylers": [
-  {
-    "color": "#023e58"
-  }
-]
-},
-{
-  "featureType": "transit",
-  "elementType": "labels.text.fill",
-  "stylers": [
-  {
-    "color": "#98a5be"
-  }
-]
-},
-{
-  "featureType": "transit",
-  "elementType": "labels.text.stroke",
-  "stylers": [
-  {
-    "color": "#1d2c4d"
-  }
-]
-},
-{
-  "featureType": "transit.line",
-  "elementType": "geometry.fill",
-  "stylers": [
-  {
-    "color": "#283d6a"
-  }
-]
-},
-{
-  "featureType": "transit.station",
-  "elementType": "geometry",
-  "stylers": [
-  {
-    "color": "#3a4762"
-  }
-]
-},
-{
-  "featureType": "water",
-  "elementType": "geometry",
-  "stylers": [
-  {
-    "color": "#0e1626"
-  }
-]
-},
-{
-  "featureType": "water",
-  "elementType": "labels.text.fill",
-  "stylers": [
-  {
-    "color": "#4e6d70"
-  }
-]
-}
-]
+  ]
 
 
   map: GoogleMap;
@@ -273,28 +273,29 @@ private mapStyles= [
   private districtBColor: string = "#FFF";
   private teamColor: Array<string> = [];
   private circleColor: string = "#0ff";
-  private bankColor:string ="#F00";
-  private tradePostColor:string="#00F";
+  private bankColor: string = "#F00";
+  private tradePostColor: string = "#00F";
   private strokeWidth: number = 5;
   private circleRadius: number = 20;
   private cirlceStrokeWidth: number = 1;
-  private geoWatch:any;
-  private mapAreaArray:Array<MapArea> = [];
-  private boundsArray:Array<AreaBounds> =[];
-  private circles:Array<any>=[];
+  private geoWatch: any;
+  private mapAreaArray: Array<MapArea> = [];
+  private boundsArray: Array<AreaBounds> = [];
+  private circles: Array<any> = [];
 
-  private game:Game;
-  private bank:any;
-  private myTeam:any;
-  private demoShop:any;
+  private game: Game;
+  private bank: any;
+  private myTeam: any;
+  private demoShop: any;
+  private market:any;
 
-  private inMarket:boolean;
-  private inDistrict:boolean;
-  private inShop:boolean;
-  private inBank:boolean;
-  private inTreasury:boolean;
+  private inMarket: boolean;
+  private inDistrict: boolean;
+  private inShop: boolean;
+  private inBank: boolean;
+  private inTreasury: boolean;
 
-  private currentLocationObject:any;
+  private currentLocationObject: any;
 
   private token: string;
   private gameId: string; //todo MA echt refactor dit
@@ -302,69 +303,68 @@ private mapStyles= [
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               public platform: Platform, public  connectionService: ConnectionService
-              , public alertCtrl:AlertController, public player:Player,
-  ) {
+    , public alertCtrl: AlertController, public player: Player,) {
     platform.ready().then(() => {
       this.loadMap();
     });
-/*
-    let self = this;
-*/
+    /*
+     let self = this;
+     */
 
-    this.connectionService.addMessageHandler(message => this.handleSocketMessage(message,this));
+    this.connectionService.addMessageHandler(message => this.handleSocketMessage(message, this));
 
-/*    this.connectionService.addMessageHandler(function (message) {
-      self.handleSocketMessage(message,self) //todo refactor
-    });*/
+    /*    this.connectionService.addMessageHandler(function (message) {
+     self.handleSocketMessage(message,self) //todo refactor
+     });*/
     console.log(navParams);
-    this.game= navParams.data;
+    this.game = navParams.data;
     console.log(this.game);
 
 
   }
 
   handleSocketMessage(message, self) {
-    let messageWrapper:MessageWrapper = JSON.parse(message.data);
+    let messageWrapper: MessageWrapper = JSON.parse(message.data);
     console.log("message received");
     console.log(messageWrapper);
-    if(messageWrapper.messageType == "BULK_LOCATION"){
-      let bulklocations:any = JSON.parse(messageWrapper.message);
+    if (messageWrapper.messageType == "BULK_LOCATION") {
+      let bulklocations: any = JSON.parse(messageWrapper.message);
       console.log("circles");
       console.log(self.circles);
-     for (let obj of self.circles){
-      obj.remove();
-     }
-     self.circles=[];
+      for (let obj of self.circles) {
+        obj.remove();
+      }
+      self.circles = [];
       for (let obj of bulklocations.locations) {
         console.log(obj);
-       self.map.addCircle({
-          center: new GoogleMapsLatLng(obj.location.lat,obj.location.lng),
+        self.map.addCircle({
+          center: new GoogleMapsLatLng(obj.location.lat, obj.location.lng),
           radius: 2,
-          strokeColor : "#000000",
-          strokeWidth : 1,
-          fillColor : self.teamColor[1]
+          strokeColor: "#000000",
+          strokeWidth: 1,
+          fillColor: self.teamColor[1]
         }).then((data) => {
-         self.circles.push(data);
-       });
+          self.circles.push(data);
+        });
       }
-    }else if(messageWrapper.messageType == "TEAM_NOTIFICATION"){
+    } else if (messageWrapper.messageType == "TEAM_NOTIFICATION") {
       let notification = JSON.parse(messageWrapper.message);
       console.log(notification);
       console.log(this.player.team);
       self.player.team.districts = notification.districts;
       self.player.team.treasury = notification.treasury;
       self.player.team.bankAccount = notification.bankAccount;
-    }else if(messageWrapper.messageType=="PLAYER_NOTIFICATION"){
+    } else if (messageWrapper.messageType == "PLAYER_NOTIFICATION") {
       let notification = JSON.parse(messageWrapper.message);
       console.log(notification);
       self.player.carriedMoney = notification.money;
       self.player.legalItems = notification.legalItems;
-      self.player.illegalItems= notification.illegalItems;
+      self.player.illegalItems = notification.illegalItems;
       console.log(this.player.team);
     }
 
 
-    else if (messageWrapper.messageType=="ERROR_EXCEPTION"){
+    else if (messageWrapper.messageType == "ERROR_EXCEPTION") {
       console.error(messageWrapper.message);
 
     }
@@ -375,29 +375,52 @@ private mapStyles= [
     this.navCtrl.push(InventoryPage);
   }
 
-  ionViewWillLeave(){
+  ionViewWillLeave() {
 
   }
 
-  exitMap(){
+  exitMap() {
     console.log("will leave map.");
     this.connectionService.stopConnection();
     this.geoWatch.unsubscribe();
     this.navCtrl.pop();
-    for (let obj of this.circles){
+    for (let obj of this.circles) {
       obj.remove();
     }
+  }
+
+  handleSellEverything() {
+    let prompt = this.alertCtrl.create({
+      title: "Confirm",
+      message: "Are you sure you want to sell everything?",
+      buttons: [
+        {
+          text: "cancel",
+          role: "cancel",
+          handler: data => {
+            console.log("Sale cancelled");
+          }
+        },
+        {
+          text: "Ok",
+          handler: data => {
+            console.log("Handeling sale");
+            this.connectionService.sendTradePostAllSale(,this.market.id);
+
+          }
+        }]
+    })
   }
 
 
   loadMap() {
 
-    this.geoWatch= Geolocation.watchPosition()/*.timeout(5000, console.log("timed out"))*/.subscribe((data) => {
+    this.geoWatch = Geolocation.watchPosition()/*.timeout(5000, console.log("timed out"))*/.subscribe((data) => {
       let position: CameraPosition = {
         target: new GoogleMapsLatLng(data.coords.latitude, data.coords.longitude),
         zoom: 18,
         tilt: 67,
-        bearing:314
+        bearing: 314
       };
       //this.map.moveCamera(position); //todo turn this back on for camera locking
 
@@ -411,9 +434,9 @@ private mapStyles= [
       this.inTreasury = false;
 
       for (let areaBound of this.boundsArray) {
-        if(areaBound.bounds.contains(new GoogleMapsLatLng(data.coords.latitude,data.coords.longitude))){
+        if (areaBound.bounds.contains(new GoogleMapsLatLng(data.coords.latitude, data.coords.longitude))) {
           this.currentLocationObject = areaBound.object;
-          switch(areaBound.type){
+          switch (areaBound.type) {
             case "BANK":
               this.inBank = true;
               console.log("is in bank");
@@ -473,7 +496,7 @@ private mapStyles= [
           console.log(error);
         });
         /*
-        this.boundsArray.push(new AreaBounds(district,this.circletoBounds(treasureLoc,this.circleRadius),"DISTRICTCAPITAL")); //todo pleinen voor veroveren
+         this.boundsArray.push(new AreaBounds(district,this.circletoBounds(treasureLoc,this.circleRadius),"DISTRICTCAPITAL")); //todo pleinen voor veroveren
          this.map.addCircle({
          center: treasureLoc,
          radius: this.circleRadius,
@@ -488,6 +511,7 @@ private mapStyles= [
         for (let point of market.points) {
           poly.push(new GoogleMapsLatLng(point.latitude, point.longitude));
         }
+        this.market = market;
         this.boundsArray.push(new AreaBounds(market, new GoogleMapsLatLngBounds(poly), "MARKET"));
         this.map.addPolygon({
           'points': poly,
@@ -501,8 +525,8 @@ private mapStyles= [
       }
       console.log(this.game);
       for (let bank of this.game.banks) {
-        let point = new GoogleMapsLatLng(bank.point.latitude,bank.point.longitude);
-        this.boundsArray.push(new AreaBounds(bank,this.circletoBounds(point,this.circleRadius),"BANK"));
+        let point = new GoogleMapsLatLng(bank.point.latitude, bank.point.longitude);
+        this.boundsArray.push(new AreaBounds(bank, this.circletoBounds(point, this.circleRadius), "BANK"));
         this.bank = bank; //todo remove?
         this.map.addCircle({
           center: point,
@@ -533,20 +557,20 @@ private mapStyles= [
         for (let key in team.players) {
           if (team.players.hasOwnProperty(key)) {
 
-            if(team.players[key].clientID === this.connectionService.clientID){
-            this.player.team = team;
-            let point = team.districts[0].points[team.districts[0].points.length - 1];
-            let treasureLoc = new GoogleMapsLatLng(point.latitude, point.longitude);
-            this.currentLocationObject = this.player.team; //todo remove this is for testing
+            if (team.players[key].clientID === this.connectionService.clientID) {
+              this.player.team = team;
+              let point = team.districts[0].points[team.districts[0].points.length - 1];
+              let treasureLoc = new GoogleMapsLatLng(point.latitude, point.longitude);
+              this.currentLocationObject = this.player.team; //todo remove this is for testing
               this.myTeam = this.player.team;
-            this.boundsArray.push(new AreaBounds(this.player.team, this.circletoBounds(treasureLoc, this.circleRadius), "TREASURY")); //todo pleinen voor veroveren
-            this.map.addCircle({
-              center: treasureLoc,
-              radius: this.circleRadius,
-              strokeColor: this.circleColor,
-              strokeWidth: 0,
-              fillColor: this.circleColor
-            })
+              this.boundsArray.push(new AreaBounds(this.player.team, this.circletoBounds(treasureLoc, this.circleRadius), "TREASURY")); //todo pleinen voor veroveren
+              this.map.addCircle({
+                center: treasureLoc,
+                radius: this.circleRadius,
+                strokeColor: this.circleColor,
+                strokeWidth: 0,
+                fillColor: this.circleColor
+              })
             }
           }
         }
@@ -559,31 +583,30 @@ private mapStyles= [
     this.connectionService.setupTCPSocket(this.token, this.gameId);
   }
 
-  public circletoBounds(center:GoogleMapsLatLng, radius:number) { //todo collapse to no variables
+  public circletoBounds(center: GoogleMapsLatLng, radius: number) { //todo collapse to no variables
     let radiusEarth = 6378000;
     let SWlat = center.lat + (-radius / radiusEarth) * (180 / Math.PI);
-    let SWlng = center.lng + (-radius / radiusEarth) * (180 / Math.PI) / Math.cos(center.lat * Math.PI/180);
-    let SWpoint = new GoogleMapsLatLng(SWlat,SWlng);
+    let SWlng = center.lng + (-radius / radiusEarth) * (180 / Math.PI) / Math.cos(center.lat * Math.PI / 180);
+    let SWpoint = new GoogleMapsLatLng(SWlat, SWlng);
     let NElat = center.lat + (radius / radiusEarth) * (180 / Math.PI);
-    let NElng = center.lng + (radius / radiusEarth) * (180 / Math.PI) / Math.cos(center.lat * Math.PI/180);
-    let NEpoint = new GoogleMapsLatLng(NElat,NElng);
-    return new GoogleMapsLatLngBounds( [SWpoint,NEpoint]);
+    let NElng = center.lng + (radius / radiusEarth) * (180 / Math.PI) / Math.cos(center.lat * Math.PI / 180);
+    let NEpoint = new GoogleMapsLatLng(NElat, NElng);
+    return new GoogleMapsLatLngBounds([SWpoint, NEpoint]);
   }
 
-  public gotoBank(){
-    this.navCtrl.push(BankPage,this.bank);
+  public gotoBank() {
+    this.navCtrl.push(BankPage, this.bank);
   }
 
 
-  public collectMoney(){
-    this.navCtrl.push(CollectMoneyPage,this.myTeam); //todo verander naar currentlocation
+  public collectMoney() {
+    this.navCtrl.push(CollectMoneyPage, this.myTeam); //todo verander naar currentlocation
   }
 
-  public gotoShop(){
+  public gotoShop() {
     //this.navCtrl.push(ShopPage,this.currentLocationObject);
-    this.navCtrl.push(ShopPage,this.demoShop);
+    this.navCtrl.push(ShopPage, this.demoShop);
   }
-
 
 
 }
