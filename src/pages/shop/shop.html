@@ -23,30 +23,61 @@
       </ion-col>
     </ion-row>
 
-    <ion-card *ngFor="let item of shop.items">
-      <ion-card-header>
-        {{item.name}}
-      </ion-card-header>
+    <ion-segment [(ngModel)]="options">
+      <ion-segment-button value="legal">
+        Legal
+      </ion-segment-button>
+      <ion-segment-button  value="illegal">
+        Illegal
+      </ion-segment-button>
+    </ion-segment>
 
-      <ion-card-content>
-        Buy {{item.name}} from {{shop.name}} for {{item.legalPurchase}}$ each?
-      </ion-card-content>
+    <div [ngSwitch]="options">
+      <div *ngSwitchCase="'legal'">
 
-      <ion-item>
-        <ion-label floating>Amount</ion-label>
-        <ion-input type="number" [(ngModel)]="amount" name="amount" min="0"></ion-input>
-      </ion-item>
+        <ion-card *ngFor="let item of shop.items">
+          <ion-card-header>
+            {{item.name}}
+          </ion-card-header>
 
-      <ion-row>
-        <ion-col>
-          <button ion-button full (click)="handleSell(item,true)" >Buy (legal)</button>
-        </ion-col>
-        <ion-col>
-          <button ion-button full (click)="handleSell(item,false)">Buy (illegal)</button>
-        </ion-col>
-      </ion-row>
+          <ion-card-content>
+            Buy {{item.name}} from {{shop.name}} for {{item.legalPurchase}}$ each?
+          </ion-card-content>
 
-    </ion-card>
+          <ion-item>
+            <ion-label floating>Amount</ion-label>
+            <ion-input type="number" [(ngModel)]="legalAmount" name="amount" min="0"></ion-input>
+          </ion-item>
+
+              <button ion-button full (click)="handleLegalSell(item)" >Buy (legal)</button>
+
+        </ion-card>
+
+      </div>
+
+      <div *ngSwitchCase="'illegal'">
+
+        <ion-card *ngFor="let item of shop.items">
+          <ion-card-header>
+            {{item.name}}
+          </ion-card-header>
+
+          <ion-card-content>
+            Buy {{item.name}} illegally from {{shop.name}} for {{item.illegalPurchase}}$ each?
+          </ion-card-content>
+
+          <ion-item>
+            <ion-label floating>Amount</ion-label>
+            <ion-input type="number" [(ngModel)]="illegalAmount" name="amount" min="0"></ion-input>
+          </ion-item>
+
+          <button ion-button full (click)="handleIllegalSell(item)" >Buy (illegal)</button>
+
+        </ion-card>
+      </div>
+    </div>
+
+
 
  </ion-grid>
 

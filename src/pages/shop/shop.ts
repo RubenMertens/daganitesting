@@ -20,7 +20,8 @@ export class ShopPage {
 
   private options:string;
   private shop:any;
-  private amount:number;
+  private legalAmount:number;
+  private illegalAmount:number;
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
@@ -30,25 +31,90 @@ export class ShopPage {
   ) {
       this.options = "Sell";
       this.shop = this.navParams.data;
-      this.amount = 1;
+      this.legalAmount = Math.floor(this.player.carriedMoney / this.shop.items[0].legalPurchase);
+      this.illegalAmount = Math.floor(this.player.carriedMoney / this.shop.items[0].illegalPurchase);
+      this.options="legal";
 
       console.log(this.shop);
   }
 
-  maxLegal(){
-
-  }
-
-  maxIllegal(){
-
-  }
 
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ShopPage');
   }
 
-  handleSell(clickedItem:any, legal:boolean) {
+  handleLegalSell(clickedItem:any){
+    console.log("Selling legal");
+    console.log(clickedItem);
+    let totPrice = +clickedItem.legalPurchase*+this.legalAmount;
+    if(totPrice <= this.player.carriedMoney){
+      let prompt = this.alertCtrl.create({
+        title:"Confirm",
+        message: "Are you sure you want to buy " + this.legalAmount + " of " + clickedItem.name +" for " +totPrice + "?",
+        buttons: [
+          {
+            text: "cancel",
+            role: "cancel",
+            handler : data => {
+              console.log("purchase cancelled");
+              this.navCtrl.pop();
+            }
+          },
+          {
+            text : "Ok",
+            handler: data => {
+              console.log(data);
+              console.log("handling sell");
+              //todo backend link
+              let itemMap = new Map<string,number>();
+              itemMap.set(clickedItem.name,this.legalAmount);
+                this.connectionService.sendTradePostLegalPurchase(totPrice,itemMap,this.shop.id);
+              this.navCtrl.pop();
+            }
+          }
+        ]
+      });
+      prompt.present();
+    }
+  }
+
+  handleIllegalSell(clickedItem:any){
+    console.log("Selling illegal");
+    console.log(clickedItem);
+    let totPrice = +clickedItem.legalPurchase*+this.illegalAmount;
+    if(totPrice <= this.player.carriedMoney){
+      let prompt = this.alertCtrl.create({
+        title:"Confirm",
+        message: "Are you sure you want to buy " + this.illegalAmount + " of " + clickedItem.name +" for " +totPrice + "?",
+        buttons: [
+          {
+            text: "cancel",
+            role: "cancel",
+            handler : data => {
+              console.log("purchase cancelled");
+              this.navCtrl.pop();
+            }
+          },
+          {
+            text : "Ok",
+            handler: data => {
+              console.log(data);
+              console.log("handling sell");
+              //todo backend link
+              let itemMap = new Map<string,number>();
+              itemMap.set(clickedItem.name,this.illegalAmount);
+              this.connectionService.sendTradePostIllegalPurchase(totPrice,itemMap,this.shop.id);
+              this.navCtrl.pop();
+            }
+          }
+        ]
+      });
+      prompt.present();
+    }
+  }
+
+ /* handleSell(clickedItem:any, legal:boolean) {
     console.log("selling");
     console.log(clickedItem);
     let totPrice = legal?+clickedItem.legalPurchase*+this.amount:+clickedItem.illegalPurchase*+this.amount;
@@ -102,7 +168,7 @@ export class ShopPage {
       });
       prompt.present();
     }
-  }
+  }*/
 
   cancel(){
     this.navCtrl.pop();
