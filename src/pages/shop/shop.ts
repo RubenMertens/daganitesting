@@ -63,7 +63,7 @@ export class ShopPage {
               //todo backend link
               let itemMap = new Map<string,number>();
               itemMap.set(clickedItem.name,this.amount);
-              this.player.carriedMoney -= totPrice;
+              //this.player.carriedMoney -= totPrice; //done by backend in handler
 
               if(legal){
                 if(this.player.items.has(clickedItem.name)){

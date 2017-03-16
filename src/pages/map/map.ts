@@ -31,273 +31,239 @@ import {ShopPage} from "../shop/shop";
 })
 export class MapPage {
 
-  private MapStyles = [
+private mapStyles= [
+  {
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#1d2c4d"
+      }
+    ]
+  },
+{
+  "elementType": "labels.text.fill",
+  "stylers": [
     {
-      "elementType": "geometry",
-      "stylers": [
-        {
-          "color": "#1d2c4d"
-        }
-      ]
-    },
-    {
-      "elementType": "labels.text.fill",
-      "stylers": [
-        {
-          "color": "#8ec3b9"
-        }
-      ]
-    },
-    {
-      "elementType": "labels.text.stroke",
-      "stylers": [
-        {
-          "color": "#1a3646"
-        }
-      ]
-    },
-    {
-      "featureType": "administrative",
-      "elementType": "geometry",
-      "stylers": [
-        {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "administrative.country",
-      "elementType": "geometry.stroke",
-      "stylers": [
-        {
-          "color": "#4b6878"
-        }
-      ]
-    },
-    {
-      "featureType": "administrative.land_parcel",
-      "elementType": "labels.text.fill",
-      "stylers": [
-        {
-          "color": "#64779e"
-        }
-      ]
-    },
-    {
-      "featureType": "administrative.province",
-      "elementType": "geometry.stroke",
-      "stylers": [
-        {
-          "color": "#4b6878"
-        }
-      ]
-    },
-    {
-      "featureType": "landscape.man_made",
-      "elementType": "geometry.stroke",
-      "stylers": [
-        {
-          "color": "#334e87"
-        }
-      ]
-    },
-    {
-      "featureType": "landscape.natural",
-      "elementType": "geometry",
-      "stylers": [
-        {
-          "color": "#023e58"
-        }
-      ]
-    },
-    {
-      "featureType": "poi",
-      "stylers": [
-        {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "poi",
-      "elementType": "geometry",
-      "stylers": [
-        {
-          "color": "#283d6a"
-        }
-      ]
-    },
-    {
-      "featureType": "poi",
-      "elementType": "labels.text.fill",
-      "stylers": [
-        {
-          "color": "#6f9ba5"
-        }
-      ]
-    },
-    {
-      "featureType": "poi",
-      "elementType": "labels.text.stroke",
-      "stylers": [
-        {
-          "color": "#1d2c4d"
-        }
-      ]
-    },
-    {
-      "featureType": "poi.park",
-      "elementType": "geometry.fill",
-      "stylers": [
-        {
-          "color": "#023e58"
-        }
-      ]
-    },
-    {
-      "featureType": "poi.park",
-      "elementType": "labels.text.fill",
-      "stylers": [
-        {
-          "color": "#3C7680"
-        }
-      ]
-    },
-    {
-      "featureType": "road",
-      "elementType": "geometry",
-      "stylers": [
-        {
-          "color": "#304a7d"
-        }
-      ]
-    },
-    {
-      "featureType": "road",
-      "elementType": "labels.icon",
-      "stylers": [
-        {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "road",
-      "elementType": "labels.text.fill",
-      "stylers": [
-        {
-          "color": "#98a5be"
-        }
-      ]
-    },
-    {
-      "featureType": "road",
-      "elementType": "labels.text.stroke",
-      "stylers": [
-        {
-          "color": "#1d2c4d"
-        }
-      ]
-    },
-    {
-      "featureType": "road.highway",
-      "elementType": "geometry",
-      "stylers": [
-        {
-          "color": "#2c6675"
-        }
-      ]
-    },
-    {
-      "featureType": "road.highway",
-      "elementType": "geometry.stroke",
-      "stylers": [
-        {
-          "color": "#255763"
-        }
-      ]
-    },
-    {
-      "featureType": "road.highway",
-      "elementType": "labels.text.fill",
-      "stylers": [
-        {
-          "color": "#b0d5ce"
-        }
-      ]
-    },
-    {
-      "featureType": "road.highway",
-      "elementType": "labels.text.stroke",
-      "stylers": [
-        {
-          "color": "#023e58"
-        }
-      ]
-    },
-    {
-      "featureType": "transit",
-      "stylers": [
-        {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "transit",
-      "elementType": "labels.text.fill",
-      "stylers": [
-        {
-          "color": "#98a5be"
-        }
-      ]
-    },
-    {
-      "featureType": "transit",
-      "elementType": "labels.text.stroke",
-      "stylers": [
-        {
-          "color": "#1d2c4d"
-        }
-      ]
-    },
-    {
-      "featureType": "transit.line",
-      "elementType": "geometry.fill",
-      "stylers": [
-        {
-          "color": "#283d6a"
-        }
-      ]
-    },
-    {
-      "featureType": "transit.station",
-      "elementType": "geometry",
-      "stylers": [
-        {
-          "color": "#3a4762"
-        }
-      ]
-    },
-    {
-      "featureType": "water",
-      "elementType": "geometry",
-      "stylers": [
-        {
-          "color": "#0e1626"
-        }
-      ]
-    },
-    {
-      "featureType": "water",
-      "elementType": "labels.text.fill",
-      "stylers": [
-        {
-          "color": "#4e6d70"
-        }
-      ]
+      "color": "#8ec3b9"
     }
-  ];
+    ]
+},
+{
+  "elementType": "labels.text.stroke",
+  "stylers": [
+  {
+    "color": "#1a3646"
+  }
+]
+},
+{
+  "featureType": "administrative.country",
+  "elementType": "geometry.stroke",
+  "stylers": [
+  {
+    "color": "#4b6878"
+  }
+]
+},
+{
+  "featureType": "administrative.land_parcel",
+  "elementType": "labels.text.fill",
+  "stylers": [
+  {
+    "color": "#64779e"
+  }
+]
+},
+{
+  "featureType": "administrative.province",
+  "elementType": "geometry.stroke",
+  "stylers": [
+  {
+    "color": "#4b6878"
+  }
+]
+},
+{
+  "featureType": "landscape.man_made",
+  "elementType": "geometry.stroke",
+  "stylers": [
+  {
+    "color": "#334e87"
+  }
+]
+},
+{
+  "featureType": "landscape.natural",
+  "elementType": "geometry",
+  "stylers": [
+  {
+    "color": "#023e58"
+  }
+]
+},
+{
+  "featureType": "poi",
+  "elementType": "geometry",
+  "stylers": [
+  {
+    "color": "#283d6a"
+  }
+]
+},
+{
+  "featureType": "poi",
+  "elementType": "labels.text.fill",
+  "stylers": [
+  {
+    "color": "#6f9ba5"
+  }
+]
+},
+{
+  "featureType": "poi",
+  "elementType": "labels.text.stroke",
+  "stylers": [
+  {
+    "color": "#1d2c4d"
+  }
+]
+},
+{
+  "featureType": "poi.park",
+  "elementType": "geometry.fill",
+  "stylers": [
+  {
+    "color": "#023e58"
+  }
+]
+},
+{
+  "featureType": "poi.park",
+  "elementType": "labels.text.fill",
+  "stylers": [
+  {
+    "color": "#3C7680"
+  }
+]
+},
+{
+  "featureType": "road",
+  "elementType": "geometry",
+  "stylers": [
+  {
+    "color": "#304a7d"
+  }
+]
+},
+{
+  "featureType": "road",
+  "elementType": "labels.text.fill",
+  "stylers": [
+  {
+    "color": "#98a5be"
+  }
+]
+},
+{
+  "featureType": "road",
+  "elementType": "labels.text.stroke",
+  "stylers": [
+  {
+    "color": "#1d2c4d"
+  }
+]
+},
+{
+  "featureType": "road.highway",
+  "elementType": "geometry",
+  "stylers": [
+  {
+    "color": "#2c6675"
+  }
+]
+},
+{
+  "featureType": "road.highway",
+  "elementType": "geometry.stroke",
+  "stylers": [
+  {
+    "color": "#255763"
+  }
+]
+},
+{
+  "featureType": "road.highway",
+  "elementType": "labels.text.fill",
+  "stylers": [
+  {
+    "color": "#b0d5ce"
+  }
+]
+},
+{
+  "featureType": "road.highway",
+  "elementType": "labels.text.stroke",
+  "stylers": [
+  {
+    "color": "#023e58"
+  }
+]
+},
+{
+  "featureType": "transit",
+  "elementType": "labels.text.fill",
+  "stylers": [
+  {
+    "color": "#98a5be"
+  }
+]
+},
+{
+  "featureType": "transit",
+  "elementType": "labels.text.stroke",
+  "stylers": [
+  {
+    "color": "#1d2c4d"
+  }
+]
+},
+{
+  "featureType": "transit.line",
+  "elementType": "geometry.fill",
+  "stylers": [
+  {
+    "color": "#283d6a"
+  }
+]
+},
+{
+  "featureType": "transit.station",
+  "elementType": "geometry",
+  "stylers": [
+  {
+    "color": "#3a4762"
+  }
+]
+},
+{
+  "featureType": "water",
+  "elementType": "geometry",
+  "stylers": [
+  {
+    "color": "#0e1626"
+  }
+]
+},
+{
+  "featureType": "water",
+  "elementType": "labels.text.fill",
+  "stylers": [
+  {
+    "color": "#4e6d70"
+  }
+]
+}
+]
 
 
   map: GoogleMap;
@@ -305,7 +271,7 @@ export class MapPage {
   private safeZoneColor: string = "#0000FF88";
   private districtAColor: string = "#FFFFFF88";
   private districtBColor: string = "#FFF";
-  private teamColor: Array<string> = ["#d3d3d3", "#4CAF50", "#FFC107", "#E91E63"];
+  private teamColor: Array<string> = [];
   private circleColor: string = "#0ff";
   private bankColor:string ="#F00";
   private tradePostColor:string="#00F";
@@ -319,7 +285,7 @@ export class MapPage {
 
   private game:Game;
   private bank:any;
-  private team:any;
+  private myTeam:any;
   private demoShop:any;
 
   private inMarket:boolean;
@@ -388,7 +354,17 @@ export class MapPage {
       self.player.team.districts = notification.districts;
       self.player.team.treasury = notification.treasury;
       self.player.team.bankAccount = notification.bankAccount;
-    }else if (messageWrapper.messageType=="ERROR_EXCEPTION"){
+    }else if(messageWrapper.messageType=="PLAYER_NOTIFICATION"){
+      let notification = JSON.parse(messageWrapper.message);
+      console.log(notification);
+      self.player.carriedMoney = notification.money;
+      self.player.legalItems = notification.legalItems;
+      self.player.illegalItems= notification.illegalItems;
+      console.log(this.player.team);
+    }
+
+
+    else if (messageWrapper.messageType=="ERROR_EXCEPTION"){
       console.error(messageWrapper.message);
 
     }
@@ -420,7 +396,8 @@ export class MapPage {
       let position: CameraPosition = {
         target: new GoogleMapsLatLng(data.coords.latitude, data.coords.longitude),
         zoom: 18,
-        tilt: 30
+        tilt: 67,
+        bearing:314
       };
       //this.map.moveCamera(position); //todo turn this back on for camera locking
 
@@ -458,7 +435,7 @@ export class MapPage {
     });
 
     this.map = new GoogleMap('map', {
-      'styles': this.MapStyles,
+      'styles': this.mapStyles,
       'controls': {
         'compass': true,
         'myLocationButton': true,
@@ -552,6 +529,7 @@ export class MapPage {
       for (let team of this.game.teams) {
         console.log("team");
         console.log(team);
+        this.teamColor.push(team.customColor);
         for (let key in team.players) {
           if (team.players.hasOwnProperty(key)) {
 
@@ -560,7 +538,7 @@ export class MapPage {
             let point = team.districts[0].points[team.districts[0].points.length - 1];
             let treasureLoc = new GoogleMapsLatLng(point.latitude, point.longitude);
             this.currentLocationObject = this.player.team; //todo remove this is for testing
-              this.team = this.player.team;
+              this.myTeam = this.player.team;
             this.boundsArray.push(new AreaBounds(this.player.team, this.circletoBounds(treasureLoc, this.circleRadius), "TREASURY")); //todo pleinen voor veroveren
             this.map.addCircle({
               center: treasureLoc,
@@ -598,7 +576,7 @@ export class MapPage {
 
 
   public collectMoney(){
-    this.navCtrl.push(CollectMoneyPage,this.team); //todo verander naar currentlocation
+    this.navCtrl.push(CollectMoneyPage,this.myTeam); //todo verander naar currentlocation
   }
 
   public gotoShop(){

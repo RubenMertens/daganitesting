@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import {ListItem} from "../../domain/ListItem";
+import {Player} from "../../providers/Player";
+import {PlayerItem} from "../../domain/PlayerItem";
 
 /*
   Generated class for the Inventory page.
@@ -16,41 +18,25 @@ export class InventoryPage {
 
   private carriedMoney:number;
   private totalMoney:number;
-  private legalItems:ListItem[];
-  private illegalitems:ListItem[];
+  private legalItems:PlayerItem[] = [];
+  private illegalitems:PlayerItem[] = [];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this.loadDummyData();
+  constructor(public navCtrl: NavController, public navParams: NavParams , public player:Player) {
+    console.log(this.player);
+
+
   }
 
-  loadDummyData(){
-    this.totalMoney = 681462152
-    this.carriedMoney = 15000;
-    this.legalItems = [
-      new ListItem("pizza",60,10),
-      new ListItem("laptop",80,1000),
-      new ListItem("aandeel",1300,5),
-      new ListItem("ijs",150,30),
-      new ListItem("pizza",60,10),
-      new ListItem("pizza",60,10),
-      new ListItem("pizza",60,10),
-      new ListItem("pizza",60,10),
-    ];
-    this.illegalitems = [
-      new ListItem("cocaine",12,50),
-      new ListItem("diploma",5456,1000),
-      new ListItem("vals geld",98765,1),
-      new ListItem("cocaine",12,50),
-      new ListItem("cocaine",12,50),
-      new ListItem("cocaine",12,50),
-      new ListItem("cocaine",12,50),
-      new ListItem("cocaine",12,50),
-      new ListItem("cocaine",12,50),
-    ];
-  }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad InventoryPage');
+    this.player.items.forEach((value,key) => {
+      if(value.legal){
+        this.legalItems.push(value);
+      }else{
+        this.illegalitems.push(value);
+      }
+    })
   }
 
 }

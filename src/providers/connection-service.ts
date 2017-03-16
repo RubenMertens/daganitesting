@@ -46,12 +46,22 @@ export class ConnectionService {
     this.sendEventMessage(message);
   }
 
+  mapToObject(map:Map<any,any>){
+    let object = {};
+    map.forEach((value,key) => {
+      object[key] = value;
+    });
+    
+    return object;
+  }
+
   sendTradePostLegalPurchase(moneyTransferred:number, items:Map<string,number>, tradePostId:string){
-    let message = new GameEventMessage("TRADEPOST_LEGAL_PURCHASE",[this.clientID],moneyTransferred,items,tradePostId);
+    let message = new GameEventMessage("TRADEPOST_LEGAL_PURCHASE",[this.clientID],moneyTransferred,this.mapToObject(items),tradePostId);
     this.sendEventMessage(message);
   }
+
   sendTradePostIllegalPurchase(moneyTransferred:number, items:Map<string,number>,tradePostId:string){
-    let message= new GameEventMessage("TRADEPOST_ILLEGAL_PURCHASE",[this.clientID],moneyTransferred,items,tradePostId);
+    let message= new GameEventMessage("TRADEPOST_ILLEGAL_PURCHASE",[this.clientID],moneyTransferred,this.mapToObject(items),tradePostId);
     this.sendEventMessage(message);
   }
 
