@@ -30,8 +30,17 @@ export class ShopPage {
   ) {
       this.options = "Sell";
       this.shop = this.navParams.data;
-      this.amount = 1; //todo make this the max the player can buy with his money
+      this.amount = 1;
+
       console.log(this.shop);
+  }
+
+  maxLegal(){
+
+  }
+
+  maxIllegal(){
+
   }
 
 
@@ -53,6 +62,7 @@ export class ShopPage {
             role: "cancel",
             handler : data => {
               console.log("purchase cancelled");
+              this.navCtrl.pop();
             }
           },
           {
@@ -66,26 +76,12 @@ export class ShopPage {
               //this.player.carriedMoney -= totPrice; //done by backend in handler
 
               if(legal){
-                if(this.player.items.has(clickedItem.name)){
-                  let item = this.player.items.get(clickedItem.name);
-                  item.amount += this.amount;
-                  //todo check if this works with the reference?
-                }else{
-                  this.player.items.set(clickedItem.name,new PlayerItem(clickedItem.legalPurchase,clickedItem.legalSales,true,this.amount,clickedItem.name));
-                }
                 this.connectionService.sendTradePostLegalPurchase(totPrice,itemMap,this.shop.id);
               }else{
-
-                if(this.player.items.has(clickedItem.name)){
-                  let item = this.player.items.get(clickedItem.name);
-                  item.amount += this.amount;
-                  //todo check if this works with the reference?
-                }else{
-                  this.player.items.set(clickedItem.name,new PlayerItem(clickedItem.illegalPurchase,clickedItem.illegalSales,false,this.amount,clickedItem.name));
-                }
                 this.connectionService.sendTradePostIllegalPurchase(totPrice,itemMap,this.shop.id);
               }
               console.log(this.player);
+              this.navCtrl.pop();
             }
           }
         ]

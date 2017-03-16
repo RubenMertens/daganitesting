@@ -17,9 +17,8 @@ import {PlayerItem} from "../../domain/PlayerItem";
 export class InventoryPage {
 
   private carriedMoney:number;
-  private totalMoney:number;
-  private legalItems:PlayerItem[] = [];
-  private illegalitems:PlayerItem[] = [];
+  private legalItems = [];
+  private illegalitems = [];
 
   constructor(public navCtrl: NavController, public navParams: NavParams , public player:Player) {
     console.log(this.player);
@@ -30,12 +29,11 @@ export class InventoryPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad InventoryPage');
-    this.player.items.forEach((value,key) => {
-      if(value.legal){
-        this.legalItems.push(value);
-      }else{
-        this.illegalitems.push(value);
-      }
+    this.player.legalItems.forEach((value,key) => {
+      this.legalItems.push(value);
+    });
+    this.player.illegalItems.forEach((value,key) => {
+      this.illegalitems.push(value);
     })
   }
 

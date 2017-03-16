@@ -442,9 +442,9 @@ export class MapPage {
   private districtAColor: string = "#FFFFFF88";
   private districtBColor: string = "#FFF";
   private teamColor: Array<string> = [];
-  private circleColor: string = "#0ff";
-  private bankColor: string = "#F00";
-  private tradePostColor: string = "#00F";
+  private circleColor: string = "#00ffff";
+  private bankColor: string = "#00ff00";
+  private tradePostColor: string = "#ff0000";
   private strokeWidth: number = 5;
   private circleRadius: number = 20;
   private cirlceStrokeWidth: number = 1;
@@ -679,9 +679,9 @@ export class MapPage {
         this.map.addCircle({
           center: point,
           radius: this.circleRadius,
-          strokeColor: this.tradePostColor,
+          strokeColor: this.bankColor,
           strokeWidth: 5,
-          fillColor: this.tradePostColor
+          fillColor: this.bankColor
         });
       }
 
