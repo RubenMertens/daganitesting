@@ -19,6 +19,17 @@
     <h1><ion-icon name="logo-usd"></ion-icon>{{this.player.carriedMoney}}</h1>
   </ion-item>
 
+  <ion-footer>
+    <ion-row>
+      <ion-col>
+        <button ion-button full (click)="handleSellAll()">Sell everything</button>
+      </ion-col>
+      <ion-col>
+        <button ion-button full (click)="cancel()">Cancel</button>
+      </ion-col>
+    </ion-row>
+  </ion-footer>
+
 
 
 

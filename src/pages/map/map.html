@@ -8,6 +8,8 @@
 <ion-content>
 
   <div #map id="map">
+
+    <ion-title>{{player.carriedMoney}}</ion-title>
     <button ion-button (click)="exitMap()">EXIT</button>
 
     <button ion-button icon-only large (click)="gotoInventory()">
@@ -18,13 +20,15 @@
       <ion-icon name="ios-cart-outline"></ion-icon>
     </button>
 
-    <button *ngIf="true" ion-button large  icon-only (click)="gotoBank()"> <!--todo if in bank-->
-      <ion-icon name="logo-usd"></ion-icon>
+    <button *ngIf="true" ion-button large  (click)="gotoBank()"> <!--todo if in bank-->
+      KBC
     </button>
 
     <ion-fab bottom right *ngIf="true"> <!--todo if in treasury!-->
       <button ion-fab (click)="collectMoney()"><ion-icon name="ios-cash"></ion-icon></button>
     </ion-fab>
+
+      <button ion-button large *ngIf="true" (click)="gotoMarket()"><ion-icon name="logo-usd"></ion-icon></button>
 
   </div>
 </ion-content>

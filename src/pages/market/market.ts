@@ -15,17 +15,28 @@ import {Player} from "../../providers/Player";
 })
 export class MarketPage {
 
+  private market : any;
+
   constructor(public navCtrl: NavController, public navParams: NavParams,
               public connectionService:ConnectionService,
               public player:Player,
               public alertCtrl:AlertController
 
   ) {
-
+    this.market = navParams.data;
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad MarketPage');
+  }
+
+  handleSellAll(){
+    this.connectionService.sendTradePostAllSale(this.market.id);
+    this.navCtrl.pop()
+  }
+
+  cancel(){
+    this.navCtrl.pop();
   }
 
 }

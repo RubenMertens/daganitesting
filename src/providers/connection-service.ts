@@ -27,6 +27,7 @@ export class ConnectionService {
   }
 
   sendEventMessage(object:any){
+    console.log("message send");
     console.log(object);
     let wrapper = new MessageWrapper("EVENT",this.token,JSON.stringify(object),this.gameId,this.clientID);
     this.ws.send(JSON.stringify(wrapper));

@@ -16,6 +16,7 @@ import {Game} from "../../domain/Game";
 import {CollectMoneyPage} from "../collect-money/collect-money";
 import {Player} from "../../providers/Player";
 import {ShopPage} from "../shop/shop";
+import {MarketPage} from "../market/market";
 
 /*
  Generated class for the Map page.
@@ -558,28 +559,6 @@ export class MapPage {
     }
   }
 
-  handleSellEverything() {
-    let prompt = this.alertCtrl.create({
-      title: "Confirm",
-      message: "Are you sure you want to sell everything?",
-      buttons: [
-        {
-          text: "cancel",
-          role: "cancel",
-          handler: data => {
-            console.log("Sale cancelled");
-          }
-        },
-        {
-          text: "Ok",
-          handler: data => {
-            console.log("Handeling sale");
-            this.connectionService.sendTradePostAllSale(this.market.id);
-
-          }
-        }]
-    })
-  }
 
 
   loadMap() {
@@ -765,6 +744,10 @@ export class MapPage {
 
   public gotoBank() {
     this.navCtrl.push(BankPage, this.bank);
+  }
+
+  public gotoMarket(){
+    this.navCtrl.push(MarketPage,this.market);
   }
 
 

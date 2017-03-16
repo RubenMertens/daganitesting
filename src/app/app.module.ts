@@ -12,6 +12,7 @@ import {ConnectionService} from "../providers/connection-service";
 import {LobbyPage} from "../pages/lobby/lobby";
 import {BankPage} from "../pages/bank/bank";
 import {CollectMoneyPage} from "../pages/collect-money/collect-money";
+import {MarketPage} from "../pages/market/market";
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import {CollectMoneyPage} from "../pages/collect-money/collect-money";
     LobbyPage,
     BankPage,
     CollectMoneyPage,
+    MarketPage,
 
   ],
   imports: [
@@ -42,6 +44,7 @@ import {CollectMoneyPage} from "../pages/collect-money/collect-money";
     LobbyPage,
     BankPage,
     CollectMoneyPage,
+    MarketPage,
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},Player,ConnectionService]
 })
