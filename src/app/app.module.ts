@@ -13,6 +13,7 @@ import {LobbyPage} from "../pages/lobby/lobby";
 import {BankPage} from "../pages/bank/bank";
 import {CollectMoneyPage} from "../pages/collect-money/collect-money";
 import {MarketPage} from "../pages/market/market";
+import {GameOverPage} from "../pages/game-over/game-over";
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import {MarketPage} from "../pages/market/market";
     BankPage,
     CollectMoneyPage,
     MarketPage,
+    GameOverPage,
 
   ],
   imports: [
@@ -45,6 +47,7 @@ import {MarketPage} from "../pages/market/market";
     BankPage,
     CollectMoneyPage,
     MarketPage,
+    GameOverPage,
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},Player,ConnectionService]
 })

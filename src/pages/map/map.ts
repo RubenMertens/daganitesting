@@ -18,6 +18,7 @@ import {Player} from "../../providers/Player";
 import {ShopPage} from "../shop/shop";
 import {MarketPage} from "../market/market";
 import {DistrictWrapper} from "../../domain/DistrictWrapper";
+import {GameOverPage} from "../game-over/game-over";
 
 /*
  Generated class for the Map page.
@@ -230,6 +231,7 @@ export class MapPage {
   private testDistrict:any;
   private market:any;
   private teams:Array<any>;
+  private winningTeam:string;
 
   private inMarket: boolean;
   private inDistrict: boolean;
@@ -251,21 +253,18 @@ export class MapPage {
     platform.ready().then(() => {
       this.loadMap();
     });
-    /*
-     let self = this;
-     */
+
 
     this.connectionService.addMessageHandler(message => this.handleSocketMessage(message, this));
 
-    /*    this.connectionService.addMessageHandler(function (message) {
-     self.handleSocketMessage(message,self) //todo refactor
-     });*/
 
     console.log(navParams);
     this.game = navParams.data;
     console.log(this.game);
-
-
+    this.player.reset();
+    this.districts = [];
+    this.teams = [];
+    this.boundsArray = [];
   }
 
   handleSocketMessage(message, self) {
@@ -340,6 +339,12 @@ export class MapPage {
         });
 
       }
+    }else if(messageWrapper.messageType =="GAME_STOP"){
+      this.stopServices();
+      this.navCtrl.push(GameOverPage,this.winningTeam);
+
+    }else if(messageWrapper.messageType =="WINNING_TEAM"){
+      this.winningTeam = messageWrapper.message;
     }
 
 
@@ -358,10 +363,14 @@ export class MapPage {
 
   }
 
-  exitMap() {
+  private stopServices(){
     console.log("will leave map.");
     this.connectionService.stopConnection();
     this.geoWatch.unsubscribe();
+  }
+
+  exitMap() {
+   this.stopServices();
     this.navCtrl.pop();
     for (let obj of this.circles) {
       obj.remove();
@@ -372,7 +381,7 @@ export class MapPage {
 
   loadMap() {
 
-    this.geoWatch = Geolocation.watchPosition()/*.timeout(5000, console.log("timed out"))*/.subscribe((data) => {
+    this.geoWatch = Geolocation.watchPosition().subscribe((data) => {
       let position: CameraPosition = {
         target: new GoogleMapsLatLng(data.coords.latitude, data.coords.longitude),
         zoom: 18,
@@ -454,7 +463,7 @@ export class MapPage {
               this.currentLocationObject = this.player.team; //todo remove this is for testing
               this.myTeam = this.player.team;
               console.log("your team found!")
-              this.boundsArray.push(new AreaBounds(this.player.team, this.circletoBounds(treasureLoc, this.circleRadius), "TREASURY")); //todo pleinen voor veroveren
+              this.boundsArray.push(new AreaBounds(this.player.team, this.circletoBounds(treasureLoc, this.circleRadius), "TREASURY"));
               this.map.addCircle({
                 center: treasureLoc,
                 radius: this.circleRadius,
