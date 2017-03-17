@@ -12,7 +12,7 @@ import {GameEventMessage} from "../domain/GameEventMessage";
 export class ConnectionService {
 
   ws :any;
-  token:string; //todo clean this up
+  token:string;
   public clientID:string;
   public gameId:string;
 
@@ -22,8 +22,8 @@ export class ConnectionService {
   private baseAdress:string = "http://10.134.229.38:8090/api/";
 
   constructor(public http: Http) {
-    //this.clientID = Device.uuid; //todo: not fake this
-    this.clientID = Math.floor(Math.random()*1000000) +1 +"";
+    this.clientID = Device.uuid;
+    //this.clientID = Math.floor(Math.random()*1000000) +1 +"";
   }
 
   sendEventMessage(object:any){
@@ -125,7 +125,7 @@ export class ConnectionService {
     return this.http.get(url).map(this.extractData).catch(this.handleError);
   }
 
-  setupTCPSocket(token:string, gameId:string){
+  setupTCPSocket(token:string){
     this.token =token;
     console.log("trying to connect to websocket url " + this.webSocketUrl);
     this.ws = new WebSocket(this.webSocketUrl);

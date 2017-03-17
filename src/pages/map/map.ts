@@ -207,15 +207,13 @@ export class MapPage {
 
   map: GoogleMap;
 
-  private safeZoneColor: string = "#0000FF88";
-  private districtAColor: string = "#FFFFFF88";
-  private districtBColor: string = "#FFFFFF";
+  private marketColor: string = "#0000FF88";
+  private neutralColor: string = "#FFFFFF88";
   private districtCapitalColor:string = "#00FF00";
-  private teamColor: Array<string> = [];
   private circleColor: string = "#00ffff";
   private bankColor: string = "#ffff00";
   private tradePostColor: string = "#5200f2";
-  private usedTradePostColor:string="#ff0000"
+  private usedTradePostColor:string="#ff0000";
   private enemyTreasuryColor: string = "#FF00FF";
   private strokeWidth: number = 5;
   private circleRadius: number = 20;
@@ -245,22 +243,13 @@ export class MapPage {
 
   private currentLocationObject: any;
 
-  private token: string;
-  private gameId: string;
-  //todo MA echt refactor dit
-
-
   constructor(public navCtrl: NavController, public navParams: NavParams,
               public platform: Platform, public  connectionService: ConnectionService
     , public alertCtrl: AlertController, public player: Player,) {
     platform.ready().then(() => {
       this.loadMap();
     });
-
-
     this.connectionService.addMessageHandler(message => this.handleSocketMessage(message, this));
-
-
     console.log(navParams);
     this.game = navParams.data;
     console.log(this.game);
@@ -268,12 +257,15 @@ export class MapPage {
     this.districts = [];
     this.teams = [];
     this.boundsArray = [];
+    this.tradePosts = [];
   }
 
   handleSocketMessage(message, self) {
     let messageWrapper: MessageWrapper = JSON.parse(message.data);
     console.log("message received");
     console.log(messageWrapper);
+
+
     if (messageWrapper.messageType == "BULK_LOCATION") {
       let bulklocations: any = JSON.parse(messageWrapper.message);
       console.log("circles");
@@ -289,7 +281,7 @@ export class MapPage {
           radius: 2,
           strokeColor: "#000000",
           strokeWidth: 1,
-          fillColor: self.teamColor[1]
+          fillColor: self.player.team.customColor
         }).then((data) => {
           self.circles.push(data);
         });
@@ -344,7 +336,7 @@ export class MapPage {
       if(notification.gameEventType === "TREASURY_ROBBERY"){
         console.log("You're team got robbed!");
         let toastString:string;
-        if(notification.by == this.myTeam.teamName){
+        if(notification.by == this.player.team.teamName){
           toastString= "You're treasury got robbed!";
         }else{
           toastString= notification.by + "'s treasury got robbed!";
@@ -520,9 +512,9 @@ export class MapPage {
 
         this.map.addPolygon({
           'points': poly,
-          'strokeColor': this.districtAColor,
+          'strokeColor': this.neutralColor,
           'strokeWidth': this.strokeWidth,
-          'fillColor': this.districtAColor,
+          'fillColor': this.neutralColor,
           'visible': true
         }).then(data => {
           this.districts.push(new DistrictWrapper(district,data));
@@ -561,9 +553,9 @@ export class MapPage {
         this.boundsArray.push(new AreaBounds(market, new GoogleMapsLatLngBounds(poly), "MARKET"));
         this.map.addPolygon({
           'points': poly,
-          'strokeColor': this.safeZoneColor,
+          'strokeColor': this.marketColor,
           'strokeWidth': this.strokeWidth,
-          'fillColor': this.safeZoneColor,
+          'fillColor': this.marketColor,
           'visible': true
         }).catch((error) => {
           console.log(error);
@@ -604,10 +596,6 @@ export class MapPage {
     });
   }
 
-  restartConnection() {
-    this.connectionService.stopConnection();
-    this.connectionService.setupTCPSocket(this.token, this.gameId);
-  }
 
   public circletoBounds(center: GoogleMapsLatLng, radius: number) { //todo collapse to no variables
     let radiusEarth = 6378000;
@@ -630,7 +618,7 @@ export class MapPage {
 
 
   public collectMoney() {
-    this.navCtrl.push(CollectMoneyPage, this.myTeam); //todo verander naar currentlocation
+    this.navCtrl.push(CollectMoneyPage); //todo verander naar currentlocation
   }
 
   public gotoShop() {

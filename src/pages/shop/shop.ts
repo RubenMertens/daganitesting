@@ -66,7 +66,6 @@ export class ShopPage {
             handler: data => {
               console.log(data);
               console.log("handling sell");
-              //todo backend link
               let itemMap = new Map<string,number>();
               itemMap.set(clickedItem.name,this.legalAmount);
                 this.connectionService.sendTradePostLegalPurchase(totPrice,itemMap,this.shop.id);
@@ -101,7 +100,6 @@ export class ShopPage {
             handler: data => {
               console.log(data);
               console.log("handling sell");
-              //todo backend link
               let itemMap = new Map<string,number>();
               itemMap.set(clickedItem.name,this.illegalAmount);
               this.connectionService.sendTradePostIllegalPurchase(totPrice,itemMap,this.shop.id);
@@ -113,62 +111,6 @@ export class ShopPage {
       prompt.present();
     }
   }
-
- /* handleSell(clickedItem:any, legal:boolean) {
-    console.log("selling");
-    console.log(clickedItem);
-    let totPrice = legal?+clickedItem.legalPurchase*+this.amount:+clickedItem.illegalPurchase*+this.amount;
-    if(totPrice < this.player.carriedMoney){
-      let prompt = this.alertCtrl.create({
-        title:"Confirm",
-        message: "Are you sure you want to buy " + this.amount + " of " + clickedItem.name +" for " +totPrice + "?",
-        buttons: [
-          {
-            text: "cancel",
-            role: "cancel",
-            handler : data => {
-              console.log("purchase cancelled");
-              this.navCtrl.pop();
-            }
-          },
-          {
-            text : "Ok",
-            handler: data => {
-              console.log(data);
-              console.log("handling sell");
-              //todo backend link
-              let itemMap = new Map<string,number>();
-              itemMap.set(clickedItem.name,this.amount);
-              //this.player.carriedMoney -= totPrice; //done by backend in handler
-
-              if(legal){
-                this.connectionService.sendTradePostLegalPurchase(totPrice,itemMap,this.shop.id);
-              }else{
-                this.connectionService.sendTradePostIllegalPurchase(totPrice,itemMap,this.shop.id);
-              }
-              console.log(this.player);
-              this.navCtrl.pop();
-            }
-          }
-        ]
-      });
-      prompt.present();
-    }else{
-      let prompt = this.alertCtrl.create({
-        title:"Problem",
-        message:"You don't have enough money",
-        buttons: [
-          {
-            text: "ok",
-            handler:data => {
-              console.error("player did not have enough money")
-            }
-          }
-        ]
-      });
-      prompt.present();
-    }
-  }*/
 
   cancel(){
     this.navCtrl.pop();
