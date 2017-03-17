@@ -233,6 +233,8 @@ export class MapPage {
   private market:any;
   private teams:Array<any>;
   private winningTeam:string;
+  private taggable:Array<string>;
+  private currentLocation:GoogleMapsLatLng;
 
   private inMarket: boolean;
   private inDistrictCapital: boolean;
@@ -240,6 +242,8 @@ export class MapPage {
   private inBank: boolean;
   private inTreasury: boolean;
   private inEnemyTreasury:boolean;
+  private taggingAllowed:boolean;
+  private canTag:boolean;
 
   private currentLocationObject: any;
 
@@ -276,10 +280,34 @@ export class MapPage {
         }
         self.circles = [];
 
+        this.taggable = [];
+
         for (let obj of bulklocations.locations) {
           console.log(obj);
+
+          let point = new GoogleMapsLatLng(obj.location.lat, obj.location.lng);
+
+          let isOnOurTeam:boolean;
+          for (let player of this.player.team.players) {
+            if(player.id === obj.key){
+              isOnOurTeam = true;
+            }
+          }
+
+          if(!isOnOurTeam){
+            let ownPoint = Geolocation.getCurrentPosition();
+            console.log(ownPoint);
+            let distance = this.getDistance(this.currentLocation,point);
+
+            console.log(distance);
+
+            if(distance < 35){
+              this.taggable.push(obj.key);
+            }
+          }
+
           self.map.addCircle({
-            center: new GoogleMapsLatLng(obj.location.lat, obj.location.lng),
+            center: point ,
             radius: 2,
             strokeColor: "#000000",
             strokeWidth: 1,
@@ -288,6 +316,12 @@ export class MapPage {
             self.circles.push(data);
           });
         }
+        if(this.taggable.length > 0){
+          this.canTag = true;
+        }
+
+
+
         break;
       case "TEAM_NOTIFICATION" :
         notification = JSON.parse(messageWrapper.message);
@@ -365,12 +399,32 @@ export class MapPage {
         this.winningTeam = messageWrapper.message;
         break;
 
+      case "TAG_PERMITTED":
+        this.taggingAllowed =true;
+        break;
+
       case "ERROR_EXCEPTION":
         console.error(messageWrapper.message);
         break;
     }
 
   }
+
+  private rad(x) {
+  return x * Math.PI / 180;
+};
+
+  private getDistance(p1:GoogleMapsLatLng, p2:GoogleMapsLatLng) {
+  let R = 6378137; // Earth’s mean radius in meter
+    let dLat = this.rad(p2.lat - p1.lat);
+    let dLong = this.rad(p2.lng - p1.lng);
+    let a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(this.rad(p1.lat)) * Math.cos(this.rad(p2.lat)) *
+    Math.sin(dLong / 2) * Math.sin(dLong / 2);
+    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    let d = R * c;
+  return d; // returns the distance in meter
+};
 
   gotoInventory() {
     this.navCtrl.push(InventoryPage);
@@ -406,6 +460,8 @@ export class MapPage {
         bearing: 314
       };
       //this.map.moveCamera(position); //todo turn this back on for camera locking
+      let location = new GoogleMapsLatLng(data.coords.latitude,data.coords.longitude);
+      this.currentLocation = location; //todo refactor
 
       this.connectionService.sendLocationData(data.coords.latitude, data.coords.longitude);
 
@@ -422,26 +478,26 @@ export class MapPage {
           switch (areaBound.type) {
             case "BANK":
               this.inBank = true;
-              console.log("is in bank");
+              // console.log("is in bank");
               break;
             case "TRADE_POST" :
               this.inShop = !this.currentLocationObject.used; //todo untested?
-              console.log("is in tradepost " + this.currentLocationObject.used);
+              // console.log("is in tradepost " + this.currentLocationObject.used);
               break;
             case "MARKET" :
               this.inMarket = true;
-              console.log("is in market")
+              // console.log("is in market")
               break;
             case "TREASURY" :
-              console.log("inside a treasury");
+              // console.log("inside a treasury");
               this.inTreasury = true;
               break;
             case "ENEMY_TREASURY":
-              console.log("inside enemy treasury");
+              // console.log("inside enemy treasury");
               this.inEnemyTreasury = true;
               break;
             case "DISTRICTCAPITAL":
-              console.log("in capital");
+              // console.log("in capital");
               this.inDistrictCapital = true;
               break;
           }
@@ -626,6 +682,7 @@ export class MapPage {
 
   public gotoBank() {
     this.navCtrl.push(BankPage, this.bank);
+    // this.navCtrl.push(BankPage, this.currentLocationObject);
   }
 
 
@@ -638,24 +695,36 @@ export class MapPage {
     this.navCtrl.push(CollectMoneyPage);
   }
 
-  public gotoShop() {
+  public gotoShop() {/*
     if(!this.demoShop.used) { //todo veranderen naar currenLocationObject
       //this.navCtrl.push(ShopPage,this.currentLocationObject.tradePost);
       this.navCtrl.push(ShopPage, this.demoShop.tradePost);
     }else{
       console.log("Can't use shop twice!")
-    }
+    }*/
+    /*console.log(this.currentLocationObject);
+    if(!this.currentLocationObject.used){
+      this.navCtrl.push(ShopPage,this.currentLocationObject.tradePost);
+    }else{
+      console.log("can't use shop twice!")
+    }*/
   }
 
   public captureDistrict(){
-    //this.connectionService.sendDistrictCaptured(this.currentLocationObject.id); //todo veranderen naar currentlocation
+    // this.connectionService.sendDistrictCaptured(this.currentLocationObject.id); //todo veranderen naar currentlocation
     this.connectionService.sendDistrictCaptured(this.testDistrict.id);
   }
 
   public robEnemyTreasury(){
-    //this.connectionService.sendTreasuryRobbery(this.currentLocationObject.id);
-    console.log(this.demoEnemyTreasury);
-    this.connectionService.sendTreasuryRobbery(this.demoEnemyTreasury.districts[0].id);
+    this.connectionService.sendTreasuryRobbery(this.currentLocationObject.districts[0].id);
+    // console.log(this.demoEnemyTreasury);
+    // this.connectionService.sendTreasuryRobbery(this.demoEnemyTreasury.districts[0].id);
+  }
+
+  public tagPlayers(){
+    console.log("tagging people!");
+    console.log(this.taggable);
+    this.connectionService.sendTagPlayers(this.taggable);
   }
 
 

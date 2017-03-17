@@ -33,5 +33,9 @@
 
     <button ion-button large *ngIf="true" (click)="robEnemyTreasury()"><ion-icon name="md-hand"></ion-icon></button>
 
+    <button ion-button large *ngIf="taggingAllowed && canTag" (click)="tagPlayers()"><ion-icon name="md-color-wand"></ion-icon></button>
+
+
+
   </div>
 </ion-content>

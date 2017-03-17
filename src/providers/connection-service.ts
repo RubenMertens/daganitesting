@@ -56,6 +56,11 @@ export class ConnectionService {
     return object;
   }
 
+  sendTagPlayers(targets:Array<string>){
+    let message = new GameEventMessage("PLAYER_TAGGED",targets,0,{},"");
+    this.sendEventMessage(message);
+  }
+
   sendTreasuryRobbery(id:string){
     let message = new GameEventMessage("TREASURY_ROBBERY",[this.clientID],0,{},id);
     this.sendEventMessage(message);
