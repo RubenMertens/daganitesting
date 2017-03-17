@@ -19,6 +19,7 @@ import {ShopPage} from "../shop/shop";
 import {MarketPage} from "../market/market";
 import {DistrictWrapper} from "../../domain/DistrictWrapper";
 import {GameOverPage} from "../game-over/game-over";
+import {TradePostWrapper} from "../../domain/TradePostWrapper";
 
 /*
  Generated class for the Map page.
@@ -213,7 +214,8 @@ export class MapPage {
   private teamColor: Array<string> = [];
   private circleColor: string = "#00ffff";
   private bankColor: string = "#ffff00";
-  private tradePostColor: string = "#ff0000";
+  private tradePostColor: string = "#5200f2";
+  private usedTradePostColor:string="#ff0000"
   private enemyTreasuryColor: string = "#FF00FF";
   private strokeWidth: number = 5;
   private circleRadius: number = 20;
@@ -222,6 +224,7 @@ export class MapPage {
   private boundsArray: Array<AreaBounds> = [];
   private circles: Array<any> = [];
   private districts : Array<DistrictWrapper> = [];
+  private tradePosts:Array<TradePostWrapper> = [];
 
   private game: Game;
   private bank: any;
@@ -298,8 +301,20 @@ export class MapPage {
       self.player.team.districts = notification.districts;
       self.player.team.treasury = notification.treasury;
       self.player.team.bankAccount = notification.bankAccount;
-      self.player.team.tradePosts = notification.tradePosts;
+      self.player.team.tradePosts = notification.tradeposts;
       console.log(self.player);
+      console.log(this.tradePosts);
+
+      for (let tradePostWrapper of this.tradePosts) {
+        for (let usedTradePostId of self.player.team.tradePosts) {
+          if(tradePostWrapper.tradePost.id === usedTradePostId){
+            tradePostWrapper.used =true;
+            tradePostWrapper.circle.setFillColor(this.usedTradePostColor);
+            tradePostWrapper.circle.setStrokeColor(this.usedTradePostColor);
+          }
+        }
+      }
+
     } else if (messageWrapper.messageType == "PLAYER_NOTIFICATION") {
       let notification = JSON.parse(messageWrapper.message);
       console.log(notification);
@@ -458,6 +473,9 @@ export class MapPage {
             inThisTeam=true;
             if (team.players[key].clientID === this.connectionService.clientID) {
               this.player.team = team;
+              if(this.player.team.tradePosts == null){
+                this.player.team.tradePosts = [];
+              }
               let point = team.districts[0].points[team.districts[0].points.length - 1];
               let treasureLoc = new GoogleMapsLatLng(point.latitude, point.longitude);
               this.currentLocationObject = this.player.team; //todo remove this is for testing
@@ -500,9 +518,6 @@ export class MapPage {
             treasureLoc = new GoogleMapsLatLng(point.latitude, point.longitude);
           }
         }
-
-
-
 
         this.map.addPolygon({
           'points': poly,
@@ -579,7 +594,10 @@ export class MapPage {
           strokeColor: this.tradePostColor,
           strokeWidth: 5,
           fillColor: this.tradePostColor
-        });
+        }).then(data => {
+          this.tradePosts.push(new TradePostWrapper(tradePost,data,false));
+        })
+        ;
       }
 
     });
