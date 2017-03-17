@@ -45,7 +45,7 @@ export class ShopPage {
   }
 
   handleLegalSell(clickedItem:any){
-    console.log("Selling legal");
+    console.log("Purchasing legal");
     console.log(clickedItem);
     let totPrice = +clickedItem.legalPurchase*+this.legalAmount;
     if(totPrice <= this.player.carriedMoney){
@@ -79,7 +79,7 @@ export class ShopPage {
   }
 
   handleIllegalSell(clickedItem:any){
-    console.log("Selling illegal");
+    console.log("purchasing illegal");
     console.log(clickedItem);
     let totPrice = +clickedItem.illegalPurchase*+this.illegalAmount;
     if(totPrice <= this.player.carriedMoney){

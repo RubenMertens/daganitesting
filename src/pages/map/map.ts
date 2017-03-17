@@ -315,7 +315,7 @@ export class MapPage {
         notification = JSON.parse(messageWrapper.message);
         console.log(notification);
         self.player.carriedMoney = notification.money;
-        self.player.legalItems = notification.legalItems;
+        self.player.legalItems =  notification.legalItems;
         self.player.illegalItems = notification.illegalItems;
         console.log(this.player.team);
         break;
