@@ -2,7 +2,7 @@ import {Component, ElementRef, ViewChild} from '@angular/core';
 import {NavController, NavParams, Platform, AlertController} from 'ionic-angular';
 import {
   GoogleMap, GoogleMapsLatLng, GoogleMapsEvent, Geolocation, CameraPosition, GoogleMapsPolygon, GoogleMapsLatLngBounds,
-  GoogleMapsGroundOverlay, GoogleMapsCircle
+  GoogleMapsGroundOverlay, GoogleMapsCircle, Toast
 } from "ionic-native";
 import {ConnectionService} from "../../providers/connection-service";
 import {InventoryPage} from "../inventory/inventory";
@@ -260,6 +260,7 @@ export class MapPage {
     /*    this.connectionService.addMessageHandler(function (message) {
      self.handleSocketMessage(message,self) //todo refactor
      });*/
+
     console.log(navParams);
     this.game = navParams.data;
     console.log(this.game);
@@ -298,6 +299,8 @@ export class MapPage {
       self.player.team.districts = notification.districts;
       self.player.team.treasury = notification.treasury;
       self.player.team.bankAccount = notification.bankAccount;
+      self.player.team.tradePosts = notification.tradePosts;
+      console.log(self.player);
     } else if (messageWrapper.messageType == "PLAYER_NOTIFICATION") {
       let notification = JSON.parse(messageWrapper.message);
       console.log(notification);
@@ -314,12 +317,28 @@ export class MapPage {
           color = team.customColor+"88";
         }
       }
-      console.log(this.districts)
+      console.log(this.districts);
       for (let wrapper of this.districts) {
         if(wrapper.district.id === notification.districtId){
           wrapper.poly.setFillColor(color);
           console.log("color changed")
         }
+      }
+    }else if(messageWrapper.messageType == "INFO_NOTIFICATION"){
+      let notification = JSON.parse(messageWrapper.message);
+      console.log(notification);
+      if(notification.gameEventType === "TREASURY_ROBBERY"){
+        console.log("You're team got robbed!");
+        let toastString:string;
+        if(notification.by == this.myTeam.teamName){
+          toastString= "You're treasury got robbed!";
+        }else{
+          toastString= notification.by + "'s treasury got robbed!";
+        }
+        Toast.show(toastString,'5000','center').subscribe(toast => {
+          console.log(toast);
+        });
+
       }
     }
 
@@ -417,11 +436,14 @@ export class MapPage {
 
     this.map.on(GoogleMapsEvent.MAP_READY).subscribe(() => {
       console.log('Map is ready!');
+      let capitalDistrictId : Array<string> = [];
 
       for (let team of this.game.teams) {
+        capitalDistrictId.push(team.districts[0].id);
         console.log("team");
         console.log(team);
         let inThisTeam:boolean = false;
+
         for (let key in team.players) {
           if (team.players.hasOwnProperty(key)) {
             inThisTeam=true;
@@ -431,6 +453,7 @@ export class MapPage {
               let treasureLoc = new GoogleMapsLatLng(point.latitude, point.longitude);
               this.currentLocationObject = this.player.team; //todo remove this is for testing
               this.myTeam = this.player.team;
+              console.log("your team found!")
               this.boundsArray.push(new AreaBounds(this.player.team, this.circletoBounds(treasureLoc, this.circleRadius), "TREASURY")); //todo pleinen voor veroveren
               this.map.addCircle({
                 center: treasureLoc,
@@ -447,6 +470,7 @@ export class MapPage {
           let treasureLoc = new GoogleMapsLatLng(point.latitude,point.longitude);
           this.boundsArray.push(new AreaBounds(team,this.circletoBounds(treasureLoc,this.circleRadius),"ENEMY_TREASURY"));
           this.demoEnemyTreasury = team;
+          console.log("enemytreasury found");
           this.map.addCircle({
             center:treasureLoc,
             radius:this.circleRadius,
@@ -467,6 +491,10 @@ export class MapPage {
             treasureLoc = new GoogleMapsLatLng(point.latitude, point.longitude);
           }
         }
+
+
+
+
         this.map.addPolygon({
           'points': poly,
           'strokeColor': this.districtAColor,
@@ -486,15 +514,19 @@ export class MapPage {
           .catch((error) => {
           console.log(error);
         });
+
+        if(capitalDistrictId.indexOf(district.id) == -1){
           this.testDistrict = district;
-         this.boundsArray.push(new AreaBounds(district,this.circletoBounds(treasureLoc,this.circleRadius),"DISTRICTCAPITAL"));
-         this.map.addCircle({
-         center: treasureLoc,
-         radius: this.circleRadius,
-         strokeColor: this.districtCapitalColor,
-         strokeWidth: this.cirlceStrokeWidth,
-         fillColor: this.districtCapitalColor
-         });
+          this.boundsArray.push(new AreaBounds(district,this.circletoBounds(treasureLoc,this.circleRadius),"DISTRICTCAPITAL"));
+          this.map.addCircle({
+            center: treasureLoc,
+            radius: this.circleRadius,
+            strokeColor: this.districtCapitalColor,
+            strokeWidth: this.cirlceStrokeWidth,
+            fillColor: this.districtCapitalColor
+          });
+        }
+
       }
 
       for (let market of this.game.markets) {

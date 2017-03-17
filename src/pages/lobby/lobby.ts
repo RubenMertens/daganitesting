@@ -71,7 +71,6 @@ export class LobbyPage {
     this.connectionService.unregisterFromGame();
     console.log(this.heartBeatTimer);
     clearInterval(this.heartBeatTimer);
-    this.heartBeatTimer.
     this.navCtrl.pop();
     BackgroundMode.disable();
   }
