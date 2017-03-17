@@ -627,8 +627,12 @@ export class MapPage {
     this.navCtrl.push(BankPage, this.bank);
   }
 
-  public gotoMarket(){
+/*  public gotoMarket(){
     this.navCtrl.push(MarketPage,this.market);
+  }*/
+
+  public sellAll(){
+    this.connectionService.sendTradePostAllSale(this.market.id);
   }
 
 
