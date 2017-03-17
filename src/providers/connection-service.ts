@@ -56,6 +56,11 @@ export class ConnectionService {
     return object;
   }
 
+  sendTreasuryRobbery(id:string){
+    let message = new GameEventMessage("TREASURY_ROBBERY",[this.clientID],0,{},id);
+    this.sendEventMessage(message);
+  }
+
   sendDistrictCaptured(districtId:string){
     let message = new GameEventMessage("DISTRICT_CONQUERED",[this.clientID],0,{},districtId);
     this.sendEventMessage(message);

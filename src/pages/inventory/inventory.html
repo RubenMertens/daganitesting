@@ -29,7 +29,7 @@
           <ion-list-header>
             Legal
           </ion-list-header>
-            <ion-item *ngFor="let item of player.legalItems" item-left>
+            <ion-item *ngFor="let item of legalItems" item-left>
               <h2 item-left>{{item.name}}</h2>
               <h2 item-right>{{item.amount}}</h2>
             </ion-item>
@@ -40,7 +40,7 @@
           <ion-list-header>
             Illegal
           </ion-list-header>
-          <ion-item *ngFor="let item of player.illegalItems">
+          <ion-item *ngFor="let item of illegalitems">
             <h2 item-left>{{item.name}}</h2>
             <h2 item-right>{{item.amount}}</h2>
           </ion-item>

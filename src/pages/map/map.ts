@@ -211,8 +211,9 @@ export class MapPage {
   private districtCapitalColor:string = "#00FF00";
   private teamColor: Array<string> = [];
   private circleColor: string = "#00ffff";
-  private bankColor: string = "#00ff00";
+  private bankColor: string = "#ffff00";
   private tradePostColor: string = "#ff0000";
+  private enemyTreasuryColor: string = "#FF00FF";
   private strokeWidth: number = 5;
   private circleRadius: number = 20;
   private cirlceStrokeWidth: number = 1;
@@ -225,6 +226,7 @@ export class MapPage {
   private bank: any;
   private myTeam: any;
   private demoShop: any;
+  private demoEnemyTreasury: any;
   private testDistrict:any;
   private market:any;
   private teams:Array<any>;
@@ -234,11 +236,13 @@ export class MapPage {
   private inShop: boolean;
   private inBank: boolean;
   private inTreasury: boolean;
+  private inEnemyTreasury:boolean;
 
   private currentLocationObject: any;
 
   private token: string;
-  private gameId: string; //todo MA echt refactor dit
+  private gameId: string;
+  //todo MA echt refactor dit
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
@@ -307,7 +311,7 @@ export class MapPage {
       console.log(notification);
       for (let team of this.game.teams) {
         if(team.teamName === notification.teamName){
-          color = team.customColor;
+          color = team.customColor+"88";
         }
       }
       console.log(this.districts)
@@ -366,6 +370,7 @@ export class MapPage {
       this.inBank = false;
       this.inDistrict = false;
       this.inTreasury = false;
+      this.inEnemyTreasury =false;
 
       for (let areaBound of this.boundsArray) {
         if (areaBound.bounds.contains(new GoogleMapsLatLng(data.coords.latitude, data.coords.longitude))) {
@@ -385,6 +390,9 @@ export class MapPage {
               console.log("inside a treasury");
               this.inTreasury = true;
               break;
+            case "ENEMY_TREASURY":
+              console.log("inside enemy treasury");
+              this.inEnemyTreasury = true;
           }
         }
 
@@ -413,10 +421,10 @@ export class MapPage {
       for (let team of this.game.teams) {
         console.log("team");
         console.log(team);
-
+        let inThisTeam:boolean = false;
         for (let key in team.players) {
           if (team.players.hasOwnProperty(key)) {
-
+            inThisTeam=true;
             if (team.players[key].clientID === this.connectionService.clientID) {
               this.player.team = team;
               let point = team.districts[0].points[team.districts[0].points.length - 1];
@@ -433,6 +441,19 @@ export class MapPage {
               })
             }
           }
+        }
+        if(!inThisTeam){
+          let point = team.districts[0].points[team.districts[0].points.length -1 ];
+          let treasureLoc = new GoogleMapsLatLng(point.latitude,point.longitude);
+          this.boundsArray.push(new AreaBounds(team,this.circletoBounds(treasureLoc,this.circleRadius),"ENEMY_TREASURY"));
+          this.demoEnemyTreasury = team;
+          this.map.addCircle({
+            center:treasureLoc,
+            radius:this.circleRadius,
+            strokeColor:this.enemyTreasuryColor,
+            strokeWidth:0,
+            fillColor:this.enemyTreasuryColor
+          })
         }
       }
 
@@ -457,7 +478,7 @@ export class MapPage {
           for (let team of this.game.teams) { //todo refactor?
             for (let teamDistrict of team.districts) {
               if(teamDistrict.id === district.id){
-                data.setFillColor(team.customColor)
+                data.setFillColor(team.customColor + "88");
               }
             }
           }
@@ -560,6 +581,12 @@ export class MapPage {
   public captureDistrict(){
     //this.connectionService.sendDistrictCaptured(this.currentLocationObject.id); //todo veranderen naar currentlocation
     this.connectionService.sendDistrictCaptured(this.testDistrict.id);
+  }
+
+  public robEnemyTreasury(){
+    //this.connectionService.sendTreasuryRobbery(this.currentLocationObject.id);
+    console.log(this.demoEnemyTreasury);
+    this.connectionService.sendTreasuryRobbery(this.demoEnemyTreasury.districts[0].id);
   }
 
 
