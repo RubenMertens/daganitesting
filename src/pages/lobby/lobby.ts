@@ -5,6 +5,7 @@ import {ConnectionService} from "../../providers/connection-service";
 import {MessageWrapper} from "../../domain/MessageWrapper";
 import {MapPage} from "../map/map";
 import {Game} from "../../domain/Game";
+import {BackgroundMode} from "ionic-native";
 
 /*
   Generated class for the Lobby page.
@@ -55,6 +56,8 @@ export class LobbyPage {
       this.game = new Game(data.id,data.roomName,data.districts,data.markets,data.tradePosts,data.teams,data.maxPlayersPerTeam,data.maxTeams,data.banks);
       console.log(this.game);
     })
+
+    BackgroundMode.enable();
   }
 
   ionViewWillLeave(){
@@ -70,6 +73,7 @@ export class LobbyPage {
     clearInterval(this.heartBeatTimer);
     this.heartBeatTimer.
     this.navCtrl.pop();
+    BackgroundMode.disable();
   }
 
 

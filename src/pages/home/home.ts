@@ -30,8 +30,6 @@ export class HomePage {
 
   goToMap(){
     this.navCtrl.push(MapPage);
-
-
   }
 
   goToShop(){

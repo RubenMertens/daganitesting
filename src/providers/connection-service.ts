@@ -56,6 +56,11 @@ export class ConnectionService {
     return object;
   }
 
+  sendDistrictCaptured(districtId:string){
+    let message = new GameEventMessage("DISTRICT_CONQUERED",[this.clientID],0,{},districtId);
+    this.sendEventMessage(message);
+  }
+
   sendTradePostLegalPurchase(moneyTransferred:number, items:Map<string,number>, tradePostId:string){
     let message = new GameEventMessage("TRADEPOST_LEGAL_PURCHASE",[this.clientID],moneyTransferred,this.mapToObject(items),tradePostId);
     this.sendEventMessage(message);

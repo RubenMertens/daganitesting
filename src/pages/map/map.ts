@@ -17,6 +17,7 @@ import {CollectMoneyPage} from "../collect-money/collect-money";
 import {Player} from "../../providers/Player";
 import {ShopPage} from "../shop/shop";
 import {MarketPage} from "../market/market";
+import {DistrictWrapper} from "../../domain/DistrictWrapper";
 
 /*
  Generated class for the Map page.
@@ -31,240 +32,6 @@ import {MarketPage} from "../market/market";
   templateUrl: 'map.html',
 })
 export class MapPage {
-
-  /*private mapStyles = [
-    {
-      "elementType": "geometry",
-      "stylers": [
-        {
-          "color": "#1d2c4d"
-        }
-      ]
-    },
-    {
-      "elementType": "labels.text.fill",
-      "stylers": [
-        {
-          "color": "#8ec3b9"
-        }
-      ]
-    },
-    {
-      "elementType": "labels.text.stroke",
-      "stylers": [
-        {
-          "color": "#1a3646"
-        }
-      ]
-    },
-    {
-      "featureType": "administrative.country",
-      "elementType": "geometry.stroke",
-      "stylers": [
-        {
-          "color": "#4b6878"
-        }
-      ]
-    },
-    {
-      "featureType": "administrative.land_parcel",
-      "elementType": "labels.text.fill",
-      "stylers": [
-        {
-          "color": "#64779e"
-        }
-      ]
-    },
-    {
-      "featureType": "administrative.province",
-      "elementType": "geometry.stroke",
-      "stylers": [
-        {
-          "color": "#4b6878"
-        }
-      ]
-    },
-    {
-      "featureType": "landscape.man_made",
-      "elementType": "geometry.stroke",
-      "stylers": [
-        {
-          "color": "#334e87"
-        }
-      ]
-    },
-    {
-      "featureType": "landscape.natural",
-      "elementType": "geometry",
-      "stylers": [
-        {
-          "color": "#023e58"
-        }
-      ]
-    },
-    {
-      "featureType": "poi",
-      "elementType": "geometry",
-      "stylers": [
-        {
-          "color": "#283d6a"
-        }
-      ]
-    },
-    {
-      "featureType": "poi",
-      "elementType": "labels.text.fill",
-      "stylers": [
-        {
-          "color": "#6f9ba5"
-        }
-      ]
-    },
-    {
-      "featureType": "poi",
-      "elementType": "labels.text.stroke",
-      "stylers": [
-        {
-          "color": "#1d2c4d"
-        }
-      ]
-    },
-    {
-      "featureType": "poi.park",
-      "elementType": "geometry.fill",
-      "stylers": [
-        {
-          "color": "#023e58"
-        }
-      ]
-    },
-    {
-      "featureType": "poi.park",
-      "elementType": "labels.text.fill",
-      "stylers": [
-        {
-          "color": "#3C7680"
-        }
-      ]
-    },
-    {
-      "featureType": "road",
-      "elementType": "geometry",
-      "stylers": [
-        {
-          "color": "#304a7d"
-        }
-      ]
-    },
-    {
-      "featureType": "road",
-      "elementType": "labels.text.fill",
-      "stylers": [
-        {
-          "color": "#98a5be"
-        }
-      ]
-    },
-    {
-      "featureType": "road",
-      "elementType": "labels.text.stroke",
-      "stylers": [
-        {
-          "color": "#1d2c4d"
-        }
-      ]
-    },
-    {
-      "featureType": "road.highway",
-      "elementType": "geometry",
-      "stylers": [
-        {
-          "color": "#2c6675"
-        }
-      ]
-    },
-    {
-      "featureType": "road.highway",
-      "elementType": "geometry.stroke",
-      "stylers": [
-        {
-          "color": "#255763"
-        }
-      ]
-    },
-    {
-      "featureType": "road.highway",
-      "elementType": "labels.text.fill",
-      "stylers": [
-        {
-          "color": "#b0d5ce"
-        }
-      ]
-    },
-    {
-      "featureType": "road.highway",
-      "elementType": "labels.text.stroke",
-      "stylers": [
-        {
-          "color": "#023e58"
-        }
-      ]
-    },
-    {
-      "featureType": "transit",
-      "elementType": "labels.text.fill",
-      "stylers": [
-        {
-          "color": "#98a5be"
-        }
-      ]
-    },
-    {
-      "featureType": "transit",
-      "elementType": "labels.text.stroke",
-      "stylers": [
-        {
-          "color": "#1d2c4d"
-        }
-      ]
-    },
-    {
-      "featureType": "transit.line",
-      "elementType": "geometry.fill",
-      "stylers": [
-        {
-          "color": "#283d6a"
-        }
-      ]
-    },
-    {
-      "featureType": "transit.station",
-      "elementType": "geometry",
-      "stylers": [
-        {
-          "color": "#3a4762"
-        }
-      ]
-    },
-    {
-      "featureType": "water",
-      "elementType": "geometry",
-      "stylers": [
-        {
-          "color": "#0e1626"
-        }
-      ]
-    },
-    {
-      "featureType": "water",
-      "elementType": "labels.text.fill",
-      "stylers": [
-        {
-          "color": "#4e6d70"
-        }
-      ]
-    }
-  ]*/
 
   private mapStyles = [
     {
@@ -440,7 +207,8 @@ export class MapPage {
 
   private safeZoneColor: string = "#0000FF88";
   private districtAColor: string = "#FFFFFF88";
-  private districtBColor: string = "#FFF";
+  private districtBColor: string = "#FFFFFF";
+  private districtCapitalColor:string = "#00FF00";
   private teamColor: Array<string> = [];
   private circleColor: string = "#00ffff";
   private bankColor: string = "#00ff00";
@@ -449,15 +217,17 @@ export class MapPage {
   private circleRadius: number = 20;
   private cirlceStrokeWidth: number = 1;
   private geoWatch: any;
-  private mapAreaArray: Array<MapArea> = [];
   private boundsArray: Array<AreaBounds> = [];
   private circles: Array<any> = [];
+  private districts : Array<DistrictWrapper> = [];
 
   private game: Game;
   private bank: any;
   private myTeam: any;
   private demoShop: any;
+  private testDistrict:any;
   private market:any;
+  private teams:Array<any>;
 
   private inMarket: boolean;
   private inDistrict: boolean;
@@ -531,6 +301,22 @@ export class MapPage {
       self.player.legalItems = notification.legalItems;
       self.player.illegalItems = notification.illegalItems;
       console.log(this.player.team);
+    }else if (messageWrapper.messageType == "DISTRICT_NOTIFICATION"){
+      let notification = JSON.parse(messageWrapper.message);
+      let color :string;
+      console.log(notification);
+      for (let team of this.game.teams) {
+        if(team.teamName === notification.teamName){
+          color = team.customColor;
+        }
+      }
+      console.log(this.districts)
+      for (let wrapper of this.districts) {
+        if(wrapper.district.id === notification.districtId){
+          wrapper.poly.setFillColor(color);
+          console.log("color changed")
+        }
+      }
     }
 
 
@@ -624,6 +410,32 @@ export class MapPage {
     this.map.on(GoogleMapsEvent.MAP_READY).subscribe(() => {
       console.log('Map is ready!');
 
+      for (let team of this.game.teams) {
+        console.log("team");
+        console.log(team);
+
+        for (let key in team.players) {
+          if (team.players.hasOwnProperty(key)) {
+
+            if (team.players[key].clientID === this.connectionService.clientID) {
+              this.player.team = team;
+              let point = team.districts[0].points[team.districts[0].points.length - 1];
+              let treasureLoc = new GoogleMapsLatLng(point.latitude, point.longitude);
+              this.currentLocationObject = this.player.team; //todo remove this is for testing
+              this.myTeam = this.player.team;
+              this.boundsArray.push(new AreaBounds(this.player.team, this.circletoBounds(treasureLoc, this.circleRadius), "TREASURY")); //todo pleinen voor veroveren
+              this.map.addCircle({
+                center: treasureLoc,
+                radius: this.circleRadius,
+                strokeColor: this.circleColor,
+                strokeWidth: 0,
+                fillColor: this.circleColor
+              })
+            }
+          }
+        }
+      }
+
       for (let district of this.game.districts) {
         let poly = [];
         let treasureLoc: GoogleMapsLatLng;
@@ -640,18 +452,28 @@ export class MapPage {
           'strokeWidth': this.strokeWidth,
           'fillColor': this.districtAColor,
           'visible': true
-        }).catch((error) => {
+        }).then(data => {
+          this.districts.push(new DistrictWrapper(district,data));
+          for (let team of this.game.teams) { //todo refactor?
+            for (let teamDistrict of team.districts) {
+              if(teamDistrict.id === district.id){
+                data.setFillColor(team.customColor)
+              }
+            }
+          }
+        })
+          .catch((error) => {
           console.log(error);
         });
-        /*
-         this.boundsArray.push(new AreaBounds(district,this.circletoBounds(treasureLoc,this.circleRadius),"DISTRICTCAPITAL")); //todo pleinen voor veroveren
+          this.testDistrict = district;
+         this.boundsArray.push(new AreaBounds(district,this.circletoBounds(treasureLoc,this.circleRadius),"DISTRICTCAPITAL"));
          this.map.addCircle({
          center: treasureLoc,
          radius: this.circleRadius,
-         strokeColor: this.circleColor,
+         strokeColor: this.districtCapitalColor,
          strokeWidth: this.cirlceStrokeWidth,
-         fillColor: this.circleColor
-         });*/
+         fillColor: this.districtCapitalColor
+         });
       }
 
       for (let market of this.game.markets) {
@@ -698,31 +520,6 @@ export class MapPage {
         });
       }
 
-      for (let team of this.game.teams) {
-        console.log("team");
-        console.log(team);
-        this.teamColor.push(team.customColor);
-        for (let key in team.players) {
-          if (team.players.hasOwnProperty(key)) {
-
-            if (team.players[key].clientID === this.connectionService.clientID) {
-              this.player.team = team;
-              let point = team.districts[0].points[team.districts[0].points.length - 1];
-              let treasureLoc = new GoogleMapsLatLng(point.latitude, point.longitude);
-              this.currentLocationObject = this.player.team; //todo remove this is for testing
-              this.myTeam = this.player.team;
-              this.boundsArray.push(new AreaBounds(this.player.team, this.circletoBounds(treasureLoc, this.circleRadius), "TREASURY")); //todo pleinen voor veroveren
-              this.map.addCircle({
-                center: treasureLoc,
-                radius: this.circleRadius,
-                strokeColor: this.circleColor,
-                strokeWidth: 0,
-                fillColor: this.circleColor
-              })
-            }
-          }
-        }
-      }
     });
   }
 
@@ -758,6 +555,11 @@ export class MapPage {
   public gotoShop() {
     //this.navCtrl.push(ShopPage,this.currentLocationObject);
     this.navCtrl.push(ShopPage, this.demoShop);
+  }
+
+  public captureDistrict(){
+    //this.connectionService.sendDistrictCaptured(this.currentLocationObject.id); //todo veranderen naar currentlocation
+    this.connectionService.sendDistrictCaptured(this.testDistrict.id);
   }
 
 

@@ -82,7 +82,7 @@ export class ShopPage {
   handleIllegalSell(clickedItem:any){
     console.log("Selling illegal");
     console.log(clickedItem);
-    let totPrice = +clickedItem.legalPurchase*+this.illegalAmount;
+    let totPrice = +clickedItem.illegalPurchase*+this.illegalAmount;
     if(totPrice <= this.player.carriedMoney){
       let prompt = this.alertCtrl.create({
         title:"Confirm",
