@@ -439,10 +439,11 @@ export class MapPage {
             case "ENEMY_TREASURY":
               console.log("inside enemy treasury");
               this.inEnemyTreasury = true;
+              break;
             case "DISTRICTCAPITAL":
               console.log("in capital");
               this.inDistrictCapital = true;
-
+              break;
           }
         }
       }
@@ -627,9 +628,6 @@ export class MapPage {
     this.navCtrl.push(BankPage, this.bank);
   }
 
-/*  public gotoMarket(){
-    this.navCtrl.push(MarketPage,this.market);
-  }*/
 
   public sellAll(){
     this.connectionService.sendTradePostAllSale(this.market.id);
