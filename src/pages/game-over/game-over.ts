@@ -33,7 +33,7 @@ export class GameOverPage {
 
   gotoHomePage(){
     this.player.reset();
-    this.navCtrl.push(HomePage);
+    this.navCtrl.popToRoot()
   }
 
 }
