@@ -424,7 +424,7 @@ export class MapPage {
               console.log("is in bank");
               break;
             case "TRADE_POST" :
-              this.inShop = true;
+              this.inShop = !this.currentLocationObject.used; //todo untested?
               break;
             case "MARKET" :
               this.inMarket = true;
@@ -438,7 +438,6 @@ export class MapPage {
               this.inEnemyTreasury = true;
           }
         }
-
       }
     });
 
@@ -586,8 +585,7 @@ export class MapPage {
 
       for (let tradePost of this.game.tradePosts) {
         let point = new GoogleMapsLatLng(tradePost.point.latitude, tradePost.point.longitude);
-        this.boundsArray.push(new AreaBounds(tradePost, this.circletoBounds(point, this.circleRadius), "TRADE_POST"));
-        this.demoShop = tradePost;
+
         this.map.addCircle({
           center: point,
           radius: this.circleRadius,
@@ -595,7 +593,10 @@ export class MapPage {
           strokeWidth: 5,
           fillColor: this.tradePostColor
         }).then(data => {
-          this.tradePosts.push(new TradePostWrapper(tradePost,data,false));
+          let tradePostWrapper = new TradePostWrapper(tradePost,data,false);
+          this.tradePosts.push(tradePostWrapper);
+          this.boundsArray.push(new AreaBounds(tradePostWrapper, this.circletoBounds(point, this.circleRadius), "TRADE_POST"));
+          this.demoShop = tradePostWrapper;
         })
         ;
       }
@@ -633,8 +634,12 @@ export class MapPage {
   }
 
   public gotoShop() {
-    //this.navCtrl.push(ShopPage,this.currentLocationObject);
-    this.navCtrl.push(ShopPage, this.demoShop);
+    if(!this.demoShop.used) { //todo veranderen naar currenLocationObject
+      //this.navCtrl.push(ShopPage,this.currentLocationObject.tradePost);
+      this.navCtrl.push(ShopPage, this.demoShop.tradePost);
+    }else{
+      console.log("Can't use shop twice!")
+    }
   }
 
   public captureDistrict(){
