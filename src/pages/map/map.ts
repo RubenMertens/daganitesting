@@ -264,100 +264,109 @@ export class MapPage {
     let messageWrapper: MessageWrapper = JSON.parse(message.data);
     console.log("message received");
     console.log(messageWrapper);
+    let notification:any;
 
+    switch(messageWrapper.messageType){
+      case "BULK_LOCATION":
+        let bulklocations: any = JSON.parse(messageWrapper.message);
+        console.log("circles");
+        console.log(self.circles);
+        for (let obj of self.circles) {
+          obj.remove();
+        }
+        self.circles = [];
+        for (let obj of bulklocations.locations) {
+          console.log(obj);
+          self.map.addCircle({
+            center: new GoogleMapsLatLng(obj.location.lat, obj.location.lng),
+            radius: 2,
+            strokeColor: "#000000",
+            strokeWidth: 1,
+            fillColor: self.player.team.customColor
+          }).then((data) => {
+            self.circles.push(data);
+          });
+        }
+        break;
+      case "TEAM_NOTIFICATION" :
+        notification = JSON.parse(messageWrapper.message);
+        console.log(notification);
+        console.log(this.player.team);
+        self.player.team.districts = notification.districts;
+        self.player.team.treasury = notification.treasury;
+        self.player.team.bankAccount = notification.bankAccount;
+        self.player.team.tradePosts = notification.tradeposts;
+        console.log(self.player);
+        console.log(this.tradePosts);
 
-    if (messageWrapper.messageType == "BULK_LOCATION") {
-      let bulklocations: any = JSON.parse(messageWrapper.message);
-      console.log("circles");
-      console.log(self.circles);
-      for (let obj of self.circles) {
-        obj.remove();
-      }
-      self.circles = [];
-      for (let obj of bulklocations.locations) {
-        console.log(obj);
-        self.map.addCircle({
-          center: new GoogleMapsLatLng(obj.location.lat, obj.location.lng),
-          radius: 2,
-          strokeColor: "#000000",
-          strokeWidth: 1,
-          fillColor: self.player.team.customColor
-        }).then((data) => {
-          self.circles.push(data);
-        });
-      }
-    } else if (messageWrapper.messageType == "TEAM_NOTIFICATION") {
-      let notification = JSON.parse(messageWrapper.message);
-      console.log(notification);
-      console.log(this.player.team);
-      self.player.team.districts = notification.districts;
-      self.player.team.treasury = notification.treasury;
-      self.player.team.bankAccount = notification.bankAccount;
-      self.player.team.tradePosts = notification.tradeposts;
-      console.log(self.player);
-      console.log(this.tradePosts);
-
-      for (let tradePostWrapper of this.tradePosts) {
-        for (let usedTradePostId of self.player.team.tradePosts) {
-          if(tradePostWrapper.tradePost.id === usedTradePostId){
-            tradePostWrapper.used =true;
-            tradePostWrapper.circle.setFillColor(this.usedTradePostColor);
-            tradePostWrapper.circle.setStrokeColor(this.usedTradePostColor);
+        for (let tradePostWrapper of this.tradePosts) {
+          for (let usedTradePostId of self.player.team.tradePosts) {
+            if(tradePostWrapper.tradePost.id === usedTradePostId){
+              tradePostWrapper.used =true;
+              tradePostWrapper.circle.setFillColor(this.usedTradePostColor);
+              tradePostWrapper.circle.setStrokeColor(this.usedTradePostColor);
+            }
           }
         }
-      }
+        break;
 
-    } else if (messageWrapper.messageType == "PLAYER_NOTIFICATION") {
-      let notification = JSON.parse(messageWrapper.message);
-      console.log(notification);
-      self.player.carriedMoney = notification.money;
-      self.player.legalItems = notification.legalItems;
-      self.player.illegalItems = notification.illegalItems;
-      console.log(this.player.team);
-    }else if (messageWrapper.messageType == "DISTRICT_NOTIFICATION"){
-      let notification = JSON.parse(messageWrapper.message);
-      let color :string;
-      console.log(notification);
-      for (let team of this.game.teams) {
-        if(team.teamName === notification.teamName){
-          color = team.customColor+"88";
+      case "PLAYER_NOTIFICATION":
+        notification = JSON.parse(messageWrapper.message);
+        console.log(notification);
+        self.player.carriedMoney = notification.money;
+        self.player.legalItems = notification.legalItems;
+        self.player.illegalItems = notification.illegalItems;
+        console.log(this.player.team);
+        break;
+
+      case "DISTRICT_NOTIFICATION":
+        notification = JSON.parse(messageWrapper.message);
+        let color :string;
+        console.log(notification);
+        for (let team of this.game.teams) {
+          if(team.teamName === notification.teamName){
+            color = team.customColor+"88";
+          }
         }
-      }
-      console.log(this.districts);
-      for (let wrapper of this.districts) {
-        if(wrapper.district.id === notification.districtId){
-          wrapper.poly.setFillColor(color);
-          console.log("color changed")
+        console.log(this.districts);
+        for (let wrapper of this.districts) {
+          if(wrapper.district.id === notification.districtId){
+            wrapper.poly.setFillColor(color);
+            console.log("color changed")
+          }
         }
-      }
-    }else if(messageWrapper.messageType == "INFO_NOTIFICATION"){
-      let notification = JSON.parse(messageWrapper.message);
-      console.log(notification);
-      if(notification.gameEventType === "TREASURY_ROBBERY"){
-        console.log("You're team got robbed!");
-        let toastString:string;
-        if(notification.by == this.player.team.teamName){
-          toastString= "You're treasury got robbed!";
-        }else{
-          toastString= notification.by + "'s treasury got robbed!";
+        break;
+
+      case "INFO_NOTIFICATION" :
+        notification = JSON.parse(messageWrapper.message);
+        console.log(notification);
+        if(notification.gameEventType === "TREASURY_ROBBERY"){
+          console.log("You're team got robbed!");
+          let toastString:string;
+          if(notification.by == this.player.team.teamName){
+            toastString= "You're treasury got robbed!";
+          }else{
+            toastString= notification.by + "'s treasury got robbed!";
+          }
+          Toast.show(toastString,'5000','center').subscribe(toast => {
+            console.log(toast);
+          });
+
         }
-        Toast.show(toastString,'5000','center').subscribe(toast => {
-          console.log(toast);
-        });
+        break;
 
-      }
-    }else if(messageWrapper.messageType =="GAME_STOP"){
-      this.stopServices();
-      this.navCtrl.push(GameOverPage,this.winningTeam);
+      case "GAME_STOP":
+        this.stopServices();
+        this.navCtrl.push(GameOverPage,this.winningTeam);
+        break;
 
-    }else if(messageWrapper.messageType =="WINNING_TEAM"){
-      this.winningTeam = messageWrapper.message;
-    }
+      case "WINNING_TEAM":
+        this.winningTeam = messageWrapper.message;
+        break;
 
-
-    else if (messageWrapper.messageType == "ERROR_EXCEPTION") {
-      console.error(messageWrapper.message);
-
+      case "ERROR_EXCEPTION":
+        console.error(messageWrapper.message);
+        break;
     }
 
   }
