@@ -235,7 +235,7 @@ export class MapPage {
   private winningTeam:string;
 
   private inMarket: boolean;
-  private inDistrict: boolean;
+  private inDistrictCapital: boolean;
   private inShop: boolean;
   private inBank: boolean;
   private inTreasury: boolean;
@@ -275,6 +275,7 @@ export class MapPage {
           obj.remove();
         }
         self.circles = [];
+
         for (let obj of bulklocations.locations) {
           console.log(obj);
           self.map.addCircle({
@@ -406,13 +407,12 @@ export class MapPage {
       };
       //this.map.moveCamera(position); //todo turn this back on for camera locking
 
-      //let isInGroteMarkt =  groteMarktBounds.contains(new GoogleMapsLatLng(data.coords.latitude,data.coords.longitude));
       this.connectionService.sendLocationData(data.coords.latitude, data.coords.longitude);
 
       this.inMarket = false;
       this.inShop = false;
       this.inBank = false;
-      this.inDistrict = false;
+      this.inDistrictCapital = false;
       this.inTreasury = false;
       this.inEnemyTreasury =false;
 
@@ -426,9 +426,11 @@ export class MapPage {
               break;
             case "TRADE_POST" :
               this.inShop = !this.currentLocationObject.used; //todo untested?
+              console.log("is in tradepost " + this.currentLocationObject.used);
               break;
             case "MARKET" :
               this.inMarket = true;
+              console.log("is in market")
               break;
             case "TREASURY" :
               console.log("inside a treasury");
@@ -437,6 +439,10 @@ export class MapPage {
             case "ENEMY_TREASURY":
               console.log("inside enemy treasury");
               this.inEnemyTreasury = true;
+            case "DISTRICTCAPITAL":
+              console.log("in capital");
+              this.inDistrictCapital = true;
+
           }
         }
       }
@@ -460,6 +466,7 @@ export class MapPage {
 
     this.map.on(GoogleMapsEvent.MAP_READY).subscribe(() => {
       console.log('Map is ready!');
+
       let capitalDistrictId : Array<string> = [];
 
       for (let team of this.game.teams) {
@@ -469,16 +476,15 @@ export class MapPage {
         let inThisTeam:boolean = false;
 
         for (let key in team.players) {
-          if (team.players.hasOwnProperty(key)) {
+          if (team.players.hasOwnProperty(key)) { //hacking for maps in typescript
             inThisTeam=true;
             if (team.players[key].clientID === this.connectionService.clientID) {
               this.player.team = team;
-              if(this.player.team.tradePosts == null){
+              if(this.player.team.tradePosts == null){ //prevent null from happening , this happened sometimes due to unknown reasons
                 this.player.team.tradePosts = [];
               }
-              let point = team.districts[0].points[team.districts[0].points.length - 1];
+              let point = team.districts[0].points[team.districts[0].points.length - 1]; //get treasury of capital district
               let treasureLoc = new GoogleMapsLatLng(point.latitude, point.longitude);
-              this.currentLocationObject = this.player.team; //todo remove this is for testing
               this.myTeam = this.player.team;
               console.log("your team found!")
               this.boundsArray.push(new AreaBounds(this.player.team, this.circletoBounds(treasureLoc, this.circleRadius), "TREASURY"));
@@ -539,7 +545,7 @@ export class MapPage {
           console.log(error);
         });
 
-        if(capitalDistrictId.indexOf(district.id) == -1){
+        if(capitalDistrictId.indexOf(district.id) == -1){ //this district is not a capital district.
           this.testDistrict = district;
           this.boundsArray.push(new AreaBounds(district,this.circletoBounds(treasureLoc,this.circleRadius),"DISTRICTCAPITAL"));
           this.map.addCircle({
@@ -606,7 +612,7 @@ export class MapPage {
   }
 
 
-  public circletoBounds(center: GoogleMapsLatLng, radius: number) { //todo collapse to no variables
+  public circletoBounds(center: GoogleMapsLatLng, radius: number) {
     let radiusEarth = 6378000;
     let SWlat = center.lat + (-radius / radiusEarth) * (180 / Math.PI);
     let SWlng = center.lng + (-radius / radiusEarth) * (180 / Math.PI) / Math.cos(center.lat * Math.PI / 180);
@@ -627,7 +633,7 @@ export class MapPage {
 
 
   public collectMoney() {
-    this.navCtrl.push(CollectMoneyPage); //todo verander naar currentlocation
+    this.navCtrl.push(CollectMoneyPage);
   }
 
   public gotoShop() {
