@@ -18,8 +18,8 @@ export class ConnectionService {
 
   //private baseAdress :string = "https://stniklaas-stadsspel.herokuapp.com/api/";
   //private webSocketUrl:string = "ws://stniklaas-stadsspel.herokuapp.com/user";
-  private webSocketUrl:string = "ws://10.134.229.38:8090/user";
-  private baseAdress:string = "http://10.134.229.38:8090/api/";
+  private webSocketUrl:string = "wss://10.134.229.38:8090/user";
+  private baseAdress:string = "https://10.134.229.38:8090/api/";
 
   constructor(public http: Http) {
     this.clientID = Device.uuid;
@@ -133,16 +133,14 @@ export class ConnectionService {
     return this.http.get(url).map(this.extractData).catch(this.handleError);
   }
 
-  setupTCPSocket(token:string){
+  setupTCPSocket(token:string) :Observable<any>{
     this.token =token;
     console.log("trying to connect to websocket url " + this.webSocketUrl);
     this.ws = new WebSocket(this.webSocketUrl);
-    this.ws.onopen = function () {
-      console.log("connection made");
-     /* let json : string = JSON.stringify({message : "kakaka"});
-      this.send(json);*/
 
-    };
+
+
+
 
     this.ws.onmessage = function (event) {
       console.log("received : " + event.data)
@@ -156,7 +154,17 @@ export class ConnectionService {
 
     this.ws.onerror = function(error){
       console.error(error);
-    }
+    };
+
+    return Observable.create(observer => {
+      this.ws.onopen = function () {
+        console.log("connection made");
+        /* let json : string = JSON.stringify({message : "kakaka"});
+         this.send(json);*/
+        observer.next("test");
+        observer.complete();
+      };
+    });
   }
 
   addMessageHandler(handler:any){

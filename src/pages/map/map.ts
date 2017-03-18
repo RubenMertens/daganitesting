@@ -227,6 +227,7 @@ export class MapPage {
   private tradePosts:Array<TradePostWrapper> = [];
   private districtCapitals:Array<CapitalWrapper> = [];
   private taggedByTeams:Array<string>= [];
+  private currentDistrict:any;
 
   private game: Game;
   private bank: any;
@@ -268,6 +269,20 @@ export class MapPage {
     this.boundsArray = [];
     this.tradePosts = [];
     this.taggedByTeams = [];
+  }
+
+  reColorTaggedDistricts(){
+    for (let wrapper of this.districts) {
+      for (let team of this.game.teams) {
+        if (this.taggedByTeams.indexOf(team.teamName) != -1) {
+          for (let district of team.districts) {
+            if (district.id == wrapper.district.id) {
+              wrapper.poly.setFillColor(this.cantUseColor);
+            }
+          }
+        }
+      }
+    }
   }
 
   handleSocketMessage(message, self) {
@@ -356,6 +371,8 @@ export class MapPage {
           this.taggedByTeams.push(notification.taggedTeamName);
         }
 
+        this.reColorTaggedDistricts();
+
         for (let team of this.game.teams) {
           if(this.taggedByTeams.indexOf(team.teamName) !=-1){
             for (let district of team.districts) {
@@ -378,10 +395,14 @@ export class MapPage {
         notification = JSON.parse(messageWrapper.message);
         let color :string;
         console.log(notification);
-        for (let team of this.game.teams) {
-          if(team.teamName === notification.teamName){
-            color = team.customColor+"88";
-            team.districts.push({id:notification.districtId});
+        if(this.taggedByTeams.indexOf(notification.teamName) != -1){
+          color = this.cantUseColor;
+        }else{
+          for (let team of this.game.teams) {
+            if(team.teamName === notification.teamName){
+              color = team.customColor+"88";
+              team.districts.push({id:notification.districtId}); //todo zou bugs kunnen veroorzaken?
+            }
           }
         }
 
@@ -390,15 +411,7 @@ export class MapPage {
             wrapper.poly.setFillColor(color);
             console.log("color changed")
           }
-          for (let team of this.game.teams) {
-            if(this.taggedByTeams.indexOf(team.teamName) != -1){
-              for (let district of team.districts) {
-                if(district.id == wrapper.district.id){
-                  wrapper.poly.setFillColor(this.cantUseColor);
-                }
-              }
-            }
-          }
+
         }
         break;
 
@@ -500,6 +513,12 @@ export class MapPage {
       this.inDistrictCapital = false;
       this.inTreasury = false;
       this.inEnemyTreasury =false;
+
+      for (let wrapper of this.districts) {
+          if(wrapper.bounds.contains(this.currentLocation)){
+            this.currentDistrict = wrapper.district;
+          }
+      }
 
       for (let areaBound of this.boundsArray) {
         if (areaBound.bounds.contains(new GoogleMapsLatLng(data.coords.latitude, data.coords.longitude))) {
@@ -618,7 +637,7 @@ export class MapPage {
           'fillColor': this.neutralColor,
           'visible': true
         }).then(data => {
-          this.districts.push(new DistrictWrapper(district,data,true));
+          this.districts.push(new DistrictWrapper(district,data,true,new GoogleMapsLatLngBounds(poly)));
           for (let team of this.game.teams) { //todo refactor?
             for (let teamDistrict of team.districts) {
               if(teamDistrict.id === district.id){
@@ -741,35 +760,38 @@ export class MapPage {
   }
 
   public gotoShop() {
-    if(!this.demoShop.used) { //todo veranderen naar currenLocationObject
+/*    if(!this.demoShop.used) { //todo veranderen naar currenLocationObject
       //this.navCtrl.push(ShopPage,this.currentLocationObject.tradePost);
       this.navCtrl.push(ShopPage, this.demoShop.tradePost);
     }else{
       console.log("Can't use shop twice!")
-    }
-    /*console.log(this.currentLocationObject);
+    }*/
+    console.log(this.currentLocationObject);
     if(!this.currentLocationObject.used){
       this.navCtrl.push(ShopPage,this.currentLocationObject.tradePost);
     }else{
       console.log("can't use shop twice!")
-    }*/
+    }
   }
 
   public captureDistrict(){
-    // this.connectionService.sendDistrictCaptured(this.currentLocationObject.id); //todo veranderen naar currentlocation
-    this.connectionService.sendDistrictCaptured(this.testDistrict.district.id);
+    console.log(this.currentLocationObject);
+    this.connectionService.sendDistrictCaptured(this.currentLocationObject.district.id); //todo veranderen naar currentlocation
+    // this.connectionService.sendDistrictCaptured(this.testDistrict.district.id);
   }
 
   public robEnemyTreasury(){
-    // this.connectionService.sendTreasuryRobbery(this.currentLocationObject.districts[0].id);
-    console.log(this.demoEnemyTreasury);
-    this.connectionService.sendTreasuryRobbery(this.demoEnemyTreasury.districts[0].id);
+    console.log(this.currentLocationObject);
+    this.connectionService.sendTreasuryRobbery(this.currentLocationObject.districts[0].id);
+    // console.log(this.demoEnemyTreasury);
+    // this.connectionService.sendTreasuryRobbery(this.demoEnemyTreasury.districts[0].id);
   }
 
   public tagPlayers(){
     console.log("tagging people!");
     console.log(this.taggable);
-    this.connectionService.sendTagPlayers(this.taggable,this.player.team.districts[0].id);
+    // this.connectionService.sendTagPlayers(this.taggable,this.player.team.districts[0].id);
+    this.connectionService.sendTagPlayers(this.taggable,this.currentDistrict.id);
   }
 
 

@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {NavController, NavParams, AlertController} from 'ionic-angular';
+import {NavController, NavParams, AlertController, LoadingController} from 'ionic-angular';
 import {ConnectionService} from "../../providers/connection-service";
 import {MapPage} from "../map/map";
 import {LobbyPage} from "../lobby/lobby";
@@ -20,11 +20,20 @@ export class ServerListPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams ,
               public connectionService:ConnectionService,
-              public alertCtrl: AlertController
+              public alertCtrl: AlertController,
+              public loadingCtrl:LoadingController
   ) {
     this.connectionService.getStagedGames().subscribe((data) => {
       console.log(data);
       this.listedGames = data;
+      this.listedGames.sort((g1,g2) => {
+        console.log("sorting");
+        if(g1.name < g2.name){
+          return 1;
+        }else{
+          return -1;
+        }
+      })
     })
   }
 
@@ -38,11 +47,16 @@ export class ServerListPage {
 
   }
 
+
   refreshList(){
+    let loading = this.loadingCtrl.create({});
+    loading.setContent("Even geduld a.u.b. ..");
+    loading.present();
     console.log("trying to refresh page!");
     this.connectionService.getStagedGames().subscribe(data => {
       console.log("page refreshed");
       this.listedGames = data;
+      loading.dismiss();
     })
   }
 
@@ -73,9 +87,25 @@ export class ServerListPage {
                 this.navCtrl.push(LobbyPage,data);
             }, error => {
               let errorprompt = this.alertCtrl.create();
-              errorprompt.setTitle("Something went wrong!");
-              errorprompt.setMessage(error);
-
+              console.log(error);
+              switch (error.status){
+                case 401: //wrong password
+                  errorprompt.setTitle("Verkeerd passwoord!")
+                  errorprompt.setMessage("Je hebt een verkeerd passwoord ingegeven, probeer opnieuw");
+                  break;
+                case 409: //already registered (shouldn't be able to happen? so unregister call when it does? idk)
+                  errorprompt.setTitle("Al geregistreerd!");
+                errorprompt.setMessage("Je bent al geregistreerd en je kan geen twee keer in hetzelfde spel geregistreerd worden!");
+                  break;
+                case 422: //can't process json
+                  errorprompt.setTitle("Er ging iets mis.")
+                  errorprompt.setMessage("Er ging iets mis, probeer nog eens");
+                  break;
+                case 500: //
+                  errorprompt.setTitle("Er ging iets mis.");
+                errorprompt.setMessage("Er ging iets mis, probeer nog eens");
+                  break;
+              }
               errorprompt.present();
             });
 
