@@ -23,19 +23,13 @@ export class LobbyPage {
   private game:Game;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, player:Player, public connectionService:ConnectionService) {
-    let gameId = navParams.data[1];
-    let token = navParams.data[0].clientToken;
+    let token = navParams.data.clientToken;
 
-    this.connectionService.setupTCPSocket(token, gameId);
+    this.connectionService.setupTCPSocket(token);
     this.heartBeatTimer = setInterval(() => this.connectionService.sendHeartBeat(),1000);
-    let self = this;
-    this.connectionService.addMessageHandler(function (message) {
-        self.handleSocketMessage(message,self) //todo refactor
-    })
+    this.connectionService.addMessageHandler(message => this.handleSocketMessage(message,this));
 
   }
-
-
 
   handleSocketMessage(message,self){
     console.log(message.data);
@@ -71,7 +65,6 @@ export class LobbyPage {
     this.connectionService.unregisterFromGame();
     console.log(this.heartBeatTimer);
     clearInterval(this.heartBeatTimer);
-    this.heartBeatTimer.
     this.navCtrl.pop();
     BackgroundMode.disable();
   }

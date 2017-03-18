@@ -2,7 +2,7 @@ import {Component, ElementRef, ViewChild} from '@angular/core';
 import {NavController, NavParams, Platform, AlertController} from 'ionic-angular';
 import {
   GoogleMap, GoogleMapsLatLng, GoogleMapsEvent, Geolocation, CameraPosition, GoogleMapsPolygon, GoogleMapsLatLngBounds,
-  GoogleMapsGroundOverlay, GoogleMapsCircle
+  GoogleMapsGroundOverlay, GoogleMapsCircle, Toast
 } from "ionic-native";
 import {ConnectionService} from "../../providers/connection-service";
 import {InventoryPage} from "../inventory/inventory";
@@ -17,6 +17,9 @@ import {CollectMoneyPage} from "../collect-money/collect-money";
 import {Player} from "../../providers/Player";
 import {ShopPage} from "../shop/shop";
 import {MarketPage} from "../market/market";
+import {DistrictWrapper} from "../../domain/DistrictWrapper";
+import {GameOverPage} from "../game-over/game-over";
+import {TradePostWrapper} from "../../domain/TradePostWrapper";
 
 /*
  Generated class for the Map page.
@@ -31,240 +34,6 @@ import {MarketPage} from "../market/market";
   templateUrl: 'map.html',
 })
 export class MapPage {
-
-  /*private mapStyles = [
-   {
-   "elementType": "geometry",
-   "stylers": [
-   {
-   "color": "#1d2c4d"
-   }
-   ]
-   },
-   {
-   "elementType": "labels.text.fill",
-   "stylers": [
-   {
-   "color": "#8ec3b9"
-   }
-   ]
-   },
-   {
-   "elementType": "labels.text.stroke",
-   "stylers": [
-   {
-   "color": "#1a3646"
-   }
-   ]
-   },
-   {
-   "featureType": "administrative.country",
-   "elementType": "geometry.stroke",
-   "stylers": [
-   {
-   "color": "#4b6878"
-   }
-   ]
-   },
-   {
-   "featureType": "administrative.land_parcel",
-   "elementType": "labels.text.fill",
-   "stylers": [
-   {
-   "color": "#64779e"
-   }
-   ]
-   },
-   {
-   "featureType": "administrative.province",
-   "elementType": "geometry.stroke",
-   "stylers": [
-   {
-   "color": "#4b6878"
-   }
-   ]
-   },
-   {
-   "featureType": "landscape.man_made",
-   "elementType": "geometry.stroke",
-   "stylers": [
-   {
-   "color": "#334e87"
-   }
-   ]
-   },
-   {
-   "featureType": "landscape.natural",
-   "elementType": "geometry",
-   "stylers": [
-   {
-   "color": "#023e58"
-   }
-   ]
-   },
-   {
-   "featureType": "poi",
-   "elementType": "geometry",
-   "stylers": [
-   {
-   "color": "#283d6a"
-   }
-   ]
-   },
-   {
-   "featureType": "poi",
-   "elementType": "labels.text.fill",
-   "stylers": [
-   {
-   "color": "#6f9ba5"
-   }
-   ]
-   },
-   {
-   "featureType": "poi",
-   "elementType": "labels.text.stroke",
-   "stylers": [
-   {
-   "color": "#1d2c4d"
-   }
-   ]
-   },
-   {
-   "featureType": "poi.park",
-   "elementType": "geometry.fill",
-   "stylers": [
-   {
-   "color": "#023e58"
-   }
-   ]
-   },
-   {
-   "featureType": "poi.park",
-   "elementType": "labels.text.fill",
-   "stylers": [
-   {
-   "color": "#3C7680"
-   }
-   ]
-   },
-   {
-   "featureType": "road",
-   "elementType": "geometry",
-   "stylers": [
-   {
-   "color": "#304a7d"
-   }
-   ]
-   },
-   {
-   "featureType": "road",
-   "elementType": "labels.text.fill",
-   "stylers": [
-   {
-   "color": "#98a5be"
-   }
-   ]
-   },
-   {
-   "featureType": "road",
-   "elementType": "labels.text.stroke",
-   "stylers": [
-   {
-   "color": "#1d2c4d"
-   }
-   ]
-   },
-   {
-   "featureType": "road.highway",
-   "elementType": "geometry",
-   "stylers": [
-   {
-   "color": "#2c6675"
-   }
-   ]
-   },
-   {
-   "featureType": "road.highway",
-   "elementType": "geometry.stroke",
-   "stylers": [
-   {
-   "color": "#255763"
-   }
-   ]
-   },
-   {
-   "featureType": "road.highway",
-   "elementType": "labels.text.fill",
-   "stylers": [
-   {
-   "color": "#b0d5ce"
-   }
-   ]
-   },
-   {
-   "featureType": "road.highway",
-   "elementType": "labels.text.stroke",
-   "stylers": [
-   {
-   "color": "#023e58"
-   }
-   ]
-   },
-   {
-   "featureType": "transit",
-   "elementType": "labels.text.fill",
-   "stylers": [
-   {
-   "color": "#98a5be"
-   }
-   ]
-   },
-   {
-   "featureType": "transit",
-   "elementType": "labels.text.stroke",
-   "stylers": [
-   {
-   "color": "#1d2c4d"
-   }
-   ]
-   },
-   {
-   "featureType": "transit.line",
-   "elementType": "geometry.fill",
-   "stylers": [
-   {
-   "color": "#283d6a"
-   }
-   ]
-   },
-   {
-   "featureType": "transit.station",
-   "elementType": "geometry",
-   "stylers": [
-   {
-   "color": "#3a4762"
-   }
-   ]
-   },
-   {
-   "featureType": "water",
-   "elementType": "geometry",
-   "stylers": [
-   {
-   "color": "#0e1626"
-   }
-   ]
-   },
-   {
-   "featureType": "water",
-   "elementType": "labels.text.fill",
-   "stylers": [
-   {
-   "color": "#4e6d70"
-   }
-   ]
-   }
-   ]*/
 
   private mapStyles = [
     {
@@ -438,38 +207,45 @@ export class MapPage {
 
   map: GoogleMap;
 
-  private safeZoneColor: string = "#0000FF88";
-  private districtAColor: string = "#FFFFFF88";
-  private districtBColor: string = "#FFF";
-  private teamColor: Array<string> = [];
+  private marketColor: string = "#0000FF88";
+  private neutralColor: string = "#FFFFFF88";
+  private districtCapitalColor:string = "#00FF00";
   private circleColor: string = "#00ffff";
-  private bankColor: string = "#00ff00";
-  private tradePostColor: string = "#ff0000";
+  private bankColor: string = "#ffff00";
+  private tradePostColor: string = "#5200f2";
+  private usedTradePostColor:string="#ff0000";
+  private enemyTreasuryColor: string = "#FF00FF";
   private strokeWidth: number = 5;
   private circleRadius: number = 20;
   private cirlceStrokeWidth: number = 1;
   private geoWatch: any;
-  private mapAreaArray: Array<MapArea> = [];
   private boundsArray: Array<AreaBounds> = [];
   private circles: Array<any> = [];
+  private districts : Array<DistrictWrapper> = [];
+  private tradePosts:Array<TradePostWrapper> = [];
 
   private game: Game;
   private bank: any;
   private myTeam: any;
   private demoShop: any;
-  private market: any;
+  private demoEnemyTreasury: any;
+  private testDistrict:any;
+  private market:any;
+  private teams:Array<any>;
+  private winningTeam:string;
+  private taggable:Array<string>;
+  private currentLocation:GoogleMapsLatLng;
 
   private inMarket: boolean;
-  private inDistrict: boolean;
+  private inDistrictCapital: boolean;
   private inShop: boolean;
   private inBank: boolean;
   private inTreasury: boolean;
+  private inEnemyTreasury:boolean;
+  private taggingAllowed:boolean;
+  private canTag:boolean;
 
   private currentLocationObject: any;
-
-  private token: string;
-  private gameId: string; //todo MA echt refactor dit
-
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               public platform: Platform, public  connectionService: ConnectionService
@@ -477,69 +253,178 @@ export class MapPage {
     platform.ready().then(() => {
       this.loadMap();
     });
-    /*
-     let self = this;
-     */
-
     this.connectionService.addMessageHandler(message => this.handleSocketMessage(message, this));
-
-    /*    this.connectionService.addMessageHandler(function (message) {
-     self.handleSocketMessage(message,self) //todo refactor
-     });*/
     console.log(navParams);
     this.game = navParams.data;
     console.log(this.game);
-
-
+    this.player.reset();
+    this.districts = [];
+    this.teams = [];
+    this.boundsArray = [];
+    this.tradePosts = [];
   }
 
   handleSocketMessage(message, self) {
     let messageWrapper: MessageWrapper = JSON.parse(message.data);
     console.log("message received");
     console.log(messageWrapper);
-    if (messageWrapper.messageType == "BULK_LOCATION") {
-      let bulklocations: any = JSON.parse(messageWrapper.message);
-      console.log("circles");
-      console.log(self.circles);
-      for (let obj of self.circles) {
-        obj.remove();
-      }
-      self.circles = [];
-      for (let obj of bulklocations.locations) {
-        console.log(obj);
-        self.map.addCircle({
-          center: new GoogleMapsLatLng(obj.location.lat, obj.location.lng),
-          radius: 2,
-          strokeColor: "#000000",
-          strokeWidth: 1,
-          fillColor: self.teamColor[1]
-        }).then((data) => {
-          self.circles.push(data);
-        });
-      }
-    } else if (messageWrapper.messageType == "TEAM_NOTIFICATION") {
-      let notification = JSON.parse(messageWrapper.message);
-      console.log(notification);
-      console.log(this.player.team);
-      self.player.team.districts = notification.districts;
-      self.player.team.treasury = notification.treasury;
-      self.player.team.bankAccount = notification.bankAccount;
-    } else if (messageWrapper.messageType == "PLAYER_NOTIFICATION") {
-      let notification = JSON.parse(messageWrapper.message);
-      console.log(notification);
-      self.player.carriedMoney = notification.money;
-      self.player.legalItems = notification.legalItems;
-      self.player.illegalItems = notification.illegalItems;
-      console.log(this.player.team);
-    }
+    let notification:any;
+
+    switch(messageWrapper.messageType){
+      case "BULK_LOCATION":
+        let bulklocations: any = JSON.parse(messageWrapper.message);
+        console.log("circles");
+        console.log(self.circles);
+        for (let obj of self.circles) {
+          obj.remove();
+        }
+        self.circles = [];
+
+        this.taggable = [];
+
+        for (let obj of bulklocations.locations) {
+          console.log(obj);
+
+          let point = new GoogleMapsLatLng(obj.location.lat, obj.location.lng);
+
+          let isOnOurTeam:boolean;
+          for (let player of this.player.team.players) {
+            if(player.id === obj.key){
+              isOnOurTeam = true;
+            }
+          }
+
+          if(!isOnOurTeam){
+            let ownPoint = Geolocation.getCurrentPosition();
+            console.log(ownPoint);
+            let distance = this.getDistance(this.currentLocation,point);
+
+            console.log(distance);
+
+            if(distance < 35){
+              this.taggable.push(obj.key);
+            }
+          }
+
+          self.map.addCircle({
+            center: point ,
+            radius: 2,
+            strokeColor: "#000000",
+            strokeWidth: 1,
+            fillColor: self.player.team.customColor
+          }).then((data) => {
+            self.circles.push(data);
+          });
+        }
+        if(this.taggable.length > 0){
+          this.canTag = true;
+        }
 
 
-    else if (messageWrapper.messageType == "ERROR_EXCEPTION") {
-      console.error(messageWrapper.message);
 
+        break;
+      case "TEAM_NOTIFICATION" :
+        notification = JSON.parse(messageWrapper.message);
+        console.log(notification);
+        console.log(this.player.team);
+        self.player.team.districts = notification.districts;
+        self.player.team.treasury = notification.treasury;
+        self.player.team.bankAccount = notification.bankAccount;
+        self.player.team.tradePosts = notification.tradeposts;
+        console.log(self.player);
+        console.log(this.tradePosts);
+
+        for (let tradePostWrapper of this.tradePosts) {
+          for (let usedTradePostId of self.player.team.tradePosts) {
+            if(tradePostWrapper.tradePost.id === usedTradePostId){
+              tradePostWrapper.used =true;
+              tradePostWrapper.circle.setFillColor(this.usedTradePostColor);
+              tradePostWrapper.circle.setStrokeColor(this.usedTradePostColor);
+            }
+          }
+        }
+        break;
+
+      case "PLAYER_NOTIFICATION":
+        notification = JSON.parse(messageWrapper.message);
+        console.log(notification);
+        self.player.carriedMoney = notification.money;
+        self.player.legalItems =  notification.legalItems;
+        self.player.illegalItems = notification.illegalItems;
+        console.log(this.player.team);
+        break;
+
+      case "DISTRICT_NOTIFICATION":
+        notification = JSON.parse(messageWrapper.message);
+        let color :string;
+        console.log(notification);
+        for (let team of this.game.teams) {
+          if(team.teamName === notification.teamName){
+            color = team.customColor+"88";
+          }
+        }
+        console.log(this.districts);
+        for (let wrapper of this.districts) {
+          if(wrapper.district.id === notification.districtId){
+            wrapper.poly.setFillColor(color);
+            console.log("color changed")
+          }
+        }
+        break;
+
+      case "INFO_NOTIFICATION" :
+        notification = JSON.parse(messageWrapper.message);
+        console.log(notification);
+        if(notification.gameEventType === "TREASURY_ROBBERY"){
+          console.log("You're team got robbed!");
+          let toastString:string;
+          if(notification.by == this.player.team.teamName){
+            toastString= "You're treasury got robbed!";
+          }else{
+            toastString= notification.by + "'s treasury got robbed!";
+          }
+          Toast.show(toastString,'5000','center').subscribe(toast => {
+            console.log(toast);
+          });
+
+        }
+        break;
+
+      case "GAME_STOP":
+        this.stopServices();
+        this.navCtrl.push(GameOverPage,this.winningTeam);
+        break;
+
+      case "WINNING_TEAM":
+        this.winningTeam = messageWrapper.message;
+        break;
+
+      case "TAG_PERMITTED":
+        this.taggingAllowed =true;
+        break;
+
+      case "ERROR_EXCEPTION":
+        console.error(messageWrapper.message);
+        break;
     }
 
   }
+
+  private rad(x) {
+  return x * Math.PI / 180;
+};
+
+  private getDistance(p1:GoogleMapsLatLng, p2:GoogleMapsLatLng) {
+  let R = 6378137; // Earth’s mean radius in meter
+    let dLat = this.rad(p2.lat - p1.lat);
+    let dLong = this.rad(p2.lng - p1.lng);
+    let a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(this.rad(p1.lat)) * Math.cos(this.rad(p2.lat)) *
+    Math.sin(dLong / 2) * Math.sin(dLong / 2);
+    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    let d = R * c;
+  return d; // returns the distance in meter
+};
 
   gotoInventory() {
     this.navCtrl.push(InventoryPage);
@@ -549,10 +434,14 @@ export class MapPage {
 
   }
 
-  exitMap() {
+  private stopServices(){
     console.log("will leave map.");
     this.connectionService.stopConnection();
     this.geoWatch.unsubscribe();
+  }
+
+  exitMap() {
+   this.stopServices();
     this.navCtrl.pop();
     for (let obj of this.circles) {
       obj.remove();
@@ -560,9 +449,10 @@ export class MapPage {
   }
 
 
+
   loadMap() {
 
-    this.geoWatch = Geolocation.watchPosition()/*.timeout(5000, console.log("timed out"))*/.subscribe((data) => {
+    this.geoWatch = Geolocation.watchPosition().subscribe((data) => {
       let position: CameraPosition = {
         target: new GoogleMapsLatLng(data.coords.latitude, data.coords.longitude),
         zoom: 18,
@@ -570,15 +460,17 @@ export class MapPage {
         bearing: 314
       };
       //this.map.moveCamera(position); //todo turn this back on for camera locking
+      let location = new GoogleMapsLatLng(data.coords.latitude,data.coords.longitude);
+      this.currentLocation = location; //todo refactor
 
-      //let isInGroteMarkt =  groteMarktBounds.contains(new GoogleMapsLatLng(data.coords.latitude,data.coords.longitude));
       this.connectionService.sendLocationData(data.coords.latitude, data.coords.longitude);
 
       this.inMarket = false;
       this.inShop = false;
       this.inBank = false;
-      this.inDistrict = false;
+      this.inDistrictCapital = false;
       this.inTreasury = false;
+      this.inEnemyTreasury =false;
 
       for (let areaBound of this.boundsArray) {
         if (areaBound.bounds.contains(new GoogleMapsLatLng(data.coords.latitude, data.coords.longitude))) {
@@ -586,21 +478,30 @@ export class MapPage {
           switch (areaBound.type) {
             case "BANK":
               this.inBank = true;
-              console.log("is in bank");
+              // console.log("is in bank");
               break;
             case "TRADE_POST" :
-              this.inShop = true;
+              this.inShop = !this.currentLocationObject.used; //todo untested?
+              // console.log("is in tradepost " + this.currentLocationObject.used);
               break;
             case "MARKET" :
               this.inMarket = true;
+              // console.log("is in market")
               break;
             case "TREASURY" :
-              console.log("inside a treasury");
+              // console.log("inside a treasury");
               this.inTreasury = true;
+              break;
+            case "ENEMY_TREASURY":
+              // console.log("inside enemy treasury");
+              this.inEnemyTreasury = true;
+              break;
+            case "DISTRICTCAPITAL":
+              // console.log("in capital");
+              this.inDistrictCapital = true;
               break;
           }
         }
-
       }
     });
 
@@ -623,6 +524,53 @@ export class MapPage {
     this.map.on(GoogleMapsEvent.MAP_READY).subscribe(() => {
       console.log('Map is ready!');
 
+      let capitalDistrictId : Array<string> = [];
+
+      for (let team of this.game.teams) {
+        capitalDistrictId.push(team.districts[0].id);
+        console.log("team");
+        console.log(team);
+        let inThisTeam:boolean = false;
+
+        for (let key in team.players) {
+          if (team.players.hasOwnProperty(key)) { //hacking for maps in typescript
+            inThisTeam=true;
+            if (team.players[key].clientID === this.connectionService.clientID) {
+              this.player.team = team;
+              if(this.player.team.tradePosts == null){ //prevent null from happening , this happened sometimes due to unknown reasons
+                this.player.team.tradePosts = [];
+              }
+              let point = team.districts[0].points[team.districts[0].points.length - 1]; //get treasury of capital district
+              let treasureLoc = new GoogleMapsLatLng(point.latitude, point.longitude);
+              this.myTeam = this.player.team;
+              console.log("your team found!")
+              this.boundsArray.push(new AreaBounds(this.player.team, this.circletoBounds(treasureLoc, this.circleRadius), "TREASURY"));
+              this.map.addCircle({
+                center: treasureLoc,
+                radius: this.circleRadius,
+                strokeColor: this.circleColor,
+                strokeWidth: 0,
+                fillColor: this.circleColor
+              })
+            }
+          }
+        }
+        if(!inThisTeam){
+          let point = team.districts[0].points[team.districts[0].points.length -1 ];
+          let treasureLoc = new GoogleMapsLatLng(point.latitude,point.longitude);
+          this.boundsArray.push(new AreaBounds(team,this.circletoBounds(treasureLoc,this.circleRadius),"ENEMY_TREASURY"));
+          this.demoEnemyTreasury = team;
+          console.log("enemytreasury found");
+          this.map.addCircle({
+            center:treasureLoc,
+            radius:this.circleRadius,
+            strokeColor:this.enemyTreasuryColor,
+            strokeWidth:0,
+            fillColor:this.enemyTreasuryColor
+          })
+        }
+      }
+
       for (let district of this.game.districts) {
         let poly = [];
         let treasureLoc: GoogleMapsLatLng;
@@ -633,24 +581,39 @@ export class MapPage {
             treasureLoc = new GoogleMapsLatLng(point.latitude, point.longitude);
           }
         }
+
         this.map.addPolygon({
           'points': poly,
-          'strokeColor': this.districtAColor,
+          'strokeColor': this.neutralColor,
           'strokeWidth': this.strokeWidth,
-          'fillColor': this.districtAColor,
+          'fillColor': this.neutralColor,
           'visible': true
-        }).catch((error) => {
+        }).then(data => {
+          this.districts.push(new DistrictWrapper(district,data));
+          for (let team of this.game.teams) { //todo refactor?
+            for (let teamDistrict of team.districts) {
+              if(teamDistrict.id === district.id){
+                data.setFillColor(team.customColor + "88");
+              }
+            }
+          }
+        })
+          .catch((error) => {
           console.log(error);
         });
-        /*
-         this.boundsArray.push(new AreaBounds(district,this.circletoBounds(treasureLoc,this.circleRadius),"DISTRICTCAPITAL")); //todo pleinen voor veroveren
-         this.map.addCircle({
-         center: treasureLoc,
-         radius: this.circleRadius,
-         strokeColor: this.circleColor,
-         strokeWidth: this.cirlceStrokeWidth,
-         fillColor: this.circleColor
-         });*/
+
+        if(capitalDistrictId.indexOf(district.id) == -1){ //this district is not a capital district.
+          this.testDistrict = district;
+          this.boundsArray.push(new AreaBounds(district,this.circletoBounds(treasureLoc,this.circleRadius),"DISTRICTCAPITAL"));
+          this.map.addCircle({
+            center: treasureLoc,
+            radius: this.circleRadius,
+            strokeColor: this.districtCapitalColor,
+            strokeWidth: this.cirlceStrokeWidth,
+            fillColor: this.districtCapitalColor
+          });
+        }
+
       }
 
       for (let market of this.game.markets) {
@@ -662,9 +625,9 @@ export class MapPage {
         this.boundsArray.push(new AreaBounds(market, new GoogleMapsLatLngBounds(poly), "MARKET"));
         this.map.addPolygon({
           'points': poly,
-          'strokeColor': this.safeZoneColor,
+          'strokeColor': this.marketColor,
           'strokeWidth': this.strokeWidth,
-          'fillColor': this.safeZoneColor,
+          'fillColor': this.marketColor,
           'visible': true
         }).catch((error) => {
           console.log(error);
@@ -675,82 +638,38 @@ export class MapPage {
         let point = new GoogleMapsLatLng(bank.point.latitude, bank.point.longitude);
         this.boundsArray.push(new AreaBounds(bank, this.circletoBounds(point, this.circleRadius), "BANK"));
         this.bank = bank; //todo remove?
-        this.map.addMarker({
-          position: point
-
-        }).then((marker) => {
-          console.log("Marker X")
-          console.log(marker);
-          marker.setIcon(
-            {
-              icon: {
-                url: "resources/BankIcon.png",
-                size: {
-                  width: 200,
-                  height: 200
-                }
-              }
-            }
-          )
-          console.log(marker);
-
+        this.map.addCircle({
+          center: point,
+          radius: this.circleRadius,
+          strokeColor: this.bankColor,
+          strokeWidth: 5,
+          fillColor: this.bankColor
         });
-        // this.map.addCircle({
-        //   center: point,
-        //   radius: this.circleRadius,
-        //   strokeColor: this.bankColor,
-        //   strokeWidth: 5,
-        //   fillColor: this.bankColor
-        // });
       }
 
       for (let tradePost of this.game.tradePosts) {
         let point = new GoogleMapsLatLng(tradePost.point.latitude, tradePost.point.longitude);
-        this.boundsArray.push(new AreaBounds(tradePost, this.circletoBounds(point, this.circleRadius), "TRADE_POST"));
-        this.demoShop = tradePost;
+
         this.map.addCircle({
           center: point,
           radius: this.circleRadius,
           strokeColor: this.tradePostColor,
           strokeWidth: 5,
           fillColor: this.tradePostColor
-        });
+        }).then(data => {
+          let tradePostWrapper = new TradePostWrapper(tradePost,data,false);
+          this.tradePosts.push(tradePostWrapper);
+          this.boundsArray.push(new AreaBounds(tradePostWrapper, this.circletoBounds(point, this.circleRadius), "TRADE_POST"));
+          this.demoShop = tradePostWrapper;
+        })
+        ;
       }
 
-      for (let team of this.game.teams) {
-        console.log("team");
-        console.log(team);
-        this.teamColor.push(team.customColor);
-        for (let key in team.players) {
-          if (team.players.hasOwnProperty(key)) {
-
-            if (team.players[key].clientID === this.connectionService.clientID) {
-              this.player.team = team;
-              let point = team.districts[0].points[team.districts[0].points.length - 1];
-              let treasureLoc = new GoogleMapsLatLng(point.latitude, point.longitude);
-              this.currentLocationObject = this.player.team; //todo remove this is for testing
-              this.myTeam = this.player.team;
-              this.boundsArray.push(new AreaBounds(this.player.team, this.circletoBounds(treasureLoc, this.circleRadius), "TREASURY")); //todo pleinen voor veroveren
-              this.map.addCircle({
-                center: treasureLoc,
-                radius: this.circleRadius,
-                strokeColor: this.circleColor,
-                strokeWidth: 0,
-                fillColor: this.circleColor
-              })
-            }
-          }
-        }
-      }
     });
   }
 
-  restartConnection() {
-    this.connectionService.stopConnection();
-    this.connectionService.setupTCPSocket(this.token, this.gameId);
-  }
 
-  public circletoBounds(center: GoogleMapsLatLng, radius: number) { //todo collapse to no variables
+  public circletoBounds(center: GoogleMapsLatLng, radius: number) {
     let radiusEarth = 6378000;
     let SWlat = center.lat + (-radius / radiusEarth) * (180 / Math.PI);
     let SWlng = center.lng + (-radius / radiusEarth) * (180 / Math.PI) / Math.cos(center.lat * Math.PI / 180);
@@ -763,20 +682,49 @@ export class MapPage {
 
   public gotoBank() {
     this.navCtrl.push(BankPage, this.bank);
+    // this.navCtrl.push(BankPage, this.currentLocationObject);
   }
 
-  public gotoMarket() {
-    this.navCtrl.push(MarketPage, this.market);
+
+  public sellAll(){
+    this.connectionService.sendTradePostAllSale(this.market.id);
   }
 
 
   public collectMoney() {
-    this.navCtrl.push(CollectMoneyPage, this.myTeam); //todo verander naar currentlocation
+    this.navCtrl.push(CollectMoneyPage);
   }
 
-  public gotoShop() {
-    //this.navCtrl.push(ShopPage,this.currentLocationObject);
-    this.navCtrl.push(ShopPage, this.demoShop);
+  public gotoShop() {/*
+    if(!this.demoShop.used) { //todo veranderen naar currenLocationObject
+      //this.navCtrl.push(ShopPage,this.currentLocationObject.tradePost);
+      this.navCtrl.push(ShopPage, this.demoShop.tradePost);
+    }else{
+      console.log("Can't use shop twice!")
+    }*/
+    /*console.log(this.currentLocationObject);
+    if(!this.currentLocationObject.used){
+      this.navCtrl.push(ShopPage,this.currentLocationObject.tradePost);
+    }else{
+      console.log("can't use shop twice!")
+    }*/
+  }
+
+  public captureDistrict(){
+    // this.connectionService.sendDistrictCaptured(this.currentLocationObject.id); //todo veranderen naar currentlocation
+    this.connectionService.sendDistrictCaptured(this.testDistrict.id);
+  }
+
+  public robEnemyTreasury(){
+    this.connectionService.sendTreasuryRobbery(this.currentLocationObject.districts[0].id);
+    // console.log(this.demoEnemyTreasury);
+    // this.connectionService.sendTreasuryRobbery(this.demoEnemyTreasury.districts[0].id);
+  }
+
+  public tagPlayers(){
+    console.log("tagging people!");
+    console.log(this.taggable);
+    this.connectionService.sendTagPlayers(this.taggable);
   }
 
 

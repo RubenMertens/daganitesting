@@ -16,7 +16,6 @@ import {LobbyPage} from "../lobby/lobby";
 })
 export class ServerListPage {
 
-  //todo refeshknop!
   private listedGames:any = [];
 
   constructor(public navCtrl: NavController, public navParams: NavParams ,
@@ -71,7 +70,7 @@ export class ServerListPage {
             console.log("Ok clicked");
             this.connectionService.registerToGame(id, this.navParams.data.playerName, data.Password).subscribe(data => {
               console.log(data);
-                this.navCtrl.push(LobbyPage,[data,id]); //todo lobby page
+                this.navCtrl.push(LobbyPage,data);
             }, error => {
               let errorprompt = this.alertCtrl.create();
               errorprompt.setTitle("Something went wrong!");

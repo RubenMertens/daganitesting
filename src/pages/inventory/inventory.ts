@@ -29,12 +29,32 @@ export class InventoryPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad InventoryPage');
-    this.player.legalItems.forEach((value,key) => {
-      this.legalItems.push(value);
-    });
-    this.player.illegalItems.forEach((value,key) => {
-      this.illegalitems.push(value);
-    })
+    console.log(this.player);
+    for(let key in this.player.legalItems){
+      console.log(key);
+      if(this.player.legalItems.hasOwnProperty(key)){
+        this.legalItems.push(new Item(key,this.player.legalItems[key]));
+        console.log("pushed stuff");
+      }
+    }
+    for(let key in this.player.illegalItems){
+      if(this.player.illegalItems.hasOwnProperty(key)){
+        this.illegalitems.push(new Item(key,this.player.illegalItems[key]));
+      }
+    }
+
+    console.log(this.legalItems)
+
   }
 
+
+
+}
+
+class Item{
+  constructor(
+    public name:string,public amount:number
+  ){
+
+  }
 }

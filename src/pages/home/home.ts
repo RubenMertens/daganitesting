@@ -19,8 +19,8 @@ export class HomePage {
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams , public platform : Platform , public connectionService : ConnectionService) {
-  //connectionService.setupTCPSocket();
     console.log(Device.uuid);
+
   }
 
 
@@ -28,17 +28,7 @@ export class HomePage {
     this.navCtrl.push(ServerListPage,{"playerName":this.playerName});
   }
 
-  goToMap(){
-    this.navCtrl.push(MapPage);
-  }
 
-  goToShop(){
-    this.navCtrl.push(ShopPage);
-  }
-
-  gotoBank(){
-    this.navCtrl.push(BankPage);
-  }
 
 
 }

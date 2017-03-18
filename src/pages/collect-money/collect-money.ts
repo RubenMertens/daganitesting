@@ -22,7 +22,7 @@ export class CollectMoneyPage {
   private team:any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public player:Player, public connectionService:ConnectionService) {
-    this.team = navParams.data;
+    this.team = this.player.team;
     this.value = this.team.treasury;
     console.log(this.team);
 

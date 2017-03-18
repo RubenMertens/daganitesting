@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import {Player} from "../../providers/Player";
+import {HomePage} from "../home/home";
 
 /*
   Generated class for the GameOver page.
@@ -13,10 +15,25 @@ import { NavController, NavParams } from 'ionic-angular';
 })
 export class GameOverPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {}
+  private winningTeam:string;
+  private hasWon:boolean;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, public player:Player) {
+    this.winningTeam = this.navParams.data;
+    if(this.player.team.teamName === this.winningTeam){
+      this.hasWon= true;
+    }else{
+      this.hasWon=false;
+    }
+  }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad GameOverPage');
+  }
+
+  gotoHomePage(){
+    this.player.reset();
+    this.navCtrl.popToRoot()
   }
 
 }
