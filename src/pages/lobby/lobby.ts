@@ -39,8 +39,10 @@ export class LobbyPage {
       console.log("in subscribe of setup");
       console.log(data);
       loading.dismiss();
+      this.connectionService.sendHeartBeat(); //do one to init the connection
+      this.heartBeatTimer = setInterval(() => this.connectionService.sendHeartBeat(),10000);
     });
-    this.heartBeatTimer = setInterval(() => this.connectionService.sendHeartBeat(),10000);
+
     this.connectionService.addMessageHandler(message => this.handleSocketMessage(message,this));
   }
 
@@ -78,7 +80,10 @@ export class LobbyPage {
 
   leavePage(){
     console.log("player is leaving game");
-    this.connectionService.unregisterFromGame();
+    this.connectionService.unregisterFromGame().subscribe(data => {
+      console.log(data);
+      console.log("Hey you actually got something from backend");
+    });
     console.log(this.heartBeatTimer);
     clearInterval(this.heartBeatTimer);
     this.navCtrl.pop();

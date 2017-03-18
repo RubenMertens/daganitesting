@@ -93,13 +93,15 @@ export class ConnectionService {
     let url : string = this.baseAdress+"games/" + gameId + "/register";
     this.gameId = gameId;
     console.log("registering cliend id : " + this.clientID + "to " + gameId);
+    console.log(url);
     return this.http.post(url,{clientID:this.clientID,name: playerName,password:password}).map(this.extractData);
   }
 
   unregisterFromGame(){
     let url:string = this.baseAdress+"games/" + this.gameId + "/unregister/" + this.clientID;
     console.log("unregistering "  + this.clientID+ " from game " + this.gameId);
-    return this.http.post(url,{}).map(this.extractData);
+    console.log(url);
+    return this.http.post(url,{});
   }
 
   sendLocationData(lat:number, lon:number){
@@ -190,6 +192,7 @@ export class ConnectionService {
 
 
   private extractData(res : Response){
+    console.log(res);
     let body = res.json();
     console.log(res.status);
     console.log("body : ");
