@@ -4,5 +4,9 @@
 
 
 export class GameEventMessage{
-  constructor(public type:string,public players:Array<string>,public moneyTransferred:number,public items:any, public tradePostId:string){}
+  constructor(public type:string,
+              public players:Array<string>,
+              public moneyTransferred:number,
+              public items:any,
+              public tradePostId:string){}
 }

@@ -2,7 +2,7 @@ import {Component, ElementRef, ViewChild} from '@angular/core';
 import {NavController, NavParams, Platform, AlertController} from 'ionic-angular';
 import {
   GoogleMap, GoogleMapsLatLng, GoogleMapsEvent, Geolocation, CameraPosition, GoogleMapsPolygon, GoogleMapsLatLngBounds,
-  GoogleMapsGroundOverlay, GoogleMapsCircle, Toast
+  GoogleMapsGroundOverlay, GoogleMapsCircle, Toast, GoogleMapsMarkerOptions, GoogleMapsMarkerIcon
 } from "ionic-native";
 import {ConnectionService} from "../../providers/connection-service";
 import {InventoryPage} from "../inventory/inventory";
@@ -20,6 +20,7 @@ import {MarketPage} from "../market/market";
 import {DistrictWrapper} from "../../domain/DistrictWrapper";
 import {GameOverPage} from "../game-over/game-over";
 import {TradePostWrapper} from "../../domain/TradePostWrapper";
+import {CapitalWrapper} from "../../domain/CapitalWrapper";
 
 /*
  Generated class for the Map page.
@@ -215,6 +216,7 @@ export class MapPage {
   private tradePostColor: string = "#5200f2";
   private usedTradePostColor:string="#ff0000";
   private enemyTreasuryColor: string = "#FF00FF";
+  private cantUseColor:string="#888888";
   private strokeWidth: number = 5;
   private circleRadius: number = 20;
   private cirlceStrokeWidth: number = 1;
@@ -223,6 +225,8 @@ export class MapPage {
   private circles: Array<any> = [];
   private districts : Array<DistrictWrapper> = [];
   private tradePosts:Array<TradePostWrapper> = [];
+  private districtCapitals:Array<CapitalWrapper> = [];
+  private taggedByTeams:Array<string>= [];
 
   private game: Game;
   private bank: any;
@@ -244,6 +248,7 @@ export class MapPage {
   private inEnemyTreasury:boolean;
   private taggingAllowed:boolean;
   private canTag:boolean;
+  private taggableTargets:boolean;
 
   private currentLocationObject: any;
 
@@ -262,6 +267,7 @@ export class MapPage {
     this.teams = [];
     this.boundsArray = [];
     this.tradePosts = [];
+    this.taggedByTeams = [];
   }
 
   handleSocketMessage(message, self) {
@@ -273,37 +279,25 @@ export class MapPage {
     switch(messageWrapper.messageType){
       case "BULK_LOCATION":
         let bulklocations: any = JSON.parse(messageWrapper.message);
-        console.log("circles");
-        console.log(self.circles);
         for (let obj of self.circles) {
           obj.remove();
         }
         self.circles = [];
-
         this.taggable = [];
-
         for (let obj of bulklocations.locations) {
           console.log(obj);
 
           let point = new GoogleMapsLatLng(obj.location.lat, obj.location.lng);
 
           let isOnOurTeam:boolean;
-          for (let player of this.player.team.players) {
+          for (let player of this.player.team.players) { //todo needed?
             if(player.id === obj.key){
               isOnOurTeam = true;
             }
           }
 
-          if(!isOnOurTeam){
-            let ownPoint = Geolocation.getCurrentPosition();
-            console.log(ownPoint);
-            let distance = this.getDistance(this.currentLocation,point);
-
-            console.log(distance);
-
-            if(distance < 35){
-              this.taggable.push(obj.key);
-            }
+          if(!isOnOurTeam && obj.taggable == true){
+            this.taggable.push(obj.key);
           }
 
           self.map.addCircle({
@@ -318,9 +312,9 @@ export class MapPage {
         }
         if(this.taggable.length > 0){
           this.canTag = true;
-        }
-
-
+        }else{
+          this.canTag= false;
+      }
 
         break;
       case "TEAM_NOTIFICATION" :
@@ -354,6 +348,32 @@ export class MapPage {
         console.log(this.player.team);
         break;
 
+      case "TAG_NOTIFICATION":
+        notification = JSON.parse(messageWrapper.message);
+        console.log(notification);
+
+        if(notification.taggedTeamName != this.player.team.teamName){
+          this.taggedByTeams.push(notification.taggedTeamName);
+        }
+
+        for (let team of this.game.teams) {
+          if(this.taggedByTeams.indexOf(team.teamName) !=-1){
+            for (let district of team.districts) {
+              for (let capital of this.districtCapitals) {
+                if(district.id == capital.district.id){
+                  capital.canCapture = false;
+              }
+            }
+          }
+        }
+        }
+        console.log(this.taggedByTeams);
+        console.log(this.districtCapitals);
+
+        Toast.show("You got tagged by " + notification.taggedBy,"3000","center");
+
+        break;
+
       case "DISTRICT_NOTIFICATION":
         notification = JSON.parse(messageWrapper.message);
         let color :string;
@@ -361,13 +381,23 @@ export class MapPage {
         for (let team of this.game.teams) {
           if(team.teamName === notification.teamName){
             color = team.customColor+"88";
+            team.districts.push({id:notification.districtId});
           }
         }
-        console.log(this.districts);
+
         for (let wrapper of this.districts) {
           if(wrapper.district.id === notification.districtId){
             wrapper.poly.setFillColor(color);
             console.log("color changed")
+          }
+          for (let team of this.game.teams) {
+            if(this.taggedByTeams.indexOf(team.teamName) != -1){
+              for (let district of team.districts) {
+                if(district.id == wrapper.district.id){
+                  wrapper.poly.setFillColor(this.cantUseColor);
+                }
+              }
+            }
           }
         }
         break;
@@ -452,7 +482,7 @@ export class MapPage {
 
   loadMap() {
 
-    this.geoWatch = Geolocation.watchPosition().subscribe((data) => {
+    this.geoWatch = Geolocation.watchPosition({enableHighAccuracy:true,timeout: 5*1000,maximumAge:0}).subscribe((data) => {
       let position: CameraPosition = {
         target: new GoogleMapsLatLng(data.coords.latitude, data.coords.longitude),
         zoom: 18,
@@ -460,8 +490,7 @@ export class MapPage {
         bearing: 314
       };
       //this.map.moveCamera(position); //todo turn this back on for camera locking
-      let location = new GoogleMapsLatLng(data.coords.latitude,data.coords.longitude);
-      this.currentLocation = location; //todo refactor
+      this.currentLocation = new GoogleMapsLatLng(data.coords.latitude, data.coords.longitude); //todo refactor
 
       this.connectionService.sendLocationData(data.coords.latitude, data.coords.longitude);
 
@@ -494,11 +523,11 @@ export class MapPage {
               break;
             case "ENEMY_TREASURY":
               // console.log("inside enemy treasury");
-              this.inEnemyTreasury = true;
+              this.inEnemyTreasury = this.taggedByTeams.indexOf(this.currentLocationObject.teamName) == -1;
               break;
             case "DISTRICTCAPITAL":
               // console.log("in capital");
-              this.inDistrictCapital = true;
+              this.inDistrictCapital = this.currentLocationObject.canCapture;
               break;
           }
         }
@@ -589,7 +618,7 @@ export class MapPage {
           'fillColor': this.neutralColor,
           'visible': true
         }).then(data => {
-          this.districts.push(new DistrictWrapper(district,data));
+          this.districts.push(new DistrictWrapper(district,data,true));
           for (let team of this.game.teams) { //todo refactor?
             for (let teamDistrict of team.districts) {
               if(teamDistrict.id === district.id){
@@ -603,8 +632,10 @@ export class MapPage {
         });
 
         if(capitalDistrictId.indexOf(district.id) == -1){ //this district is not a capital district.
-          this.testDistrict = district;
-          this.boundsArray.push(new AreaBounds(district,this.circletoBounds(treasureLoc,this.circleRadius),"DISTRICTCAPITAL"));
+          let wrapper = new CapitalWrapper(district,true);
+          this.testDistrict = wrapper;
+          this.boundsArray.push(new AreaBounds(wrapper,this.circletoBounds(treasureLoc,this.circleRadius),"DISTRICTCAPITAL"));
+          this.districtCapitals.push(wrapper);
           this.map.addCircle({
             center: treasureLoc,
             radius: this.circleRadius,
@@ -638,13 +669,27 @@ export class MapPage {
         let point = new GoogleMapsLatLng(bank.point.latitude, bank.point.longitude);
         this.boundsArray.push(new AreaBounds(bank, this.circletoBounds(point, this.circleRadius), "BANK"));
         this.bank = bank; //todo remove?
-        this.map.addCircle({
+        /*this.map.addCircle({
           center: point,
           radius: this.circleRadius,
           strokeColor: this.bankColor,
           strokeWidth: 5,
           fillColor: this.bankColor
-        });
+        });*/
+
+        let markerIcon: GoogleMapsMarkerIcon = {
+          url:"../../../resources/BankMarker.png",
+          size:{
+            width: 372,
+            height:594
+          }
+        };
+        let markerOptions : GoogleMapsMarkerOptions = {
+          position: point,
+          title: "Test" ,
+          icon:markerIcon
+        };
+        this.map.addMarker(markerOptions)
       }
 
       for (let tradePost of this.game.tradePosts) {
@@ -695,13 +740,13 @@ export class MapPage {
     this.navCtrl.push(CollectMoneyPage);
   }
 
-  public gotoShop() {/*
+  public gotoShop() {
     if(!this.demoShop.used) { //todo veranderen naar currenLocationObject
       //this.navCtrl.push(ShopPage,this.currentLocationObject.tradePost);
       this.navCtrl.push(ShopPage, this.demoShop.tradePost);
     }else{
       console.log("Can't use shop twice!")
-    }*/
+    }
     /*console.log(this.currentLocationObject);
     if(!this.currentLocationObject.used){
       this.navCtrl.push(ShopPage,this.currentLocationObject.tradePost);
@@ -712,19 +757,19 @@ export class MapPage {
 
   public captureDistrict(){
     // this.connectionService.sendDistrictCaptured(this.currentLocationObject.id); //todo veranderen naar currentlocation
-    this.connectionService.sendDistrictCaptured(this.testDistrict.id);
+    this.connectionService.sendDistrictCaptured(this.testDistrict.district.id);
   }
 
   public robEnemyTreasury(){
-    this.connectionService.sendTreasuryRobbery(this.currentLocationObject.districts[0].id);
-    // console.log(this.demoEnemyTreasury);
-    // this.connectionService.sendTreasuryRobbery(this.demoEnemyTreasury.districts[0].id);
+    // this.connectionService.sendTreasuryRobbery(this.currentLocationObject.districts[0].id);
+    console.log(this.demoEnemyTreasury);
+    this.connectionService.sendTreasuryRobbery(this.demoEnemyTreasury.districts[0].id);
   }
 
   public tagPlayers(){
     console.log("tagging people!");
     console.log(this.taggable);
-    this.connectionService.sendTagPlayers(this.taggable);
+    this.connectionService.sendTagPlayers(this.taggable,this.player.team.districts[0].id);
   }
 
 

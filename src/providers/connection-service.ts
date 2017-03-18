@@ -23,7 +23,9 @@ export class ConnectionService {
 
   constructor(public http: Http) {
     this.clientID = Device.uuid;
-    //this.clientID = Math.floor(Math.random()*1000000) +1 +"";
+    if(this.clientID == null){
+      this.clientID = Math.floor(Math.random()*1000000) +1 +"";
+    }
   }
 
   sendEventMessage(object:any){
@@ -56,8 +58,8 @@ export class ConnectionService {
     return object;
   }
 
-  sendTagPlayers(targets:Array<string>){
-    let message = new GameEventMessage("PLAYER_TAGGED",targets,0,{},"");
+  sendTagPlayers(targets:Array<string> , districtId:string){
+    let message = new GameEventMessage("PLAYER_TAGGED",targets,0,{},districtId);
     this.sendEventMessage(message);
   }
 
@@ -104,6 +106,7 @@ export class ConnectionService {
     if(this.ws != null && this.ws.readyState === this.ws.OPEN ){
       let message: LocationMessage = new LocationMessage(lat, lon);
       let messageString = JSON.stringify(message);
+      //console.log(message);
       let messageWrapper: MessageWrapper = new MessageWrapper("LOCATION",this.token, messageString , this.gameId,this.clientID +"");
       let messageWrapperString = JSON.stringify(messageWrapper);
       this.ws.send(messageWrapperString);

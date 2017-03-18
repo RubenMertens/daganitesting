@@ -8,6 +8,7 @@ export class DistrictWrapper{
 
   constructor(
     public district:any,
-    public poly:GoogleMapsPolygon
+    public poly:GoogleMapsPolygon,
+    public canCapture:boolean
   ){}
 }
