@@ -5,22 +5,24 @@
   Ionic pages and navigation.
 -->
 
+
+
 <ion-content>
 
   <div #map id="map">
 
-    <ion-title text-center>{{player.carriedMoney}}</ion-title>
-    <button ion-button (click)="exitMap()">EXIT</button>
+    <ion-title text-center>Jouw geld : <ion-icon name="logo-usd"></ion-icon>{{player.carriedMoney}}</ion-title>
+    <button ion-button large (click)="exitMap()">EXIT</button>
 
     <button ion-button icon-only large (click)="gotoInventory()">
       <ion-icon name="ios-basket" ></ion-icon>
     </button>
 
-    <button *ngIf="inShop" ion-button icon-only large (click)="gotoShop()"> <!--todo if in shop-->
+    <button *ngIf="true" ion-button icon-only large (click)="gotoShop()"> <!--todo if in shop-->
       <ion-icon name="ios-cart-outline"></ion-icon>
     </button>
 
-    <button *ngIf="inBank" ion-button large  (click)="gotoBank()"> <!--todo if in bank-->
+    <button *ngIf="true" ion-button large  (click)="gotoBank()"> <!--todo if in bank-->
       <img src="../../../resources/BankIcon.png">
     </button>
 
@@ -28,10 +30,10 @@
       <button ion-fab (click)="collectMoney()"><ion-icon name="ios-cash"></ion-icon></button>
     </ion-fab>
 
-      <button ion-button large *ngIf="inMarket" (click)="sellAll()"><ion-icon name="logo-usd"></ion-icon></button>
-    <button ion-button large *ngIf="inDistrictCapital" (click)="captureDistrict()"><ion-icon name="md-flag"></ion-icon> </button>
+      <button ion-button large *ngIf="true" (click)="sellAll()"><ion-icon name="logo-usd"></ion-icon></button>
+    <button ion-button large *ngIf="true" (click)="captureDistrict()"><ion-icon name="md-flag"></ion-icon> </button>
 
-    <button ion-button large *ngIf="inEnemyTreasury" (click)="robEnemyTreasury()"><ion-icon name="md-hand"></ion-icon></button>
+    <button ion-button large *ngIf="true" (click)="robEnemyTreasury()"><ion-icon name="md-hand"></ion-icon></button>
 
     <button ion-button large *ngIf="taggingAllowed && canTag" (click)="tagPlayers()"><ion-icon name="md-color-wand"></ion-icon></button>
 

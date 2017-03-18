@@ -760,38 +760,38 @@ export class MapPage {
   }
 
   public gotoShop() {
-/*    if(!this.demoShop.used) { //todo veranderen naar currenLocationObject
+    if(!this.demoShop.used) { //todo veranderen naar currenLocationObject
       //this.navCtrl.push(ShopPage,this.currentLocationObject.tradePost);
       this.navCtrl.push(ShopPage, this.demoShop.tradePost);
     }else{
       console.log("Can't use shop twice!")
-    }*/
-    console.log(this.currentLocationObject);
+    }
+/*    console.log(this.currentLocationObject);
     if(!this.currentLocationObject.used){
       this.navCtrl.push(ShopPage,this.currentLocationObject.tradePost);
     }else{
       console.log("can't use shop twice!")
-    }
+    }*/
   }
 
   public captureDistrict(){
     console.log(this.currentLocationObject);
-    this.connectionService.sendDistrictCaptured(this.currentLocationObject.district.id); //todo veranderen naar currentlocation
-    // this.connectionService.sendDistrictCaptured(this.testDistrict.district.id);
+    // this.connectionService.sendDistrictCaptured(this.currentLocationObject.district.id); //todo veranderen naar currentlocation
+    this.connectionService.sendDistrictCaptured(this.testDistrict.district.id);
   }
 
   public robEnemyTreasury(){
     console.log(this.currentLocationObject);
-    this.connectionService.sendTreasuryRobbery(this.currentLocationObject.districts[0].id);
-    // console.log(this.demoEnemyTreasury);
-    // this.connectionService.sendTreasuryRobbery(this.demoEnemyTreasury.districts[0].id);
+    // this.connectionService.sendTreasuryRobbery(this.currentLocationObject.districts[0].id);
+    console.log(this.demoEnemyTreasury);
+    this.connectionService.sendTreasuryRobbery(this.demoEnemyTreasury.districts[0].id);
   }
 
   public tagPlayers(){
     console.log("tagging people!");
     console.log(this.taggable);
-    // this.connectionService.sendTagPlayers(this.taggable,this.player.team.districts[0].id);
-    this.connectionService.sendTagPlayers(this.taggable,this.currentDistrict.id);
+    this.connectionService.sendTagPlayers(this.taggable,this.player.team.districts[0].id);
+    // this.connectionService.sendTagPlayers(this.taggable,this.currentDistrict.id);
   }
 
 

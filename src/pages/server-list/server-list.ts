@@ -63,16 +63,16 @@ export class ServerListPage {
   entergame(id:string){
     console.log("tried to enter game: " + id);
     let prompt = this.alertCtrl.create({
-      title: "Type in password",
+      title: "Geef het passwoord in.",
       inputs : [
         {
         name: "Password",
-        placeholder: "Password"
+        placeholder: "Passwoord"
       }
       ],
       buttons: [
         {
-          text: 'cancel',
+          text: 'Terug',
           handler: data => {
             console.log("cancel clicked")
           }

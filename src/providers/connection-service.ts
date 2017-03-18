@@ -18,8 +18,8 @@ export class ConnectionService {
 
   //private baseAdress :string = "https://stniklaas-stadsspel.herokuapp.com/api/";
   //private webSocketUrl:string = "ws://stniklaas-stadsspel.herokuapp.com/user";
-  private webSocketUrl:string = "wss://10.134.229.38:8090/user";
-  private baseAdress:string = "https://10.134.229.38:8090/api/";
+  private webSocketUrl:string = "ws://10.134.229.38:8090/user";
+  private baseAdress:string = "http://10.134.229.38:8090/api/";
 
   constructor(public http: Http) {
     this.clientID = Device.uuid;

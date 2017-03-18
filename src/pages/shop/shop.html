@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar color="primary">
-    <ion-title>shop</ion-title>
+    <ion-title>Handelspost</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -25,10 +25,10 @@
 
     <ion-segment [(ngModel)]="options">
       <ion-segment-button value="legal">
-        Legal
+        Legaal
       </ion-segment-button>
       <ion-segment-button  value="illegal">
-        Illegal
+        Illegaal
       </ion-segment-button>
     </ion-segment>
 
@@ -41,15 +41,15 @@
           </ion-card-header>
 
           <ion-card-content>
-            Buy {{item.name}} from {{shop.name}} for {{item.legalPurchase}}$ each?
+            Koop {{item.name}} van {{shop.name}} voor <ion-icon name="logo-usd"></ion-icon>{{item.legalPurchase}} per stuk?
           </ion-card-content>
 
           <ion-item>
-            <ion-label floating>Amount</ion-label>
+            <ion-label floating>Aantal</ion-label>
             <ion-input type="number" [(ngModel)]="legalAmount" name="amount" min="0"></ion-input>
           </ion-item>
 
-              <button ion-button full (click)="handleLegalSell(item)" >Buy (legal)</button>
+              <button ion-button full (click)="handleLegalSell(item)" >Koop (legaal)</button>
 
         </ion-card>
 
@@ -63,15 +63,15 @@
           </ion-card-header>
 
           <ion-card-content>
-            Buy {{item.name}} illegally from {{shop.name}} for {{item.illegalPurchase}}$ each?
+            Koop {{item.name}} illegaal van {{shop.name}} voor <ion-icon name="logo-usd"></ion-icon>{{item.illegalPurchase}} per stuk?
           </ion-card-content>
 
           <ion-item>
-            <ion-label floating>Amount</ion-label>
+            <ion-label floating>Aantal</ion-label>
             <ion-input type="number" [(ngModel)]="illegalAmount" name="amount" min="0"></ion-input>
           </ion-item>
 
-          <button ion-button full (click)="handleIllegalSell(item)" >Buy (illegal)</button>
+          <button ion-button full (click)="handleIllegalSell(item)" >Koop (illegaal)</button>
 
         </ion-card>
       </div>
@@ -82,7 +82,7 @@
  </ion-grid>
 
   <ion-footer>
-    <button ion-button full (click)="cancel()">Cancel</button>
+    <button ion-button full (click)="cancel()">Terug</button>
   </ion-footer>
 
 </ion-content>
