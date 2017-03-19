@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import {ListItem} from "../../domain/ListItem";
 import {Player} from "../../providers/Player";
-import {PlayerItem} from "../../domain/PlayerItem";
 
 /*
   Generated class for the Inventory page.

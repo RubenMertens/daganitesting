@@ -1,10 +1,7 @@
 import { Component } from '@angular/core';
 import {NavController, NavParams, AlertController} from 'ionic-angular';
-import {ListItem} from "../../domain/ListItem";
 import {Player} from "../../providers/Player";
-import {ConfirmsalePage} from "../confirmsale/confirmsale";
 import {ConnectionService} from "../../providers/connection-service";
-import {PlayerItem} from "../../domain/PlayerItem";
 
 /*
   Generated class for the Shop page.

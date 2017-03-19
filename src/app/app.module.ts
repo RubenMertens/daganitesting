@@ -23,11 +23,9 @@ import {GameOverPage} from "../pages/game-over/game-over";
     MapPage,
     InventoryPage,
     ShopPage,
-    ConfirmsalePage,
     LobbyPage,
     BankPage,
     CollectMoneyPage,
-    MarketPage,
     GameOverPage,
 
   ],
@@ -42,11 +40,9 @@ import {GameOverPage} from "../pages/game-over/game-over";
     MapPage,
     InventoryPage,
     ShopPage,
-    ConfirmsalePage,
     LobbyPage,
     BankPage,
     CollectMoneyPage,
-    MarketPage,
     GameOverPage,
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},Player,ConnectionService]

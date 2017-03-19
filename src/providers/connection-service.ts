@@ -4,7 +4,6 @@ import {Observable} from "rxjs";
 import 'rxjs/Rx';
 import {LocationMessage} from "../domain/LocationMessage";
 import {MessageWrapper} from "../domain/MessageWrapper";
-import {assetUrl} from "@angular/compiler/src/identifiers";
 import {Device} from "ionic-native";
 import {GameEventMessage} from "../domain/GameEventMessage";
 
@@ -18,8 +17,8 @@ export class ConnectionService {
 
   //private baseAdress :string = "https://stniklaas-stadsspel.herokuapp.com/api/";
   //private webSocketUrl:string = "ws://stniklaas-stadsspel.herokuapp.com/user";
-  private webSocketUrl:string = "ws://10.134.229.40:8090/user";
-  private baseAdress:string = "http://10.134.229.40:8090/api/";
+  private webSocketUrl:string = "ws://10.134.229.38:8090/user";
+  private baseAdress:string = "http://10.134.229.38:8090/api/";
 
   constructor(public http: Http) {
     this.clientID = Device.uuid;

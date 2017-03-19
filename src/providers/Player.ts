@@ -1,7 +1,4 @@
 import {Injectable} from "@angular/core";
-import {ListItem} from "../domain/ListItem";
-import {PlayerItem} from "../domain/PlayerItem";
-import {sample} from "rxjs/operator/sample";
 /**
  * Created by Ravanys on 05/03/2017.
  */

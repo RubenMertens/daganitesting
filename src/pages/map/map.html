@@ -20,29 +20,29 @@
       <ion-icon name="ios-basket" ></ion-icon>
     </button>
 
-    <button *ngIf="true" ion-button icon-only large (click)="gotoShop()"> <!--todo if in shop-->
+    <button *ngIf="inShop" ion-button icon-only large (click)="gotoShop()">
       <!--<ion-icon name="ios-cart-outline"></ion-icon>-->
       <img src="img/TradepostIcon.png"/>
     </button>
 
-    <button *ngIf="true" ion-button large (click)="gotoBank()"> <!--todo if in bank-->
+    <button *ngIf="inBank" ion-button large (click)="gotoBank()">
       <img src="img/BankIcon.png"/>
     </button>
 
-    <ion-fab bottom right *ngIf="true"> <!--todo if in treasury!-->
+    <ion-fab bottom right *ngIf="inTreasury">
       <button ion-fab (click)="collectMoney()">
         <ion-icon name="ios-cash"></ion-icon>
       </button>
     </ion-fab>
 
-    <button ion-button large *ngIf="true" (click)="sellAll()">
+    <button ion-button large *ngIf="inMarket" (click)="sellAll()">
       <ion-icon name="logo-usd"></ion-icon>
     </button>
-    <button ion-button large *ngIf="true" (click)="captureDistrict()">
+    <button ion-button large *ngIf="inDistrictCapital" (click)="captureDistrict()">
       <ion-icon name="md-flag"></ion-icon>
     </button>
 
-    <button ion-button large *ngIf="true" (click)="robEnemyTreasury()">
+    <button ion-button large *ngIf="inEnemyTreasury" (click)="robEnemyTreasury()">
       <ion-icon name="md-hand"></ion-icon>
     </button>
 

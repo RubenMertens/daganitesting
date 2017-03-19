@@ -19,7 +19,7 @@ export class HomePage {
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams ,
-              public platform : Platform , public connectionService : ConnectionService
+              public platform : Platform
               ,public alertCtrl:AlertController
   ) {
     console.log(Device.uuid);

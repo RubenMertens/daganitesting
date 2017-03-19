@@ -1,4 +1,4 @@
-import {GoogleMapsCircle} from "ionic-native";
+import {GoogleMapsCircle, GoogleMapsMarker} from "ionic-native";
 /**
  * Created by Ravanys on 17/03/2017.
  */
@@ -7,7 +7,7 @@ import {GoogleMapsCircle} from "ionic-native";
 export class TradePostWrapper{
   constructor(
     public tradePost:any,
-    public circle:GoogleMapsCircle,
+    public marker:GoogleMapsMarker,
     public used:boolean
   ){}
 }
