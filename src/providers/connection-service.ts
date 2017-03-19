@@ -141,9 +141,6 @@ export class ConnectionService {
     this.ws = new WebSocket(this.webSocketUrl);
 
 
-
-
-
     this.ws.onmessage = function (event) {
       console.log("received : " + event.data)
 

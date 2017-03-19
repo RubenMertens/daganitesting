@@ -41,9 +41,13 @@ export class LobbyPage {
       loading.dismiss();
       this.connectionService.sendHeartBeat(); //do one to init the connection
       this.heartBeatTimer = setInterval(() => this.connectionService.sendHeartBeat(),10000);
+      this.connectionService.addMessageHandler(message => {
+        this.handleSocketMessage(message,this);
+        console.log('handler changed');
+      });
+      console.log(this.connectionService.ws);
     });
 
-    this.connectionService.addMessageHandler(message => this.handleSocketMessage(message,this));
   }
 
   handleSocketMessage(message,self){
@@ -51,8 +55,8 @@ export class LobbyPage {
     let messageWrapper:MessageWrapper = JSON.parse(message.data);
     console.log(messageWrapper);
     if(messageWrapper.messageType == "GAME_START"){
-      clearInterval(this.heartBeatTimer);
-      self.navCtrl.push(MapPage,this.game);
+      clearInterval(self.heartBeatTimer);
+      self.navCtrl.push(MapPage,self.game);
 
       }
   }
