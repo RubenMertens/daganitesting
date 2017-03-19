@@ -490,7 +490,7 @@ export class MapPage {
         tilt: 67,
         bearing: data.coords.heading
       };
-      // this.map.moveCamera(position);
+       this.map.moveCamera(position);
       this.currentLocation = new GoogleMapsLatLng(data.coords.latitude, data.coords.longitude);
 
       this.connectionService.sendLocationData(data.coords.latitude, data.coords.longitude);

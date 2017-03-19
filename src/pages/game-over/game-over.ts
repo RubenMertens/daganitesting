@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import {Player} from "../../providers/Player";
-import {HomePage} from "../home/home";
-
 /*
   Generated class for the GameOver page.
 

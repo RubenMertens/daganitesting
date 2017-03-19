@@ -15,8 +15,8 @@ export class ConnectionService {
   public clientID:string;
   public gameId:string;
 
-  //private baseAdress :string = "https://stniklaas-stadsspel.herokuapp.com/api/";
-  //private webSocketUrl:string = "ws://stniklaas-stadsspel.herokuapp.com/user";
+  // private baseAdress :string = "https://stniklaas-stadsspel.herokuapp.com/api/";
+  // private webSocketUrl:string = "ws://stniklaas-stadsspel.herokuapp.com/user";
   private webSocketUrl:string = "ws://10.134.229.38:8090/user";
   private baseAdress:string = "http://10.134.229.38:8090/api/";
 

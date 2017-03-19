@@ -1,7 +1,6 @@
-import {Component, Input} from '@angular/core';
+import {Component} from '@angular/core';
 import {NavController, NavParams, AlertController, LoadingController} from 'ionic-angular';
 import {ConnectionService} from "../../providers/connection-service";
-import {MapPage} from "../map/map";
 import {LobbyPage} from "../lobby/lobby";
 
 /*
