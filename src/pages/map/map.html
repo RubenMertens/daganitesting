@@ -6,12 +6,14 @@
 -->
 
 
-
 <ion-content>
 
   <div #map id="map">
 
-    <ion-title text-center>Jouw geld : <ion-icon name="logo-usd"></ion-icon>{{player.carriedMoney}}</ion-title>
+    <ion-title text-center>Jouw geld :
+      <ion-icon name="logo-usd"></ion-icon>
+      {{player.carriedMoney}}
+    </ion-title>
     <button ion-button large (click)="exitMap()">EXIT</button>
 
     <button ion-button icon-only large (click)="gotoInventory()">
@@ -19,25 +21,34 @@
     </button>
 
     <button *ngIf="true" ion-button icon-only large (click)="gotoShop()"> <!--todo if in shop-->
-      <ion-icon name="ios-cart-outline"></ion-icon>
+      <!--<ion-icon name="ios-cart-outline"></ion-icon>-->
+      <img src="img/TradepostIcon.png"/>
     </button>
 
-    <button *ngIf="true" ion-button large  (click)="gotoBank()"> <!--todo if in bank-->
-      BANK
+    <button *ngIf="true" ion-button large (click)="gotoBank()"> <!--todo if in bank-->
+      <img src="img/BankIcon.png"/>
     </button>
 
     <ion-fab bottom right *ngIf="true"> <!--todo if in treasury!-->
-      <button ion-fab (click)="collectMoney()"><ion-icon name="ios-cash"></ion-icon></button>
+      <button ion-fab (click)="collectMoney()">
+        <ion-icon name="ios-cash"></ion-icon>
+      </button>
     </ion-fab>
 
-      <button ion-button large *ngIf="true" (click)="sellAll()"><ion-icon name="logo-usd"></ion-icon></button>
-    <button ion-button large *ngIf="true" (click)="captureDistrict()"><ion-icon name="md-flag"></ion-icon> </button>
+    <button ion-button large *ngIf="true" (click)="sellAll()">
+      <ion-icon name="logo-usd"></ion-icon>
+    </button>
+    <button ion-button large *ngIf="true" (click)="captureDistrict()">
+      <ion-icon name="md-flag"></ion-icon>
+    </button>
 
-    <button ion-button large *ngIf="true" (click)="robEnemyTreasury()"><ion-icon name="md-hand"></ion-icon></button>
+    <button ion-button large *ngIf="true" (click)="robEnemyTreasury()">
+      <ion-icon name="md-hand"></ion-icon>
+    </button>
 
-    <button ion-button large *ngIf="taggingAllowed && canTag" (click)="tagPlayers()"><ion-icon name="md-color-wand"></ion-icon></button>
-
-
+    <button ion-button large *ngIf="taggingAllowed && canTag" (click)="tagPlayers()">
+      <ion-icon name="md-color-wand"></ion-icon>
+    </button>
 
   </div>
 </ion-content>

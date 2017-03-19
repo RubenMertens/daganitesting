@@ -594,12 +594,15 @@ export class MapPage {
               this.myTeam = this.player.team;
               console.log("your team found!")
               this.boundsArray.push(new AreaBounds(this.player.team, this.circletoBounds(treasureLoc, this.circleRadius), "TREASURY"));
-              this.map.addCircle({
-                center: treasureLoc,
-                radius: this.circleRadius,
-                strokeColor: this.circleColor,
-                strokeWidth: 0,
-                fillColor: this.circleColor
+              let markerOptions: GoogleMapsMarkerOptions =
+                {
+                  'position': treasureLoc,
+                  'icon': {
+                    'url': 'www/img/TreasureMarker.png'
+                  }
+                };
+              this.map.addMarker(markerOptions).then(data => {
+                console.log(data);
               })
             }
           }
@@ -610,12 +613,20 @@ export class MapPage {
           this.boundsArray.push(new AreaBounds(team,this.circletoBounds(treasureLoc,this.circleRadius),"ENEMY_TREASURY"));
           this.demoEnemyTreasury = team;
           console.log("enemytreasury found");
-          this.map.addCircle({
-            center:treasureLoc,
-            radius:this.circleRadius,
-            strokeColor:this.enemyTreasuryColor,
-            strokeWidth:0,
-            fillColor:this.enemyTreasuryColor
+          // this.map.addCircle({
+          //   center: treasureLoc,
+          //   radius: this.circleRadius,
+          //   strokeColor: this.enemyTreasuryColor,
+          //   strokeWidth: 0,
+          //   fillColor: this.enemyTreasuryColor
+          // })
+          let markerOptions: GoogleMapsMarkerOptions = {
+            position: treasureLoc,
+            title: "Test",
+            icon: "www/img/EnemyTreasureMarker.png"
+          };
+          this.map.addMarker(markerOptions).then(data => {
+            console.log(data);
           })
         }
       }
@@ -648,8 +659,8 @@ export class MapPage {
           }
         })
           .catch((error) => {
-          console.log(error);
-        });
+            console.log(error);
+          });
 
         if(capitalDistrictId.indexOf(district.id) == -1){ //this district is not a capital district.
           let wrapper = new CapitalWrapper(district,true);
@@ -689,14 +700,18 @@ export class MapPage {
         let point = new GoogleMapsLatLng(bank.point.latitude, bank.point.longitude);
         this.boundsArray.push(new AreaBounds(bank, this.circletoBounds(point, this.circleRadius), "BANK"));
         this.bank = bank; //todo remove?
-
-        let customMarker = "img/BankMarker.png";
-
-        let markerOptions : GoogleMapsMarkerOptions = {
-            position: point,
-            title: "Test",
-            icon: customMarker
-          };
+        /*this.map.addCircle({
+         center: point,
+         radius: this.circleRadius,
+         strokeColor: this.bankColor,
+         strokeWidth: 5,
+         fillColor: this.bankColor
+         });*/
+        let markerOptions: GoogleMapsMarkerOptions = {
+          position: point,
+          title: "Test",
+          icon: "www/img/BankMarker.png"
+        };
         this.map.addMarker(markerOptions).then(data => {
           console.log(data);
         })
@@ -704,15 +719,22 @@ export class MapPage {
 
       for (let tradePost of this.game.tradePosts) {
         let point = new GoogleMapsLatLng(tradePost.point.latitude, tradePost.point.longitude);
-
-        this.map.addCircle({
-          center: point,
-          radius: this.circleRadius,
-          strokeColor: this.tradePostColor,
-          strokeWidth: 5,
-          fillColor: this.tradePostColor
-        }).then(data => {
-          let tradePostWrapper = new TradePostWrapper(tradePost,data,false);
+        let markerOptions: GoogleMapsMarkerOptions = {
+          position: point,
+          title: "Test",
+          icon: "www/img/TradepostEnabled.png"
+        };
+        this.map.addMarker(markerOptions).then(data => {
+          console.log(data);
+          // })
+          // this.map.addCircle({
+          //   center: point,
+          //   radius: this.circleRadius,
+          //   strokeColor: this.tradePostColor,
+          //   strokeWidth: 5,
+          //   fillColor: this.tradePostColor
+          // }).then(data => {
+          let tradePostWrapper = new TradePostWrapper(tradePost, data, false);
           this.tradePosts.push(tradePostWrapper);
           this.boundsArray.push(new AreaBounds(tradePostWrapper, this.circletoBounds(point, this.circleRadius), "TRADE_POST"));
           this.demoShop = tradePostWrapper;
