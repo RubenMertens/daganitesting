@@ -689,27 +689,13 @@ export class MapPage {
         let point = new GoogleMapsLatLng(bank.point.latitude, bank.point.longitude);
         this.boundsArray.push(new AreaBounds(bank, this.circletoBounds(point, this.circleRadius), "BANK"));
         this.bank = bank; //todo remove?
-        /*this.map.addCircle({
-          center: point,
-          radius: this.circleRadius,
-          strokeColor: this.bankColor,
-          strokeWidth: 5,
-          fillColor: this.bankColor
-        });*/
-        let customMarker = "www/img/bank.svg";
 
-        let icon:GoogleMapsMarkerIcon = {
-          url:"www/img/bank.svg",
-          size: {
-            width :40,
-            height: 40
-          }
-        }
+        let customMarker = "img/BankMarker.png";
 
         let markerOptions : GoogleMapsMarkerOptions = {
             position: point,
             title: "Test",
-            icon: "img/BankMarker.png"
+            icon: customMarker
           };
         this.map.addMarker(markerOptions).then(data => {
           console.log(data);
