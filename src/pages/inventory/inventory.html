@@ -6,8 +6,8 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>inventory</ion-title>
+  <ion-navbar color="primary">
+    <ion-title>Rugzak</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -27,7 +27,7 @@
       <ion-col>
         <ion-list>
           <ion-list-header>
-            Legal
+            Legaal
           </ion-list-header>
             <ion-item *ngFor="let item of legalItems" item-left>
               <h2 item-left>{{item.name}}</h2>
@@ -38,7 +38,7 @@
       <ion-col>
         <ion-list>
           <ion-list-header>
-            Illegal
+            Illegaal
           </ion-list-header>
           <ion-item *ngFor="let item of illegalitems">
             <h2 item-left>{{item.name}}</h2>

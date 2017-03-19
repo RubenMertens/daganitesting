@@ -23,7 +23,9 @@ export class ConnectionService {
 
   constructor(public http: Http) {
     this.clientID = Device.uuid;
-    //this.clientID = Math.floor(Math.random()*1000000) +1 +"";
+    if(this.clientID == null){
+      this.clientID = Math.floor(Math.random()*1000000) +1 +"";
+    }
   }
 
   sendEventMessage(object:any){
@@ -56,8 +58,8 @@ export class ConnectionService {
     return object;
   }
 
-  sendTagPlayers(targets:Array<string>){
-    let message = new GameEventMessage("PLAYER_TAGGED",targets,0,{},"");
+  sendTagPlayers(targets:Array<string> , districtId:string){
+    let message = new GameEventMessage("PLAYER_TAGGED",targets,0,{},districtId);
     this.sendEventMessage(message);
   }
 
@@ -91,19 +93,22 @@ export class ConnectionService {
     let url : string = this.baseAdress+"games/" + gameId + "/register";
     this.gameId = gameId;
     console.log("registering cliend id : " + this.clientID + "to " + gameId);
+    console.log(url);
     return this.http.post(url,{clientID:this.clientID,name: playerName,password:password}).map(this.extractData);
   }
 
   unregisterFromGame(){
     let url:string = this.baseAdress+"games/" + this.gameId + "/unregister/" + this.clientID;
     console.log("unregistering "  + this.clientID+ " from game " + this.gameId);
-    return this.http.post(url,{}).map(this.extractData);
+    console.log(url);
+    return this.http.post(url,{});
   }
 
   sendLocationData(lat:number, lon:number){
     if(this.ws != null && this.ws.readyState === this.ws.OPEN ){
       let message: LocationMessage = new LocationMessage(lat, lon);
       let messageString = JSON.stringify(message);
+      //console.log(message);
       let messageWrapper: MessageWrapper = new MessageWrapper("LOCATION",this.token, messageString , this.gameId,this.clientID +"");
       let messageWrapperString = JSON.stringify(messageWrapper);
       this.ws.send(messageWrapperString);
@@ -130,16 +135,14 @@ export class ConnectionService {
     return this.http.get(url).map(this.extractData).catch(this.handleError);
   }
 
-  setupTCPSocket(token:string){
+  setupTCPSocket(token:string) :Observable<any>{
     this.token =token;
     console.log("trying to connect to websocket url " + this.webSocketUrl);
     this.ws = new WebSocket(this.webSocketUrl);
-    this.ws.onopen = function () {
-      console.log("connection made");
-     /* let json : string = JSON.stringify({message : "kakaka"});
-      this.send(json);*/
 
-    };
+
+
+
 
     this.ws.onmessage = function (event) {
       console.log("received : " + event.data)
@@ -153,7 +156,17 @@ export class ConnectionService {
 
     this.ws.onerror = function(error){
       console.error(error);
-    }
+    };
+
+    return Observable.create(observer => {
+      this.ws.onopen = function () {
+        console.log("connection made");
+        /* let json : string = JSON.stringify({message : "kakaka"});
+         this.send(json);*/
+        observer.next("test");
+        observer.complete();
+      };
+    });
   }
 
   addMessageHandler(handler:any){
@@ -179,6 +192,7 @@ export class ConnectionService {
 
 
   private extractData(res : Response){
+    console.log(res);
     let body = res.json();
     console.log(res.status);
     console.log("body : ");

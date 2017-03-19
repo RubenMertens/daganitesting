@@ -6,8 +6,8 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>Collect Money</ion-title>
+  <ion-navbar color="primary">
+    <ion-title>Schatkist</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -15,7 +15,7 @@
 
 <ion-content padding>
 
-  <h1 text-center>Select the amount of money you would like to get from this treasury</h1>
+  <h1 text-center>Hoeveel geld wil je uit de schatkist halen?</h1>
 
   <h2 text-center>{{team.treasury}}</h2>
 
@@ -27,16 +27,19 @@
   <p class="error" text-center>{{errorMessage}}</p>
 
   <ion-footer>
+    <ion-toolbar>
       <ion-row>
         <ion-col>
-          <button ion-button (click)="handleCancel()" full>Cancel</button>
+          <button ion-button (click)="handleCancel()" full>Terug</button>
 
         </ion-col>
         <ion-col>
-          <button ion-button (click)="handleCollect()" full>Collect</button>
+          <button ion-button (click)="handleCollect()" full>Neem</button>
 
         </ion-col>
       </ion-row>
+    </ion-toolbar>
+
   </ion-footer>
 
 </ion-content>

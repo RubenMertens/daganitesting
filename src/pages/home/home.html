@@ -1,6 +1,6 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>HomePage</ion-title>
+  <ion-navbar color="primary">
+    <ion-title>Sint-niklaas stadSspel</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -8,13 +8,26 @@
 <ion-content padding>
 
   <ion-item>
-    <ion-label color="primary" floating>Your username</ion-label>
+    <ion-label color="primary" floating>Gebruikersnaam</ion-label>
     <ion-input [(ngModel)]="playerName" name="playerName"></ion-input>
-
   </ion-item>
 
-<button ion-button full (click)=goToServerList()>
-  Server List
-</button>
+
+    <p>
+      Hier een korte tekst dat het spel uitlegd Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus ad
+      architecto beatae debitis distinctio eligendi error exercitationem, expedita facilis illum molestiae nam nostrum
+      omnis pariatur, praesentium quas quia rem velit veritatis voluptatum. Aperiam asperiores commodi dolore, earum
+      eligendi explicabo laudantium, neque nesciunt nihil numquam, odit perspiciatis sint sit suscipit temporibus.
+    </p>
+
+
+  <ion-footer>
+    <ion-toolbar>
+      <button ion-button full (click)=goToServerList()>
+        Vind een spel!
+      </button>
+    </ion-toolbar>
+  </ion-footer>
+
 
 </ion-content>

@@ -5,12 +5,14 @@
   Ionic pages and navigation.
 -->
 
+
+
 <ion-content>
 
   <div #map id="map">
 
-    <ion-title text-center>{{player.carriedMoney}}</ion-title>
-    <button ion-button (click)="exitMap()">EXIT</button>
+    <ion-title text-center>Jouw geld : <ion-icon name="logo-usd"></ion-icon>{{player.carriedMoney}}</ion-title>
+    <button ion-button large (click)="exitMap()">EXIT</button>
 
     <button ion-button icon-only large (click)="gotoInventory()">
       <ion-icon name="ios-basket" ></ion-icon>
@@ -21,7 +23,7 @@
     </button>
 
     <button *ngIf="true" ion-button large  (click)="gotoBank()"> <!--todo if in bank-->
-      KBC
+      BANK
     </button>
 
     <ion-fab bottom right *ngIf="true"> <!--todo if in treasury!-->

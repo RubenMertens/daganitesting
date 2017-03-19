@@ -51,10 +51,10 @@ export class ShopPage {
     if(totPrice <= this.player.carriedMoney){
       let prompt = this.alertCtrl.create({
         title:"Confirm",
-        message: "Are you sure you want to buy " + this.legalAmount + " of " + clickedItem.name +" for " +totPrice + "?",
+        message: "Bent u zeker dat u " + this.legalAmount +" " + clickedItem.name +" wilt kopen voor " +totPrice + "?",
         buttons: [
           {
-            text: "cancel",
+            text: "Terug",
             role: "cancel",
             handler : data => {
               console.log("purchase cancelled");
@@ -85,10 +85,10 @@ export class ShopPage {
     if(totPrice <= this.player.carriedMoney){
       let prompt = this.alertCtrl.create({
         title:"Confirm",
-        message: "Are you sure you want to buy " + this.illegalAmount + " of " + clickedItem.name +" for " +totPrice + "?",
+        message: "Bent u zeker dat u  " + this.illegalAmount + " " + clickedItem.name +" wilt kopen voor " +totPrice + "?",
         buttons: [
           {
-            text: "cancel",
+            text: "Terug",
             role: "cancel",
             handler : data => {
               console.log("purchase cancelled");

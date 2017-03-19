@@ -9,15 +9,15 @@
 <ion-content padding>
 
   <div *ngIf="hasWon">
-    <h1 text-center>Congratulation! You have won!</h1>
+    <h1 text-center>Proficiat! Je bent de winnaar!</h1>
   </div>
 
   <div *ngIf="!hasWon">
-    <h1>I'm sorry, you lost! {{winningTeam}} has Won!</h1>
+    <h1>Sorry, je bent verloren! {{winningTeam}} heeft gewonnen!</h1>
   </div>
 
   <ion-footer>
-    <button ion-button full (click)="gotoHomePage()">Go back to main menu</button>
+    <button ion-button full (click)="gotoHomePage()">Terug naar start</button>
   </ion-footer>
 
 </ion-content>
