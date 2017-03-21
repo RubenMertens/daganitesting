@@ -310,6 +310,8 @@ export class MapPage {
             self.circles.push(data);
           });
         }
+        console.log("taggable")
+        console.log(this.taggable);
         if (this.taggable.length > 0) {
           this.canTag = true;
         } else {
@@ -479,7 +481,7 @@ export class MapPage {
   loadMap() {
 
     this.geoWatch = Geolocation.watchPosition({
-      enableHighAccuracy: true,
+      enableHighAccuracy: false,
       timeout: 5 * 1000,
       maximumAge: 0
     }).subscribe((data) => {
@@ -490,7 +492,7 @@ export class MapPage {
         tilt: 67,
         bearing: data.coords.heading
       };
-       this.map.moveCamera(position);
+       // this.map.moveCamera(position);
       this.currentLocation = new GoogleMapsLatLng(data.coords.latitude, data.coords.longitude);
 
       this.connectionService.sendLocationData(data.coords.latitude, data.coords.longitude);
@@ -546,7 +548,7 @@ export class MapPage {
     this.map = new GoogleMap('map', {
       'styles': this.mapStyles,
       'controls': {
-        'compass': false,
+        'compass': true,
         'myLocationButton': true,
         'indoorPicker': false,
         'zoom': false
@@ -597,6 +599,7 @@ export class MapPage {
             }
           }
         }
+        console.log(inThisTeam);
         if (!inThisTeam) {
           let point = team.districts[0].points[team.districts[0].points.length - 1];
           let treasureLoc = new GoogleMapsLatLng(point.latitude, point.longitude);
