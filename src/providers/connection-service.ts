@@ -141,10 +141,10 @@ export class ConnectionService {
     this.token = token;
     console.log("trying to connect to websocket url " + this.webSocketUrl);
     this.ws = new WebSocket(this.webSocketUrl);
-    this.ws.onmessage = function (event) {
+/*    this.ws.onmessage = function (event) {
       console.log("received : " + event.data)
 
-    }
+    }*/
 
     let self = this;
 
