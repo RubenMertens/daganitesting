@@ -485,7 +485,8 @@ export class MapPage {
       timeout: 5 * 1000,
       maximumAge: 0
     }).subscribe((data) => {
-
+      // console.log("location found");
+      console.log(data)
       let position: CameraPosition = {
         target: new GoogleMapsLatLng(data.coords.latitude, data.coords.longitude),
         zoom: 18,
@@ -548,7 +549,7 @@ export class MapPage {
     this.map = new GoogleMap('map', {
       'styles': this.mapStyles,
       'controls': {
-        'compass': true,
+        'compass': false,
         'myLocationButton': true,
         'indoorPicker': false,
         'zoom': false
@@ -563,6 +564,7 @@ export class MapPage {
 
     this.map.on(GoogleMapsEvent.MAP_READY).subscribe(() => {
       console.log('Map is ready!');
+
 
       let capitalDistrictId: Array<string> = [];
 
