@@ -14,7 +14,7 @@ export class ConnectionService {
   token: string;
   public clientID: string;
   public gameId: string;
-  resetInterval: any;
+  private currentMessageHandler:any;
 
   // private baseAdress :string = "https://stniklaas-stadsspel.herokuapp.com/api/";
   // private webSocketUrl:string = "ws://stniklaas-stadsspel.herokuapp.com/user";
@@ -145,22 +145,16 @@ export class ConnectionService {
       console.log("received : " + event.data)
 
     }*/
-
-    let self = this;
+    this.ws.onmessage = this.currentMessageHandler;
 
     this.ws.onclose = (event) => {
       console.log("websocket closed");
       console.error(event);
       if (!event.wasClean) {
         console.log('tyring to reconnect');
-        console.log(this);
-        console.log("normally showed this");
         let interval = setInterval(() => {
-          console.log(this);
-          console.log("above this in interval");
           this.setupTCPSocket(this.token).subscribe(event => {
             console.log("reconnect done");
-            console.log(this);
             clearInterval(interval);
           });
         },5000);
@@ -185,6 +179,7 @@ export class ConnectionService {
   addMessageHandler(handler: any) {
     console.log("Handler changed");
     this.ws.onmessage = handler;
+    this.currentMessageHandler = handler;
   }
 
   getAreaLocations(): Observable<any> {

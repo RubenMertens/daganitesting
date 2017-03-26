@@ -486,14 +486,14 @@ export class MapPage {
       maximumAge: 0
     }).subscribe((data) => {
       // console.log("location found");
-      console.log(data)
+      //console.log(data)
       let position: CameraPosition = {
         target: new GoogleMapsLatLng(data.coords.latitude, data.coords.longitude),
         zoom: 18,
         tilt: 67,
         bearing: data.coords.heading
       };
-       // this.map.moveCamera(position);
+        this.map.moveCamera(position);
       this.currentLocation = new GoogleMapsLatLng(data.coords.latitude, data.coords.longitude);
 
       this.connectionService.sendLocationData(data.coords.latitude, data.coords.longitude);
@@ -555,10 +555,10 @@ export class MapPage {
         'zoom': false
       },
       'gestures': {
-        'scroll': true, //todo : turn all these function off, only true for debugging
-        'tilt': true,
-        'rotate': true,
-        'zoom': true
+        'scroll': false, //todo : turn all these function off, only true for debugging
+        'tilt': false,
+        'rotate': false,
+        'zoom': false
       }
     });
 
