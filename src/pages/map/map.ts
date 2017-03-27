@@ -576,8 +576,10 @@ export class MapPage {
 
         for (let key in team.players) {
           if (team.players.hasOwnProperty(key)) { //hacking for maps in typescript
-            inThisTeam = true;
+            console.log("thisteam = true");
+            console.log(team.players);
             if (team.players[key].clientID === this.connectionService.clientID) {
+              inThisTeam = true;
               this.player.team = team;
               if (this.player.team.tradePosts == null) { //prevent null from happening , this happened sometimes due to unknown reasons
                 this.player.team.tradePosts = [];
@@ -601,6 +603,7 @@ export class MapPage {
             }
           }
         }
+        console.log("in this team");
         console.log(inThisTeam);
         if (!inThisTeam) {
           let point = team.districts[0].points[team.districts[0].points.length - 1];
